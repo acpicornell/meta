@@ -254,6 +254,7 @@ HISTORICAL_VARIANTS = [
     ("Caimari",    "Caimari",    "Mallorca"),
     ("Caimary",    "Caimari",    "Mallorca"),    # Miñano Y/I variant
     ("Mancor",     "Mancor de la Vall","Mallorca"),
+    ("Mancor del Valle","Mancor de la Vall","Mallorca"),    # Floridablanca
     ("Moscari",    "Moscari",    "Mallorca"),
     ("Moscarí",    "Moscari",    "Mallorca"),
     ("Biniamar",   "Biniamar",   "Mallorca"),
@@ -299,6 +300,10 @@ HISTORICAL_VARIANTS = [
     ("San Llorens d' el Cordasar","Sant Llorenç des Cardassar","Mallorca"),  # Riera OCR space
     ("San Llorens del Cordasar","Sant Llorenç des Cardassar","Mallorca"),
     ("San Llorens del Cardasar","Sant Llorenç des Cardassar","Mallorca"),
+    ("San Llorens Descardasar","Sant Llorenç des Cardassar","Mallorca"),     # Miñano joined
+    ("San Lorens Descardasar","Sant Llorenç des Cardassar","Mallorca"),
+    ("San Lorens des Cardesar","Sant Llorenç des Cardassar","Mallorca"),     # CARDESAR variant
+    ("San Llorens des Cardesar","Sant Llorenç des Cardassar","Mallorca"),
     ("Capdepera",  "Capdepera",  "Mallorca"),
     ("Cap de Pera","Capdepera",  "Mallorca"),
     # Miñano writes 'Alcaria' for what NGIB records as 'Alqueria'
@@ -424,6 +429,7 @@ HISTORICAL_VARIANTS = [
     # 1860 nomenclator spellings.
     ("Llummayor",  "Llucmajor",  "Mallorca"),
     ("Lluch-mayor","Llucmajor",  "Mallorca"),
+    ("Llucmayor",  "Llucmajor",  "Mallorca"),    # Miñano single-C variant
     # Floridablanca / 1860 compounded toponym ("Campos del Puerto"
     # = the modern Campos villa).
     ("Campos del Puerto","Campos","Mallorca"),
