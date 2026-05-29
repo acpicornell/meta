@@ -207,6 +207,7 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
   transition: background .12s;
 }
 .place-row:hover { background: var(--accent-soft); }
+.place-row-clickable { cursor: pointer; }
 .place-row .place-name { font-weight: 600; font-size: 1.04rem; color: var(--ink); }
 .place-row .place-meta { color: var(--ink-dim); font-size: .87rem; margin-top: .15rem; }
 .place-row .variant-list { color: var(--ink-faint); font-size: .82rem; font-style: italic; margin-top: .2rem; }

@@ -349,8 +349,12 @@ function renderUnlinkedList() {
     el.innerHTML = `<div class="loading">Cap article sense vincle no coincideix.</div>`;
     return;
   }
+  // Orphans render as place-rows that act like entry cards — clicking
+  // any of them opens the in-page entry modal (delegated handler).
   el.innerHTML = slice.map(u => `
-    <div class="place-row">
+    <div class="place-row place-row-clickable"
+         data-entry-source="${esc(u.source)}"
+         data-entry-id="${esc(u.source_id)}">
       <div>
         <div class="place-name">${esc(u.title)}</div>
         <div class="place-meta">
@@ -359,7 +363,6 @@ function renderUnlinkedList() {
           ${u.municipality ? ` · municipi de ${esc(u.municipality)}` : ""}
           ${u.place_type ? ` · ${esc(u.place_type)}` : ""}
         </div>
-        ${u.source_url ? `<div class="variant-list"><a href="${esc(u.source_url)}" target="_blank" rel="noopener">↗ Article original</a></div>` : ""}
       </div>
       <div class="source-dots"><span class="conf-pill conf-sense">sense vincle</span></div>
     </div>
@@ -656,11 +659,12 @@ function findEntry(source, sourceId) {
       }
     }
   }
-  for (const arr of Object.values(state.data.orphans || {})) {
-    for (const e of arr) {
-      if (e.source === source && String(e.source_id) === String(sourceId)) {
-        return { e: { ...e, year: SOURCE_YEAR[e.source] } };
-      }
+  // Orphans are bucketed by source as the dict key; the items
+  // themselves don't carry a `source` field.
+  const orphans = state.data.orphans || {};
+  for (const arr of (orphans[source] || [])) {
+    if (String(arr.source_id) === String(sourceId)) {
+      return { e: { ...arr, source, year: SOURCE_YEAR[source] } };
     }
   }
   return null;
