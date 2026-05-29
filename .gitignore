@@ -1,0 +1,57 @@
+# Source snapshots — re-fetchable via fetch_sources.py from sibling projects.
+data/sources/
+
+# NGIB toponyms — copied from minano/data/ngib/ via the install step.
+data/ngib/
+
+# Gazetteer (re-buildable from NGIB via build_gazetteer.py).
+data/gazetteer.parquet
+
+# Wikidata enrichment (re-fetchable / re-buildable). Optional —
+# data/wikidata.jsonl is small and can be checked in to avoid
+# re-hitting the Wikidata SPARQL endpoint on every clone.
+data/wikidata_variants.parquet
+
+# Normalized JSONL (regenerable via normalize_sources.py).
+data/normalized/
+
+# Resolution outputs (regenerable via resolve_entities.py).
+data/place_links.jsonl
+data/unlinked.tsv
+data/match_report.tsv
+
+# Optional LLM tiebreaker cache.
+data/llm_cache.jsonl
+
+# Generated audit reports.
+data/reports/
+
+# DuckDB binary — rebuildable from JSONL via load_db.py.
+db/*.duckdb
+db/*.duckdb.wal
+
+# Generated web data (rebuildable via export_web_data.py).
+web/data.json
+web/data-blobs.json
+
+# Secrets.
+.env
+.env.*
+!.env.example
+
+# Python.
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Editor.
+.vscode/
+.idea/
+.DS_Store
+
+# Wrangler.
+.wrangler
+.dev.vars*
+!.dev.vars.example
+node_modules/

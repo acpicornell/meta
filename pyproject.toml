@@ -1,0 +1,19 @@
+[project]
+name = "meta"
+version = "0.1.0"
+description = "Cross-nomenclator web for the Balearic gazetteer family — unified search over Floridablanca (1787), Miñano (1826), Madoz (1845), Nomenclátor (1860) and Riera (1881), anchored to NGIB."
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.0",
+    "rapidfuzz>=3.0",
+    "python-dotenv>=1.0",
+    "pyarrow>=15.0",
+]
+
+[project.optional-dependencies]
+llm = [
+    "anthropic>=0.100",
+]
+
+[tool.uv]
+package = false

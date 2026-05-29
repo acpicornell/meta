@@ -1,0 +1,43 @@
+# Cloudflare Pages headers config. One rule per block, path + indented
+# header lines. Glob '*' supported.
+#
+# Strategy: 'no-store' on every asset. The browser never writes the
+# response to disk and the bfcache is bypassed, so a plain reload (or
+# even a back/forward navigation) always fetches the live deploy.
+# Trade-off vs. 'max-age=0, must-revalidate': we lose the 304 short
+# circuit, so every visit re-downloads the full payload. data.json is
+# ~1.5 MB and data-blobs.json ~8 MB; the latter is lazy-loaded on
+# first place detail. If file size becomes a concern, switch to
+# 304-style caching once data.json content settles.
+
+/*.html
+  Cache-Control: no-store
+
+/*.json
+  Cache-Control: no-store
+
+/*.js
+  Cache-Control: no-store
+
+/*.css
+  Cache-Control: no-store
+
+# Security headers — site is read-only static, no auth, no forms.
+#
+# CSP notes:
+# - No remote scripts in v1 (no Leaflet, no analytics).
+# - style-src 'self' 'unsafe-inline' — index.html / app.js use a
+#   handful of inline style="…" attributes for one-off layout touches.
+#   Accepted: CSS-only XSS has very limited impact on a read-only
+#   site without auth.
+# - img-src 'self' data: — favicon is an inline SVG data: URI.
+# - connect-src 'self' — only fetches are data.json + data-blobs.json
+#   from the same origin.
+# - External Internet Archive, NGIB, Wikipedia and sibling-site links
+#   are navigational (<a href>), not embedded resources, so they don't
+#   need CSP allowances.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
