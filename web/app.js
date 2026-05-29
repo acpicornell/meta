@@ -583,33 +583,21 @@ function renderRiera(b) {
   </div>`;
 }
 
-// Compact box for minor / jurisdictional entries — each renders as
-// a native <details> element whose <summary> is a click-target with
-// year + source + title + place_type, and whose body is the full
-// timelineCard with citation + blob.
-function entryBox(e, blobs) {
+// Compact card for minor / jurisdictional entries — same visual
+// treatment as «Llocs amb identitat NGIB dins el terme»: each is a
+// clickable card linking to the original article at the sibling
+// project, opened in a new tab.
+function entryCard(e, blobs) {
   const blob = blobs[`${e.source}:${e.source_id}`];
   const displayTitle = (e.source === "floridablanca" && blob?.name_1787)
     ? blob.name_1787 : e.title;
-  const supp = e.is_supplement
-    ? ` <span class="suppl-badge mini" title="${esc(SOURCE_LABEL[e.source])} ${e.source === "minano" ? "Tom XI" : "Tom XVI"}">supl.</span>`
-    : "";
-  return `<details class="entry-box">
-    <summary>
-      <span class="entry-box-year y-${e.year}">${e.year}</span>
-      <span class="entry-box-body">
-        <span class="entry-box-title">${esc(displayTitle)}${supp}</span>
-        <span class="entry-box-meta">${esc(SOURCE_LABEL[e.source])}${e.place_type ? ` · ${esc(e.place_type)}` : ""}</span>
-      </span>
-    </summary>
-    <div class="entry-box-content">
-      <div class="citation">
-        ${citationFor(e, blob)}
-        ${e.source_url ? ` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">↗ Article original</a>` : ""}
-      </div>
-      ${renderBlob(e.source, blob)}
-    </div>
-  </details>`;
+  const href = e.source_url || "#";
+  const target = e.source_url ? `target="_blank" rel="noopener"` : "";
+  return `<a class="child-card" href="${esc(href)}" ${target}>
+    <div class="child-name">${esc(displayTitle)}</div>
+    <div class="child-meta">${esc(SOURCE_LABEL[e.source])} · ${e.year}${e.place_type ? ` · ${esc(e.place_type)}` : ""}</div>
+    ${e.is_supplement ? `<div class="child-count">suplement</div>` : ""}
+  </a>`;
 }
 
 function timelineCard(e, blobs) {
@@ -715,25 +703,19 @@ function renderPlaceDetail(place, blobs) {
     ` : ""}
 
     ${isMunicipi && minorEnts.length ? `
-      <details class="entry-grid-section" open>
-        <summary>Articles dins el terme sense entrada NGIB pròpia (${minorEnts.length})
-          <span class="minor-help">— predis, casas de labor, accidents geogràfics i similars dins el terme que NGIB no recull com a entitat pròpia.</span>
-        </summary>
-        <div class="entry-grid">
-          ${minorEnts.map(e => entryBox(e, blobs)).join("")}
-        </div>
-      </details>
+      <h2 class="section-h">Articles dins el terme sense entrada NGIB pròpia (${minorEnts.length})</h2>
+      <p class="section-help">Predis, casas de labor, accidents geogràfics i similars dins el terme que NGIB no recull com a entitat pròpia. Clica per anar a l'article original.</p>
+      <div class="child-grid">
+        ${minorEnts.map(e => entryCard(e, blobs)).join("")}
+      </div>
     ` : ""}
 
     ${isMunicipi && jurisdictionalEnts.length ? `
-      <details class="entry-grid-section">
-        <summary>Articles administratius i jurisdiccionals (${jurisdictionalEnts.length})
-          <span class="minor-help">— entrades que descriuen termes, partits judicials, diòcesis i altres categories administratives sense equivalent NGIB modern.</span>
-        </summary>
-        <div class="entry-grid">
-          ${jurisdictionalEnts.map(e => entryBox(e, blobs)).join("")}
-        </div>
-      </details>
+      <h2 class="section-h">Articles administratius i jurisdiccionals (${jurisdictionalEnts.length})</h2>
+      <p class="section-help">Termes, partits judicials, diòcesis i altres categories administratives sense equivalent NGIB modern.</p>
+      <div class="child-grid">
+        ${jurisdictionalEnts.map(e => entryCard(e, blobs)).join("")}
+      </div>
     ` : ""}
   `;
 
