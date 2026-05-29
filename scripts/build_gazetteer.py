@@ -277,6 +277,10 @@ HISTORICAL_VARIANTS = [
     ("Sancelles",  "Sencelles",  "Mallorca"),
     ("Vilafranca", "Vilafranca de Bonany","Mallorca"),
     ("Villafranca","Vilafranca de Bonany","Mallorca"),
+    ("Vila Franca","Vilafranca de Bonany","Mallorca"),    # Floridablanca name_1787
+    ("Villa Franca","Vilafranca de Bonany","Mallorca"),
+    ("Villafranca de Bonany","Vilafranca de Bonany","Mallorca"),
+    ("Vilafranca de Bonany","Vilafranca de Bonany","Mallorca"),
     ("Sa Pobla",   "sa Pobla",   "Mallorca"),
     ("La Puebla",  "sa Pobla",   "Mallorca"),
     ("Pobla",      "sa Pobla",   "Mallorca"),
@@ -285,7 +289,13 @@ HISTORICAL_VARIANTS = [
     ("Son Servera","Son Servera","Mallorca"),
     ("Sonservera", "Son Servera","Mallorca"),
     ("Sant Llorenç","Sant Llorenç des Cardassar","Mallorca"),
+    ("Sant Llorens","Sant Llorenç des Cardassar","Mallorca"),
+    ("San Lorenzo","Sant Llorenç des Cardassar","Mallorca"),
     ("San Lorenzo del Cardasar","Sant Llorenç des Cardassar","Mallorca"),
+    ("San Llorens d'el Cordasar","Sant Llorenç des Cardassar","Mallorca"),
+    ("San Llorens d' el Cordasar","Sant Llorenç des Cardassar","Mallorca"),  # Riera OCR space
+    ("San Llorens del Cordasar","Sant Llorenç des Cardassar","Mallorca"),
+    ("San Llorens del Cardasar","Sant Llorenç des Cardassar","Mallorca"),
     ("Capdepera",  "Capdepera",  "Mallorca"),
     ("Cap de Pera","Capdepera",  "Mallorca"),
     # Miñano writes 'Alcaria' for what NGIB records as 'Alqueria'
