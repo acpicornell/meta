@@ -627,21 +627,98 @@ function renderRiera(b) {
 
 // Compact card for minor / jurisdictional entries — same visual
 // treatment as «Llocs amb identitat NGIB dins el terme»: each is a
-// clickable card linking to the original article at the sibling
-// project, opened in a new tab.
+// clickable card. Click opens an in-page modal with the article
+// content (citation + blob); the meta site stays self-contained
+// and never bounces the reader to an external sibling URL.
 function entryCard(e, blobs) {
   const blob = blobs[`${e.source}:${e.source_id}`];
   const rawTitle = (e.source === "floridablanca" && blob?.name_1787)
     ? blob.name_1787 : e.title;
   const displayTitle = stripSupp(rawTitle);
-  const href = e.source_url || "#";
-  const target = e.source_url ? `target="_blank" rel="noopener"` : "";
-  return `<a class="child-card" href="${esc(href)}" ${target}>
+  const suppBadge = e.is_supplement ? `<div class="child-count">suplement</div>` : "";
+  return `<button type="button" class="child-card"
+            data-entry-source="${esc(e.source)}"
+            data-entry-id="${esc(e.source_id)}">
     <div class="child-name">${esc(displayTitle)}</div>
     <div class="child-meta">${esc(SOURCE_LABEL[e.source])} · ${e.year}${e.place_type ? ` · ${esc(e.place_type)}` : ""}</div>
-    ${e.is_supplement ? `<div class="child-count">suplement</div>` : ""}
-  </a>`;
+    ${suppBadge}
+  </button>`;
 }
+
+// Lookup an entry by source:id across every place + orphans bucket.
+function findEntry(source, sourceId) {
+  for (const p of (state.data.places || [])) {
+    for (const arr of [p.entries, p.minor_entries, p.jurisdictional_entries]) {
+      for (const e of (arr || [])) {
+        if (e.source === source && String(e.source_id) === String(sourceId)) {
+          return { e, place: p };
+        }
+      }
+    }
+  }
+  for (const arr of Object.values(state.data.orphans || {})) {
+    for (const e of arr) {
+      if (e.source === source && String(e.source_id) === String(sourceId)) {
+        return { e: { ...e, year: SOURCE_YEAR[e.source] } };
+      }
+    }
+  }
+  return null;
+}
+
+async function openEntryModal(source, sourceId) {
+  const blobs = await ensureBlobs();
+  const hit = findEntry(source, sourceId);
+  if (!hit) return;
+  const e = hit.e;
+  const blob = blobs[`${e.source}:${e.source_id}`];
+  const rawTitle = (e.source === "floridablanca" && blob?.name_1787)
+    ? blob.name_1787 : e.title;
+  const displayTitle = stripSupp(rawTitle);
+  const yr = e.year || SOURCE_YEAR[e.source];
+  const overlay = document.createElement("div");
+  overlay.className = "entry-modal-overlay";
+  overlay.innerHTML = `
+    <div class="entry-modal" role="dialog" aria-modal="true">
+      <button class="entry-modal-close" type="button" aria-label="Tancar">✕</button>
+      <div class="entry-modal-head">
+        <div class="timeline-year y-${yr}">${yr}</div>
+        <div>
+          <h3 class="entry-modal-title">${esc(displayTitle)}${e.is_supplement ? ` <span class="suppl-badge">suplement</span>` : ""}</h3>
+          <div class="entry-modal-sub">
+            <strong>${esc(SOURCE_LABEL[e.source])}</strong>${e.place_type ? ` · ${esc(e.place_type)}` : ""}
+          </div>
+        </div>
+      </div>
+      <div class="entry-modal-body">
+        <div class="citation">${citationFor(e, blob)}</div>
+        ${renderBlob(e.source, blob)}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.body.style.overflow = "hidden";
+  const close = () => {
+    overlay.remove();
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onKey);
+  };
+  const onKey = ev => { if (ev.key === "Escape") close(); };
+  overlay.addEventListener("click", ev => {
+    if (ev.target === overlay) close();
+  });
+  overlay.querySelector(".entry-modal-close").addEventListener("click", close);
+  document.addEventListener("keydown", onKey);
+}
+
+// Delegated click handler — attached once in initTabs.
+document.addEventListener("click", ev => {
+  const card = ev.target.closest("[data-entry-source]");
+  if (card) {
+    ev.preventDefault();
+    openEntryModal(card.dataset.entrySource, card.dataset.entryId);
+  }
+});
 
 function timelineCard(e, blobs) {
   const blob = blobs[`${e.source}:${e.source_id}`];

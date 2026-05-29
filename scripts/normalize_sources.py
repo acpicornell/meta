@@ -43,15 +43,14 @@ NORMALIZED = ROOT / 'data' / 'normalized'
 #   'unknown'        — no informative place_type. Resolver defaults to
 #       'settlement' handling.
 
-# Per-sibling deployed origin. Used to build deep links when the
-# sibling does not already publish a stable ia_url / bdcyl_url.
-SIBLING_ORIGIN = {
-    'floridablanca':   'https://floridablanca-balears.pages.dev',
-    'minano':          'https://minano-balears.pages.dev',
-    'madoz':           'https://madoz.pages.dev',
-    'nomenclator_1860':'https://nomenclator-1860-balears.pages.dev',
-    'riera':           'https://riera-balears.pages.dev',
-}
+# meta is intentionally self-contained — entry cards open a modal
+# with the article content rather than navigating to a sibling site
+# or an external facsimile. ``source_url`` is therefore left empty
+# (or pass-through of the sibling's own ia_url / bdcyl_url) and the
+# UI never relies on it as a click target.
+SIBLING_FALLBACK_URL = {k: None for k in (
+    'floridablanca', 'minano', 'madoz', 'nomenclator_1860', 'riera',
+)}
 
 FORMENTERA_FB_NAMES = {
     'FORMENTERA', 'EL PILAR DE LA MOLA', 'PILAR DE LA MOLA',
@@ -168,7 +167,7 @@ def adapt_floridablanca() -> list[dict]:
             'island':         canon_island(island),
             'municipality':   None,   # Floridablanca pueblos ARE the
                                       # municipalities at that date.
-            'source_url':     f'{SIBLING_ORIGIN["floridablanca"]}/#cod-{p["cod"]}',
+            'source_url':     SIBLING_FALLBACK_URL["floridablanca"],
             'hint_lat':       None,
             'hint_lon':       None,
             'hint_match':     None,
@@ -208,7 +207,7 @@ def adapt_minano() -> list[dict]:
             'place_type':     e.get('place_type'),
             'island':         canon_island(e.get('island')),
             'municipality':   e.get('municipality'),
-            'source_url':     e.get('ia_url') or f'{SIBLING_ORIGIN["minano"]}/#entry-{e["id"]}',
+            'source_url':     e.get('ia_url') or SIBLING_FALLBACK_URL["minano"],
             'hint_lat':       e.get('lat'),
             'hint_lon':       e.get('lon'),
             'hint_match':     e.get('matched_toponym'),
@@ -241,7 +240,7 @@ def adapt_madoz() -> list[dict]:
             'place_type':     e.get('place_type'),
             'island':         canon_island(e.get('island')),
             'municipality':   e.get('municipality'),
-            'source_url':     e.get('ia_url') or f'{SIBLING_ORIGIN["madoz"]}/#entry-{e["id"]}',
+            'source_url':     e.get('ia_url') or SIBLING_FALLBACK_URL["madoz"],
             'hint_lat':       None,
             'hint_lon':       None,
             'hint_match':     None,
@@ -282,7 +281,7 @@ def adapt_nomenclator_1860() -> list[dict]:
             'place_type':     e.get('place_class') or e.get('class_normalized'),
             'island':         canon_island(island),
             'municipality':   e.get('municipality'),
-            'source_url':     f'{SIBLING_ORIGIN["nomenclator_1860"]}/#entry-{e["id"]}',
+            'source_url':     SIBLING_FALLBACK_URL["nomenclator_1860"],
             'hint_lat':       None,
             'hint_lon':       None,
             'hint_match':     None,
@@ -320,7 +319,7 @@ def adapt_riera() -> list[dict]:
             'place_type':     e.get('place_type'),
             'island':         canon_island(e.get('island')),
             'municipality':   e.get('municipality'),
-            'source_url':     e.get('bdcyl_url') or f'{SIBLING_ORIGIN["riera"]}/#entry-{e["id"]}',
+            'source_url':     e.get('bdcyl_url') or SIBLING_FALLBACK_URL["riera"],
             'hint_lat':       e.get('lat'),
             'hint_lon':       e.get('lon'),
             'hint_match':     e.get('matched_toponym'),

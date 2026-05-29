@@ -385,6 +385,120 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
   max-width: 70ch;
 }
 
+/* === CARD AS BUTTON (resets <button> default styling for the
+       entry boxes that mirror child_card) === */
+button.child-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* === ENTRY MODAL === */
+.entry-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 41, 51, .52);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  z-index: 1000;
+  overflow-y: auto;
+  animation: entry-modal-fade .12s ease-out;
+}
+@keyframes entry-modal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.entry-modal {
+  background: var(--paper-card);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  max-width: 820px;
+  width: 100%;
+  padding: 1.5rem 1.6rem 1.8rem;
+  position: relative;
+}
+.entry-modal-close {
+  position: absolute;
+  top: .8rem;
+  right: .9rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+  color: var(--ink-dim);
+}
+.entry-modal-close:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.entry-modal-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 1rem;
+}
+.entry-modal-title {
+  margin: 0 0 .2rem;
+  font-size: 1.4rem;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.entry-modal-sub {
+  color: var(--ink-dim);
+  font-size: .9rem;
+}
+.entry-modal-body .citation {
+  font-size: .85rem;
+  color: var(--ink-dim);
+  border-left: 3px solid var(--accent-soft);
+  padding-left: .8rem;
+  margin: 0 0 1rem;
+  font-style: italic;
+}
+.entry-modal-body .citation a {
+  color: var(--accent);
+  font-style: normal;
+}
+.entry-modal-body .blob {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 1rem 1.2rem;
+  font-size: .93rem;
+}
+.entry-modal-body .blob h4 {
+  margin: .9rem 0 .25rem;
+  font-size: .82rem;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.entry-modal-body .blob h4:first-child { margin-top: 0; }
+.entry-modal-body .blob p { margin: 0 0 .5rem; line-height: 1.6; }
+.entry-modal-body .blob .raw {
+  background: white;
+  border: 1px dashed var(--rule);
+  border-radius: 3px;
+  padding: .4rem .6rem;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: .76rem;
+  color: var(--ink-dim);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
 .timeline { display: grid; gap: 1.2rem; }
 .timeline-card {
   display: grid;
