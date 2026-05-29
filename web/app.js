@@ -29,6 +29,14 @@ const SOURCE_YEAR = {
 const SOURCE_ORDER = ["floridablanca", "minano", "madoz", "nomenclator_1860", "riera"];
 
 // ---------------------- utilities --------------------------------------------
+// Strip Miñano Tom XI / Madoz Tom XVI / Riera supplement suffixes
+// ("(adición)", "(addicional)", "(addició)") from a displayed title.
+// The SUPLEMENT badge on the card already conveys the same info.
+const SUPP_TITLE_RX = /\s*\(\s*ad+ici[oó]n(?:al)?\s*\)\s*$/i;
+function stripSupp(t) {
+  return (t || "").replace(SUPP_TITLE_RX, "").trim();
+}
+
 function esc(s) {
   if (s == null) return "";
   return String(s)
@@ -495,7 +503,7 @@ function renderFlorida(b) {
   return `<div class="blob">
     <h4>Identificació</h4>
     ${row("Topònim 1787", b.name_1787)}
-    ${row("Topònim actual (INE)", b.name_current)}
+    ${row("Topònim INE 1986", b.name_current)}
     ${row("Categoria", cat)}
     ${row("Autoritat", auth)}
     ${row("Jurisdicció", jur)}
@@ -589,8 +597,9 @@ function renderRiera(b) {
 // project, opened in a new tab.
 function entryCard(e, blobs) {
   const blob = blobs[`${e.source}:${e.source_id}`];
-  const displayTitle = (e.source === "floridablanca" && blob?.name_1787)
+  const rawTitle = (e.source === "floridablanca" && blob?.name_1787)
     ? blob.name_1787 : e.title;
+  const displayTitle = stripSupp(rawTitle);
   const href = e.source_url || "#";
   const target = e.source_url ? `target="_blank" rel="noopener"` : "";
   return `<a class="child-card" href="${esc(href)}" ${target}>
@@ -609,8 +618,11 @@ function timelineCard(e, blobs) {
   // For Floridablanca, prefer the literal 1787 spelling
   // (e.g. ANDRAIG) over the INE-modernised re-typed form
   // (ANDRAITX) used in the matcher. Both come from the same blob.
-  const displayTitle = (e.source === "floridablanca" && blob?.name_1787)
+  // Strip the "(adición)" / "(addicional)" supplement suffix from
+  // the displayed title — the SUPLEMENT badge already says so.
+  const rawTitle = (e.source === "floridablanca" && blob?.name_1787)
     ? blob.name_1787 : e.title;
+  const displayTitle = stripSupp(rawTitle);
   const confVal = e.describes_confidence != null ? e.describes_confidence.toFixed(2) : "—";
   return `<div class="timeline-card">
     <div class="timeline-year y-${e.year}">${e.year}</div>

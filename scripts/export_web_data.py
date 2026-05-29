@@ -25,12 +25,32 @@ anchor to anything.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
 import duckdb
+
+# Strip Miñano Tom XI / Madoz Tom XVI / Riera supplement markers
+# from a title when computing the variants list. The supplement
+# itself is already flagged with the is_supplement badge on each
+# timeline card, so the parenthetical marker is redundant noise in
+# the place-header variants line.
+_SUPP_TITLE_RX = re.compile(
+    # Accept one or two 'd's (Miñano «(adición)», Riera
+    # «(addicional)»), and the bare Catalan «(addició)».
+    r'\s*\(\s*ad+ici[oó]n(?:al)?\s*\)\s*$|'
+    r'\s*\(\s*ad+ici[oó]\s*\)\s*$',
+    re.IGNORECASE,
+)
+
+
+def strip_supp_suffix(t: str) -> str:
+    if not t:
+        return ''
+    return _SUPP_TITLE_RX.sub('', t).strip()
 
 ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = ROOT / 'db' / 'meta.duckdb'
@@ -164,7 +184,13 @@ def main():
         place_types.add(local_type or '')
 
         # Variants are titles of entries that NAME this entity.
-        variants = sorted({e['title'] for e in ents if e['title']})
+        # Drop supplement-marker suffixes ((adición), (addicional),
+        # (addició)) so e.g. Miñano "ALGAIDA (adición)" and Riera
+        # "ALGAIDA (addicional)" collapse with the primary "ALGAIDA"
+        # into a single canonical variant.
+        variants = sorted({
+            strip_supp_suffix(e['title']) for e in ents if e['title']
+        } - {''})
 
         # Child places (only for Municipi).
         child_places = []

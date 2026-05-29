@@ -560,16 +560,30 @@ def resolve(entry: dict, by_island: dict, all_rows: list[dict],
         #   (c) When kind_hint is 'feature' (predio, cala, peñas,
         #       isla, …) and parent_id is already set, don't override.
 
+        # Promoting a feature-typed entry to municipality is only
+        # safe in one narrow case: place_type is 'isla'/'illa' AND
+        # the matched Municipi is the eponymous island-municipality
+        # (Formentera, Mallorca-the-island in archipelago articles).
+        # All other feature place_types ('peñas', 'puerto', 'cabo',
+        # 'cala', 'predio', …) name a sub-feature that coincidentally
+        # shares its toponym with a Municipi name.
+        plain_title = norm_title == normalize(title)
+        feature_is_island = bool(
+            place_type and ('isla' in place_type.lower()
+                            or 'illa' in place_type.lower())
+        )
+
         def _try_title_municipi(target_ngib_id: str | None,
                                 method: str, conf: float):
             nonlocal entry_kind, parent_id, parent_method, parent_conf
             if not target_ngib_id:
                 return False
+            if kind_hint == 'feature' and not feature_is_island:
+                return False
+            if kind_hint == 'feature' and not plain_title:
+                return False
             if parent_id and target_ngib_id != parent_id:
-                if kind_hint == 'feature':
-                    # Title-Municipi mismatch with an already-known
-                    # parent terme is almost always a sub-feature
-                    # named after the Municipi. Leave as feature.
+                if kind_hint == 'feature' and not feature_is_island:
                     return False
             entry_kind = 'municipality'
             if not parent_id:
