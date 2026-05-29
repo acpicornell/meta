@@ -368,13 +368,17 @@ HISTORICAL_VARIANTS = [
     ("Jesús",      "Jesús",      "Eivissa"),
     ("Balanzat",   "Sant Miquel de Balansat","Eivissa"),
     ("Balansat",   "Sant Miquel de Balansat","Eivissa"),
-    # Formentera
+    # Formentera. NGIB names the capital "Sant Francesc de Formentera"
+    # (NOT "Sant Francesc Xavier"), so the historical variants point at
+    # the spelling NGIB actually uses.
     ("Formentera", "Formentera", "Formentera"),
-    ("San Francisco Javier","Sant Francesc Xavier","Formentera"),
-    ("Sant Francesc","Sant Francesc Xavier","Formentera"),
+    ("San Francisco Javier","Sant Francesc de Formentera","Formentera"),
+    ("Sant Francesc Xavier","Sant Francesc de Formentera","Formentera"),
+    ("Sant Francesc","Sant Francesc de Formentera","Formentera"),
     ("San Fernando","Sant Ferran de ses Roques","Formentera"),
     ("Sant Ferran","Sant Ferran de ses Roques","Formentera"),
     ("Pilar de la Mola","el Pilar de la Mola","Formentera"),
+    ("Nuestra Señora del Pilar de la Mola","el Pilar de la Mola","Formentera"),
     # Cabrera
     ("Cabrera",    "Cabrera",    "Cabrera"),
 

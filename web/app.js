@@ -147,11 +147,24 @@ function initFilters() {
 }
 
 // ---------------------- filtering -------------------------------------------
+
+// Collect every entry attached to a place across its four buckets.
+// The Explore-tab filters and counts treat all four equivalently
+// (each is a sibling article about / inside / referring to this
+// canonical NGIB place).
+function allEntriesOf(p) {
+  const out = [];
+  for (const e of (p.entries || [])) out.push(e);
+  for (const e of (p.minor_entries || [])) out.push(e);
+  for (const e of (p.jurisdictional_entries || [])) out.push(e);
+  return out;
+}
+
 function placeBestConfidenceBand(p) {
   // The strongest confidence band attested by any entry in this place.
   let best = "sense";
   const rank = { sense: 0, baixa: 1, mitjana: 2, alta: 3 };
-  for (const e of p.entries) {
+  for (const e of allEntriesOf(p)) {
     if (rank[e.describes_band] > rank[best]) best = e.describes_band;
   }
   return best;
@@ -162,13 +175,25 @@ function placeMatchesSearch(p, q) {
   const qn = norm(q);
   if (norm(p.name).includes(qn)) return true;
   if (norm(p.municipality).includes(qn)) return true;
-  for (const v of p.variants) if (norm(v).includes(qn)) return true;
+  for (const v of (p.variants || [])) if (norm(v).includes(qn)) return true;
+  // Also search across the titles of every entry — this surfaces
+  // matches like «PORMAÑY», «ALAYOR (peñas)», «SARRECÓ» that live in
+  // the minor / jurisdictional buckets and are not part of the
+  // canonical name.
+  for (const e of allEntriesOf(p)) {
+    if (norm(e.title).includes(qn)) return true;
+  }
+  // Search across child place names too (a Municipi page surfaces if
+  // it has a sub-feature whose name matches the query).
+  for (const c of (p.child_places || [])) {
+    if (norm(c.name).includes(qn)) return true;
+  }
   return false;
 }
 
 function placeMatchesSources(p) {
   if (state.sources.size === 0) return true;
-  const present = new Set(p.entries.map(e => e.source));
+  const present = new Set(allEntriesOf(p).map(e => e.source));
   if (state.combine === "all") {
     for (const s of state.sources) if (!present.has(s)) return false;
     return true;
@@ -179,12 +204,15 @@ function placeMatchesSources(p) {
 }
 
 function applyFilters() {
-  const showUnlinked = state.conf === "sense";
-  if (showUnlinked) {
-    // Render the unlinked tail as if each row were a one-source "place".
+  const showOrphans = state.conf === "sense";
+  if (showOrphans) {
+    // Render the orphan tail (entries with neither parent nor
+    // describes NGIB id) as if each row were a one-source "place".
+    // The data property is `orphans` in v2 (was `unlinked` in v1).
+    const orphans = state.data.orphans || {};
     const all = [];
     for (const src of SOURCE_ORDER) {
-      for (const u of (state.data.unlinked[src] || [])) {
+      for (const u of (orphans[src] || [])) {
         if (state.island && u.island !== state.island) continue;
         if (state.type && u.place_type !== state.type) continue;
         if (state.sources.size && !state.sources.has(src)) continue;
@@ -195,7 +223,7 @@ function applyFilters() {
     state.filtered = all;
     renderUnlinkedList();
     renderPagination();
-    $("result-count").textContent = `${fmt(all.length)} articles sense vincle NGIB`;
+    $("result-count").textContent = `${fmt(all.length)} articles orfes (sense vincle NGIB)`;
     return;
   }
 
@@ -232,13 +260,23 @@ function renderResults() {
     return;
   }
   const html = slice.map(p => {
-    const present = new Set(p.entries.map(e => e.source));
+    const all = allEntriesOf(p);
+    const present = new Set(all.map(e => e.source));
     const dots = SOURCE_ORDER.map(s => {
       const yr = SOURCE_YEAR[s];
       const has = present.has(s);
       return `<span class="source-dot ${has ? "has-" + yr : "empty"}" title="${esc(SOURCE_LABEL[s])} (${yr})${has ? "" : " — no atestat"}">${has ? yr : "·"}</span>`;
     }).join("");
     const variants = p.variants.filter(v => norm(v) !== norm(p.name));
+    const nMain = (p.entries || []).length;
+    const nMinor = (p.minor_entries || []).length;
+    const nJur = (p.jurisdictional_entries || []).length;
+    const nChildren = (p.child_places || []).length;
+    const detailBits = [];
+    if (nMain) detailBits.push(`${nMain} article${nMain === 1 ? "" : "s"}`);
+    if (nChildren) detailBits.push(`${nChildren} sub-lloc${nChildren === 1 ? "" : "s"}`);
+    if (nMinor) detailBits.push(`${nMinor} menor${nMinor === 1 ? "" : "s"}`);
+    if (nJur) detailBits.push(`${nJur} jurisd.`);
     return `
       <div class="place-row" data-ngib="${esc(p.ngib_id)}">
         <div>
@@ -247,7 +285,7 @@ function renderResults() {
             ${esc(p.island || "—")}
             ${p.municipality && p.municipality !== p.name ? ` · municipi de <strong>${esc(p.municipality)}</strong>` : ""}
             ${p.local_type ? ` · ${esc(p.local_type)}` : ""}
-            · ${p.entries.length} article${p.entries.length === 1 ? "" : "s"}
+            ${detailBits.length ? ` · ${detailBits.join(" · ")}` : ""}
           </div>
           ${variants.length ? `<div class="variant-list">també: ${variants.map(esc).join(" · ")}</div>` : ""}
         </div>
@@ -714,11 +752,12 @@ function renderStats() {
   const el = $("stats-content");
   if (el.dataset.rendered === "1") return;
 
-  // 1. Llocs presents en N fonts.
+  // 1. Llocs presents en N fonts (compting every source attested in
+  // any of the four entry buckets, not just the main timeline).
   const dist = [0, 0, 0, 0, 0, 0];
   for (const p of state.data.places) {
-    const n = new Set(p.entries.map(e => e.source)).size;
-    dist[n] = (dist[n] || 0) + 1;
+    const n = new Set(allEntriesOf(p).map(e => e.source)).size;
+    if (n >= 1 && n <= 5) dist[n] += 1;
   }
   const distMax = Math.max(...dist.slice(1));
   const distHtml = [1, 2, 3, 4, 5].map(n => {
@@ -745,21 +784,29 @@ function renderStats() {
       `;
     }).join("");
 
-  // 3. Per font.
+  // 3. Per font — v2 reports describes_linked + parent_linked instead
+  // of a single linked count.
   const t = state.data.totals;
   const srcHtml = `
     <table class="coverage-table">
-      <thead><tr><th>Font</th><th>Any</th><th class="num">Articles</th><th class="num">Enllaçats</th><th class="num">No enllaçats</th><th class="num">% enllaç</th></tr></thead>
+      <thead><tr>
+        <th>Font</th><th>Any</th>
+        <th class="num">Articles</th>
+        <th class="num">Amb describes</th>
+        <th class="num">Amb parent</th>
+        <th class="num">% describes</th>
+      </tr></thead>
       <tbody>
         ${SOURCE_ORDER.map(s => {
-          const d = t.by_source[s] || { total: 0, linked: 0, unlinked: 0, pct: 0 };
+          const d = t.by_source[s] || { total: 0, describes_linked: 0, parent_linked: 0 };
+          const dpct = d.total ? (d.describes_linked * 100 / d.total) : 0;
           return `<tr>
             <td><strong>${esc(SOURCE_LABEL[s])}</strong></td>
             <td>${SOURCE_YEAR[s]}</td>
             <td class="num">${fmt(d.total)}</td>
-            <td class="num">${fmt(d.linked)}</td>
-            <td class="num">${fmt(d.unlinked)}</td>
-            <td class="num">${d.pct}%</td>
+            <td class="num">${fmt(d.describes_linked)}</td>
+            <td class="num">${fmt(d.parent_linked)}</td>
+            <td class="num">${dpct.toFixed(1)}%</td>
           </tr>`;
         }).join("")}
       </tbody>
@@ -782,7 +829,7 @@ function renderStats() {
       <h3>Cobertura per font</h3>
       ${srcHtml}
       <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
-        La cua de no enllaçats és visible amb el filtre <em>Sense vincle NGIB</em> de la pestanya Explorar. Els articles de Madoz i del Nomenclàtor de 1860 amb confiança mitjana o baixa convé inspeccionar-los abans d'extreure'n conclusions.
+        <em>Describes</em> = l'article descriu una entitat NGIB concreta. <em>Parent</em> = l'article està ubicat dins el terme d'un municipi NGIB. La cua d'articles orfes (cap dels dos enllaços) és visible amb el filtre <em>Sense vincle NGIB</em> de la pestanya Explorar.
       </p>
     </div>
   `;

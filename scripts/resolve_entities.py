@@ -544,9 +544,13 @@ def resolve(entry: dict, by_island: dict, all_rows: list[dict],
                                 parent_method = 'jurisdictional_title_historical'
                                 parent_conf = 0.97
                                 break
-    elif kind_hint in ('settlement', 'unknown'):
+    else:
         # If title is a known Municipi name on this island, the entry
-        # describes that municipality.
+        # describes that municipality — REGARDLESS of kind_hint, since
+        # an island-municipality like Formentera or Cabrera (or even
+        # archipelago entries about Mallorca) is often classified by
+        # the sibling as place_type='isla' yet is still the canonical
+        # Municipi article.
         for r in pool_island:
             if (r['source'] == 'ngib'
                     and r.get('local_type') == 'Municipi'
@@ -556,16 +560,10 @@ def resolve(entry: dict, by_island: dict, all_rows: list[dict],
                     parent_id = r['id']
                     parent_method = 'self_municipality'
                     parent_conf = 0.97
-                else:
-                    # Sanity: title-derived Municipi should agree with
-                    # the parent hint when both exist. If they don't,
-                    # prefer the title (more authoritative for kind
-                    # decision). For Floridablanca/1860 this is the
-                    # norm.
-                    if r['id'] != parent_id:
-                        parent_id = r['id']
-                        parent_method = 'self_municipality_override'
-                        parent_conf = 0.96
+                elif r['id'] != parent_id:
+                    parent_id = r['id']
+                    parent_method = 'self_municipality_override'
+                    parent_conf = 0.96
                 break
         if entry_kind is None:
             # Also try the historical_curated path: the title may be a
@@ -664,13 +662,31 @@ def resolve(entry: dict, by_island: dict, all_rows: list[dict],
             terme_name = parent_row.get('municipality')
             if terme_name:
                 norm_terme = normalize(terme_name)
-                # All gazetteer rows (NGIB primaries, historicals,
-                # wikidata aliases) located within the terme.
-                pool_terme = [
-                    r for r in pool_island
-                    if r.get('municipality')
-                    and normalize(r['municipality']) == norm_terme
-                ]
+                # NGIB and wikidata rows can be filtered directly by
+                # their ``municipality`` column (which is the terme).
+                # Historical rows are tricky: their ``municipality``
+                # field stores the SPELLING of the target NGIB row,
+                # not the terme it lives in (e.g. "San Francisco
+                # Javier" → municipality="Sant Francesc de
+                # Formentera", which is the target's name, not the
+                # Formentera terme). Resolve each historical row's
+                # target NGIB and use the target's terme.
+                def hist_target_terme(h: dict) -> str:
+                    nid = historical_to_ngib(h, pool_island)
+                    if not nid:
+                        return ''
+                    target = ngib_by_id.get(nid)
+                    if not target:
+                        return ''
+                    return normalize(target.get('municipality') or '')
+
+                pool_terme = []
+                for r in pool_island:
+                    if r['source'] == 'historical':
+                        if hist_target_terme(r) == norm_terme:
+                            pool_terme.append(r)
+                    elif r.get('municipality') and normalize(r['municipality']) == norm_terme:
+                        pool_terme.append(r)
                 preferred_types, _ = classify_place_type(place_type)
                 # First pass — type-scoped within terme.
                 if preferred_types is not None:
