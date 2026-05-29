@@ -152,6 +152,38 @@ function initFilters() {
       applyFilters();
     });
   });
+  $("clear-filters").addEventListener("click", clearFilters);
+}
+
+function anyFilterActive() {
+  return Boolean(
+    state.search || state.island || state.type || state.conf
+    || state.combine !== "any" || state.sources.size
+  );
+}
+
+function refreshClearButton() {
+  const btn = $("clear-filters");
+  if (!btn) return;
+  btn.hidden = !anyFilterActive();
+}
+
+function clearFilters() {
+  state.search = "";
+  state.island = "";
+  state.type   = "";
+  state.conf   = "";
+  state.combine = "any";
+  state.sources = new Set();
+  state.page = 0;
+  $("search").value = "";
+  $("f-island").value = "";
+  $("f-type").value = "";
+  $("f-conf").value = "";
+  $("f-combine").value = "any";
+  document.querySelectorAll(".sources-row input[data-source]")
+    .forEach(cb => { cb.checked = false; });
+  applyFilters();
 }
 
 // ---------------------- filtering -------------------------------------------
@@ -232,6 +264,7 @@ function applyFilters() {
     renderUnlinkedList();
     renderPagination();
     $("result-count").textContent = `${fmt(all.length)} articles orfes (sense vincle NGIB)`;
+    refreshClearButton();
     return;
   }
 
@@ -250,6 +283,7 @@ function applyFilters() {
   renderPagination();
   $("result-count").textContent =
     `${fmt(state.filtered.length)} lloc${state.filtered.length === 1 ? "" : "s"} canònic${state.filtered.length === 1 ? "" : "s"}`;
+  refreshClearButton();
 }
 
 function placeMatchesSearchUnlinked(u, q) {
