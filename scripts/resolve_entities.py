@@ -113,9 +113,38 @@ _LEADING_FEATURE_RX = re.compile(
 )
 
 
+# Madoz files Catalan saints under the proper-name letter and tucks
+# the saint qualifier in parens — "LUIS (San)" = Sant Lluís,
+# "MARIA (Santa) del Camí" = Santa Maria del Camí, "ANTONIO (San)"
+# = Sant Antoni. Reverse the order so the historical-variant table
+# can match the Castilian "San X" form.
+_SAINT_INVERSE_RX = re.compile(
+    r'^\s*(?P<head>[^()]+?)\s*\(\s*(?P<saint>San|Santa|Sant|Sta\.?)\s*\)\s*(?P<tail>.*)$',
+    re.IGNORECASE,
+)
+
+
+def _reverse_saint_inversion(t: str) -> str:
+    m = _SAINT_INVERSE_RX.match(t)
+    if not m:
+        return t
+    head = m.group('head').strip()
+    saint = m.group('saint')
+    tail = m.group('tail').strip()
+    if not head:
+        return t
+    new = f'{saint} {head}'
+    if tail:
+        new = f'{new} {tail}'
+    return new
+
+
 def clean_title(t: str) -> str:
     if not t:
         return ''
+    # Reverse Madoz's "X (San/Santa)" alphabetical filing BEFORE the
+    # paren strip throws the saint marker away.
+    t = _reverse_saint_inversion(t)
     t = _LEADING_PQ_RX.sub('', t)
     # Drop the explicit editorial trailers first, then any other dash
     # trailer (we do this before paren-stripping because some

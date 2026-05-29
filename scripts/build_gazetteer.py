@@ -403,6 +403,18 @@ HISTORICAL_VARIANTS = [
     ("San Lorenzo ó Llorens Descardasar",
                    "Sant Llorenç des Cardassar","Mallorca"),
     ("Maria de la Salud","Maria de la Salut","Mallorca"),
+    # Madoz OCR variants where the canonical second form is dropped
+    # by clean_title's «X ó Y» trailing strip. Curate the first form
+    # explicitly.
+    ("Vañalbufar", "Banyalbufar","Mallorca"),    # Madoz V/B OCR
+    ("Fornaluig",  "Fornalutx",  "Mallorca"),    # Madoz spelling
+    # 1860 nomenclator spellings.
+    ("Llummayor",  "Llucmajor",  "Mallorca"),
+    ("Lluch-mayor","Llucmajor",  "Mallorca"),
+    # Floridablanca / 1860 compounded toponym ("Campos del Puerto"
+    # = the modern Campos villa).
+    ("Campos del Puerto","Campos","Mallorca"),
+    ("Campos del Puerto Real","Campos","Mallorca"),
 
     # Floridablanca-specific Castilianised forms (1787, INE re-typed).
     # These show up in the floridablanca/web/data.json name_current
