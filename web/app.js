@@ -370,6 +370,14 @@ function renderUnlinkedList() {
 }
 
 // ---------------------- pagination ------------------------------------------
+// Re-render the current results page (places or orphans) — used by
+// pagination buttons. Pagination only needs to switch the page
+// slice; the active filter set is unchanged.
+function renderCurrentPage() {
+  if (state.conf === "sense") renderUnlinkedList();
+  else renderResults();
+}
+
 function renderPagination() {
   const totalPages = Math.max(1, Math.ceil(state.filtered.length / state.perPage));
   const el = $("pagination");
@@ -379,8 +387,18 @@ function renderPagination() {
     <span class="page-num">pàgina ${state.page + 1} de ${totalPages}</span>
     <button id="page-next" ${state.page >= totalPages - 1 ? "disabled" : ""}>Següent ›</button>
   `;
-  $("page-prev").addEventListener("click", () => { state.page--; renderResults(); renderPagination(); window.scrollTo({top:0,behavior:"smooth"}); });
-  $("page-next").addEventListener("click", () => { state.page++; renderResults(); renderPagination(); window.scrollTo({top:0,behavior:"smooth"}); });
+  $("page-prev").addEventListener("click", () => {
+    state.page--;
+    renderCurrentPage();
+    renderPagination();
+    window.scrollTo({top: 0, behavior: "smooth"});
+  });
+  $("page-next").addEventListener("click", () => {
+    state.page++;
+    renderCurrentPage();
+    renderPagination();
+    window.scrollTo({top: 0, behavior: "smooth"});
+  });
 }
 
 // ---------------------- place detail (timeline) -----------------------------
