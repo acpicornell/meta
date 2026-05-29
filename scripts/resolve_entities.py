@@ -546,40 +546,58 @@ def resolve(entry: dict, by_island: dict, all_rows: list[dict],
                                 break
     else:
         # If title is a known Municipi name on this island, the entry
-        # describes that municipality — REGARDLESS of kind_hint, since
-        # an island-municipality like Formentera or Cabrera (or even
-        # archipelago entries about Mallorca) is often classified by
-        # the sibling as place_type='isla' yet is still the canonical
-        # Municipi article.
+        # MAY describe that municipality. Three rules guard against
+        # spurious matches:
+        #   (a) When parent_id is already set and the title-derived
+        #       Municipi is a DIFFERENT one, prefer the parent_hint:
+        #       a Madoz «SAN JUAN (so)» predio with municipality=Alaró
+        #       names a possessió, not the Sant Joan municipi.
+        #   (b) Override the parent only for settlement/unknown
+        #       kind_hints AND only when the title-derived Municipi IS
+        #       the one resolved from the hint. Required for Madoz
+        #       «FORMENTERA (isla)» with hint='Ibiza' to switch to
+        #       Formentera Municipi.
+        #   (c) When kind_hint is 'feature' (predio, cala, peñas,
+        #       isla, …) and parent_id is already set, don't override.
+
+        def _try_title_municipi(target_ngib_id: str | None,
+                                method: str, conf: float):
+            nonlocal entry_kind, parent_id, parent_method, parent_conf
+            if not target_ngib_id:
+                return False
+            if parent_id and target_ngib_id != parent_id:
+                if kind_hint == 'feature':
+                    # Title-Municipi mismatch with an already-known
+                    # parent terme is almost always a sub-feature
+                    # named after the Municipi. Leave as feature.
+                    return False
+            entry_kind = 'municipality'
+            if not parent_id:
+                parent_id = target_ngib_id
+                parent_method = method
+                parent_conf = conf
+            elif parent_id != target_ngib_id:
+                parent_id = target_ngib_id
+                parent_method = method + '_override'
+                parent_conf = conf - 0.01
+            return True
+
         for r in pool_island:
             if (r['source'] == 'ngib'
                     and r.get('local_type') == 'Municipi'
                     and r['normalized'] == norm_title):
-                entry_kind = 'municipality'
-                if not parent_id:
-                    parent_id = r['id']
-                    parent_method = 'self_municipality'
-                    parent_conf = 0.97
-                elif r['id'] != parent_id:
-                    parent_id = r['id']
-                    parent_method = 'self_municipality_override'
-                    parent_conf = 0.96
-                break
+                if _try_title_municipi(r['id'], 'self_municipality', 0.97):
+                    break
         if entry_kind is None:
-            # Also try the historical_curated path: the title may be a
-            # Castilianised Municipi name (e.g. ALAYOR → Alaior).
+            # Castilianised Municipi name (ALAYOR → Alaior).
             for r in pool_island:
                 if r['source'] == 'historical' and r['normalized'] == norm_title:
                     nid = historical_to_ngib(r, pool_island)
                     if nid:
                         target = ngib_by_id.get(nid)
                         if target and target.get('local_type') == 'Municipi':
-                            entry_kind = 'municipality'
-                            if not parent_id:
-                                parent_id = nid
-                                parent_method = 'self_municipality_historical'
-                                parent_conf = 0.98
-                            break
+                            if _try_title_municipi(nid, 'self_municipality_historical', 0.98):
+                                break
     # Phase 1 fallback — the title may name an NGIB sub-feature
     # (llogaret, possessió, barri) that lives inside a Municipi.
     # Floridablanca pueblos like BINIARAIX/CAIMARI/ESTABLIMENTS fit
