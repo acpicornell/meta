@@ -704,7 +704,6 @@ function renderPlaceDetail(place, blobs) {
 
     ${isMunicipi && minorEnts.length ? `
       <h2 class="section-h">Articles dins el terme sense entrada NGIB pròpia (${minorEnts.length})</h2>
-      <p class="section-help">Predis, casas de labor, accidents geogràfics i similars dins el terme que NGIB no recull com a entitat pròpia. Clica per anar a l'article original.</p>
       <div class="child-grid">
         ${minorEnts.map(e => entryCard(e, blobs)).join("")}
       </div>
