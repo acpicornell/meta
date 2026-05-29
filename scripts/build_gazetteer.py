@@ -252,6 +252,7 @@ HISTORICAL_VARIANTS = [
     ("Algayda",    "Algaida",    "Mallorca"),
     ("Caymari",    "Caimari",    "Mallorca"),
     ("Caimari",    "Caimari",    "Mallorca"),
+    ("Caimary",    "Caimari",    "Mallorca"),    # Miñano Y/I variant
     ("Mancor",     "Mancor de la Vall","Mallorca"),
     ("Moscari",    "Moscari",    "Mallorca"),
     ("Moscarí",    "Moscari",    "Mallorca"),
@@ -261,8 +262,10 @@ HISTORICAL_VARIANTS = [
     ("Búger",      "Búger",      "Mallorca"),
     ("Buger",      "Búger",      "Mallorca"),
     ("Bugeu",      "Búger",      "Mallorca"),    # documented OCR mangle
-    ("Belver",     "Bellver",    "Mallorca"),    # OCR variant
-    ("Bellver",    "Bellver",    "Mallorca"),
+    # NOTE: NGIB does not have a stand-alone "Bellver" row; the
+    # only Bellver entity is the Castell de Bellver monument in
+    # Palma. Don't curate "Belver" / "Bellver" against a missing
+    # target — the explicit Castell variants below cover the cases.
     ("Belver Castillo","Castell de Bellver","Mallorca"),
     ("Ariañy",     "Ariany",     "Mallorca"),
     ("Ariany",     "Ariany",     "Mallorca"),
@@ -425,6 +428,34 @@ HISTORICAL_VARIANTS = [
     # = the modern Campos villa).
     ("Campos del Puerto","Campos","Mallorca"),
     ("Campos del Puerto Real","Campos","Mallorca"),
+    # Miñano OCR mangles / spellings of common sub-toponyms.
+    ("Ascorca",    "Escorca",    "Mallorca"),    # Miñano A/E OCR
+    ("Mansanella", "Mancor de la Vall","Mallorca"),  # Miñano spelling
+    # Floridablanca aldea spellings.
+    ("Esglayeta",  "s'Esgleieta","Mallorca"),
+    ("Esglayeta, La","s'Esgleieta","Mallorca"),
+    ("La Esglayeta","s'Esgleieta","Mallorca"),
+    # Castell de Bellver (the Palma castle, often titled BELVER as a
+    # standalone «castillo» article in Miñano/Madoz).
+    ("Belver Castell","Castell de Bellver","Mallorca"),
+    ("Castillo de Belver","Castell de Bellver","Mallorca"),
+    # Eivissa parròquies that pre-date the modern Municipis. These
+    # land on the historical hamlet of the same name.
+    ("San Mateo",  "Sant Mateu d'Albarca","Eivissa"),
+    ("San Agustín","Sant Agustí des Vedrà","Eivissa"),
+    ("San Agustin","Sant Agustí des Vedrà","Eivissa"),
+    # Miñano santuari de Lluc.
+    ("Nuestra Señora de Lluch","Lluc","Mallorca"),
+    # Mallorca salines (the village ses Salines + the historic
+    # salt flats). The Miñano "SALINAS (las)" loses the article when
+    # parens are stripped, so curate the bare form too.
+    ("Las Salinas","ses Salines","Mallorca"),
+    ("Salinas Las","ses Salines","Mallorca"),
+    ("Salinas",    "ses Salines","Mallorca"),
+    # The Palma castle (often a stand-alone «castillo» article in
+    # Miñano under the bare toponym).
+    ("Belver",     "Castell de Bellver","Mallorca"),  # OCR variant
+    ("Castell de Belver","Castell de Bellver","Mallorca"),
 
     # Floridablanca-specific Castilianised forms (1787, INE re-typed).
     # These show up in the floridablanca/web/data.json name_current
