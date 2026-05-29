@@ -583,6 +583,35 @@ function renderRiera(b) {
   </div>`;
 }
 
+// Compact box for minor / jurisdictional entries — each renders as
+// a native <details> element whose <summary> is a click-target with
+// year + source + title + place_type, and whose body is the full
+// timelineCard with citation + blob.
+function entryBox(e, blobs) {
+  const blob = blobs[`${e.source}:${e.source_id}`];
+  const displayTitle = (e.source === "floridablanca" && blob?.name_1787)
+    ? blob.name_1787 : e.title;
+  const supp = e.is_supplement
+    ? ` <span class="suppl-badge mini" title="${esc(SOURCE_LABEL[e.source])} ${e.source === "minano" ? "Tom XI" : "Tom XVI"}">supl.</span>`
+    : "";
+  return `<details class="entry-box">
+    <summary>
+      <span class="entry-box-year y-${e.year}">${e.year}</span>
+      <span class="entry-box-body">
+        <span class="entry-box-title">${esc(displayTitle)}${supp}</span>
+        <span class="entry-box-meta">${esc(SOURCE_LABEL[e.source])}${e.place_type ? ` · ${esc(e.place_type)}` : ""}</span>
+      </span>
+    </summary>
+    <div class="entry-box-content">
+      <div class="citation">
+        ${citationFor(e, blob)}
+        ${e.source_url ? ` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">↗ Article original</a>` : ""}
+      </div>
+      ${renderBlob(e.source, blob)}
+    </div>
+  </details>`;
+}
+
 function timelineCard(e, blobs) {
   const blob = blobs[`${e.source}:${e.source_id}`];
   const band = e.describes_band || "sense";
@@ -686,23 +715,23 @@ function renderPlaceDetail(place, blobs) {
     ` : ""}
 
     ${isMunicipi && minorEnts.length ? `
-      <details class="minor-places" open>
+      <details class="entry-grid-section" open>
         <summary>Articles dins el terme sense entrada NGIB pròpia (${minorEnts.length})
           <span class="minor-help">— predis, casas de labor, accidents geogràfics i similars dins el terme que NGIB no recull com a entitat pròpia.</span>
         </summary>
-        <div class="timeline timeline-minor">
-          ${minorEnts.map(e => timelineCard(e, blobs)).join("")}
+        <div class="entry-grid">
+          ${minorEnts.map(e => entryBox(e, blobs)).join("")}
         </div>
       </details>
     ` : ""}
 
     ${isMunicipi && jurisdictionalEnts.length ? `
-      <details class="jurisdictional-places">
+      <details class="entry-grid-section">
         <summary>Articles administratius i jurisdiccionals (${jurisdictionalEnts.length})
           <span class="minor-help">— entrades que descriuen termes, partits judicials, diòcesis i altres categories administratives sense equivalent NGIB modern.</span>
         </summary>
-        <div class="timeline timeline-minor">
-          ${jurisdictionalEnts.map(e => timelineCard(e, blobs)).join("")}
+        <div class="entry-grid">
+          ${jurisdictionalEnts.map(e => entryBox(e, blobs)).join("")}
         </div>
       </details>
     ` : ""}
