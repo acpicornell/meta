@@ -243,7 +243,7 @@ NGIB_WATER = {
 _RX_NO_NGIB = re.compile(
     r'\b(?:cuart[oó]n|despoblado|t[eé]rmino|partido(?:\s+judicial)?|'
     r'di[oó]cesis|obispado|provincia|desaparecid\w*|antigu\w*|'
-    r'jurisdicci[oó]n|feligres[ií]a|coto(?:\s+redondo)?|archipi[eé]lago)\b',
+    r'jurisdicci[oó]n|feligres[ií]a|archipi[eé]lago)\b',
     re.I,
 )
 _RX_SETTLEMENT = re.compile(
@@ -256,7 +256,8 @@ _RX_POSSESSION = re.compile(
     r'\b(?:pr[eé]dio|alquer\w+|casa\s+de\s+\w+|cortijo|estancia|'
     r'huert\w*|molino\w*|ace[nñ]a\w*|almazara|f[aá]brica|tejero\w*|'
     r'tinte|venta|albergue\w*|reuni[oó]n|caser[ií]o\w*|'
-    r'porci[oó]n\s+de\s+terreno|rafal|possessi[oó]|finca)\b',
+    r'porci[oó]n\s+de\s+terreno|rafal|possessi[oó]|finca|'
+    r'coto(?:\s+redondo)?)\b',
     re.I,
 )
 _RX_ISLAND = re.compile(r'\b(?:isla|islote|isleta|illa|illot)s?\b', re.I)
@@ -691,6 +692,16 @@ def resolve(entry: dict, by_island: dict, all_rows: list[dict],
                         target = ngib_by_id[nid]
                         if target.get('local_type') != 'Municipi':
                             _try_subfeature(target, 'historical_curated_subfeature')
+                            break
+                        elif kind_hint == 'feature':
+                            # Curated form points at a Municipi but the
+                            # entry is a feature within that terme
+                            # (e.g. "CAP DE PERA" castle ⇒ Capdepera).
+                            # Use the Municipi as parent so Phase 3 can
+                            # search within the terme.
+                            parent_id = nid
+                            parent_method = 'historical_curated_parent'
+                            parent_conf = 0.92
                             break
     if entry_kind is None:
         entry_kind = 'feature'  # provisional; Phase 3 confirms _with_ngib or _no_ngib

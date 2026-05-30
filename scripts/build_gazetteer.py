@@ -255,6 +255,28 @@ HISTORICAL_VARIANTS = [
     ("Caimary",    "Caimari",    "Mallorca"),    # Miñano Y/I variant
     ("Mancor",     "Mancor de la Vall","Mallorca"),
     ("Mancor del Valle","Mancor de la Vall","Mallorca"),    # Floridablanca
+    # Audit batch (fuzzy ≥ 88% to a NGIB Municipi / llogaret on the
+    # same island; curated after manual verification).
+    ("Escorga",    "Escorca",    "Mallorca"),    # Miñano A↔E
+    ("Biniarroig", "Biniarroi",  "Mallorca"),    # Floridablanca
+    ("Biniarroy",  "Biniarroi",  "Mallorca"),    # Miñano
+    ("Biniaraig",  "Biniaraix",  "Mallorca"),    # Miñano (adició)
+    ("Escapdella", "es Capdellà","Mallorca"),    # Miñano
+    ("Lluch Alcari","Llucalcari","Mallorca"),    # Floridablanca
+    ("San Jordi","Sant Jordi","Mallorca"),       # Miñano aldea "(Pla de)"
+    ("Servera","Son Servera","Mallorca"),        # Madoz predio "(so)"
+    ("Llombarts",  "es Llombards","Mallorca"),   # Miñano/Madoz
+    ("Son Suñer",  "Son Sunyer", "Mallorca"),    # Miñano coto
+    ("Establiments nóus","Establiments","Mallorca"),  # 1860
+    ("Establiments véis","Establiments","Mallorca"),
+    ("Nuestra Señora de Jesús","Jesús","Eivissa"),    # Floridablanca
+    ("Nuestra Señora de Jesus","Jesús","Eivissa"),
+    ("Santa Eulalia del Río","Santa Eulària des Riu","Eivissa"),  # Floridablanca
+    ("Santa Eulalia del Rio","Santa Eulària des Riu","Eivissa"),
+    ("Rafalet Grau","es Grau","Menorca"),        # Madoz predio
+    # "CAP DE PERA" → clean_title strips CAP leading marker leaving
+    # PERA. Curate the residual form so it still finds Capdepera.
+    ("Pera",       "Capdepera",  "Mallorca"),
     ("Moscari",    "Moscari",    "Mallorca"),
     ("Moscarí",    "Moscari",    "Mallorca"),
     ("Biniamar",   "Biniamar",   "Mallorca"),
