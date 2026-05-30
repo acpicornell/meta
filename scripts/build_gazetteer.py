@@ -364,6 +364,9 @@ HISTORICAL_VARIANTS = [
     ("Eivissa",    "Eivissa",    "Eivissa"),
     ("Sant Antoni","Sant Antoni de Portmany","Eivissa"),
     ("San Antonio","Sant Antoni de Portmany","Eivissa"),
+    ("San Antonio Abad","Sant Antoni de Portmany","Eivissa"),  # parròquia → Municipi
+    ("San Antónío Abad","Sant Antoni de Portmany","Eivissa"),  # 1860 accents
+    ("Sant Antoni Abat","Sant Antoni de Portmany","Eivissa"),
     ("Pormany",    "Sant Antoni de Portmany","Eivissa"),
     ("Portmany",   "Sant Antoni de Portmany","Eivissa"),
     ("Sant Josep", "Sant Josep de sa Talaia","Eivissa"),
