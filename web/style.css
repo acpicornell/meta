@@ -39,7 +39,7 @@ header {
   border-bottom: 1px solid var(--rule);
   padding: 1.4rem 1rem 1.1rem;
 }
-.header-content { max-width: 1100px; margin: 0 auto; }
+.header-content { max-width: 1400px; margin: 0 auto; padding: 0 .4rem; }
 header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spacing: -.01em; }
 .subtitle { margin: 0; color: var(--ink-dim); font-size: .97rem; }
 
@@ -50,7 +50,7 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
   padding: 0 1rem;
   display: flex;
   gap: .3rem;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
   flex-wrap: wrap;
 }
@@ -72,9 +72,9 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
 /* === SECTIONS === */
 .tab-content {
   display: none;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 1.6rem 1rem 4rem;
+  padding: 1.6rem 1.4rem 4rem;
 }
 .tab-content.active { display: block; }
 
@@ -100,9 +100,30 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
 .home-stat .label { display: block; color: var(--ink-dim); font-size: .85rem; margin-top: .2rem; }
 
 .home-prose h2 { margin-top: 2rem; font-size: 1.25rem; }
-.home-prose p, .home-prose ul { max-width: 70ch; }
+.home-prose p, .home-prose ul { max-width: 75ch; }
 .source-list { padding-left: 1.2rem; }
 .source-list li { margin-bottom: .5rem; }
+/* On wide screens fan out the home prose into two columns so it
+   stops feeling like a single narrow blog post in the middle of the
+   page. Each H2-section is a brick that can sit next to another. */
+@media (min-width: 1100px) {
+  .home-prose {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+    align-items: start;
+  }
+  .home-prose > h2 {
+    grid-column: 1 / -1;
+    margin-bottom: .3rem;
+  }
+  .home-prose > p,
+  .home-prose > ul {
+    max-width: none;
+  }
+  /* Span the sources-grid full width since it has its own grid. */
+  .home-prose > .sources-grid { grid-column: 1 / -1; }
+}
 
 /* === EXPLORE === */
 .explore-controls {
@@ -705,12 +726,22 @@ button.child-card {
 .coverage-table tr:last-child td { border-bottom: none; }
 
 /* === NOTES === */
-#tab-notes { max-width: 800px; }
 #tab-notes h2 { margin-top: 0; }
 #tab-notes h3 { margin-top: 2rem; font-size: 1.1rem; }
+#tab-notes p, #tab-notes ol, #tab-notes ul { max-width: 75ch; }
 #tab-notes ol, #tab-notes ul { padding-left: 1.2rem; }
 #tab-notes li { margin-bottom: .35rem; }
 #tab-notes code { background: var(--paper-card); padding: .1rem .35rem; border-radius: 3px; font-size: .9em; color: var(--accent); }
+/* Notes fan into a two-column flow on wide screens — keeps each
+   paragraph at a comfortable reading width while filling the page. */
+@media (min-width: 1100px) {
+  #tab-notes {
+    column-count: 2;
+    column-gap: 3rem;
+  }
+  #tab-notes h2, #tab-notes h3 { break-after: avoid; }
+  #tab-notes p, #tab-notes ul, #tab-notes ol { break-inside: avoid-column; }
+}
 
 /* === LOADING === */
 .loading { text-align: center; padding: 3rem 1rem; color: var(--ink-dim); }
@@ -735,8 +766,8 @@ button.child-card {
 
 .sources-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: .8rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
   margin: 1rem 0 2rem;
   max-width: 100%;
 }
@@ -774,13 +805,37 @@ button.child-card {
 
 /* === FONTS TAB === */
 .source-deep {
-  max-width: 75ch;
-  margin: 0 auto 2.5rem;
+  max-width: 100%;
+  margin: 0 0 2.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--rule);
 }
 .source-deep:last-of-type { border-bottom: none; }
 .source-deep header { margin-bottom: 1rem; }
+.source-deep p { max-width: 75ch; }
+/* Two-column layout on wide screens: the citation / metadata sit on
+   the right-hand side as a sidebar, with the prose on the left. */
+@media (min-width: 1100px) {
+  .source-deep {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    column-gap: 2.4rem;
+    align-items: start;
+  }
+  .source-deep > header { grid-column: 1 / -1; margin-bottom: 1.4rem; }
+  .source-deep > p { max-width: none; }
+  .source-deep > .source-meta {
+    grid-row: 2 / span 99;
+    grid-column: 2;
+    position: sticky;
+    top: 1.4rem;
+    margin-top: 0;
+  }
+  .source-deep > p,
+  .source-deep > .modern-intro {
+    grid-column: 1;
+  }
+}
 .source-deep h2 {
   margin: 0 0 .25rem;
   font-size: 1.4rem;
@@ -823,9 +878,10 @@ button.child-card {
 .source-deep .source-meta strong { color: var(--ink); }
 
 .modern-intro {
-  max-width: 75ch;
-  margin: 0 auto 2rem;
+  max-width: 80ch;
+  margin: 0 0 2rem;
 }
+.modern-intro > p { max-width: 75ch; }
 .modern-intro h2 { margin-top: 0; font-size: 1.5rem; }
 .modern-intro h3 { font-size: 1.1rem; margin-top: 1.5rem; }
 
@@ -841,12 +897,12 @@ button.child-card {
   font-size: .95rem;
 }
 .abbr-source {
-  max-width: 75ch;
-  margin: 0 auto 1rem;
+  max-width: 100%;
+  margin: 0 0 1rem;
   border: 1px solid var(--rule);
   border-radius: 6px;
   background: var(--paper-card);
-  padding: 0 1rem;
+  padding: 0 1.2rem;
 }
 .abbr-source > summary {
   list-style: none;
@@ -895,7 +951,7 @@ button.child-card {
 }
 .abbr-list {
   column-count: 2;
-  column-gap: 1.4rem;
+  column-gap: 1.8rem;
   margin-bottom: .8rem;
 }
 .abbr-item {
@@ -936,9 +992,8 @@ button.child-card {
   font-style: italic;
   margin: .5rem 0 0;
 }
-@media (min-width: 900px) {
-  .abbr-list { column-count: 3; }
-}
+@media (min-width: 900px)  { .abbr-list { column-count: 3; } }
+@media (min-width: 1280px) { .abbr-list { column-count: 4; } }
 
 /* === FOOTER === */
 footer {
