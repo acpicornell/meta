@@ -1,26 +1,15 @@
-# Cloudflare Pages headers config. One rule per block, path + indented
-# header lines. Glob '*' supported.
+# Cloudflare headers config (Workers Static Assets reads the same
+# format as Pages). One rule per block, path + indented header lines.
+# Glob '*' supported.
 #
-# Strategy: 'no-store' on every asset. The browser never writes the
-# response to disk and the bfcache is bypassed, so a plain reload (or
-# even a back/forward navigation) always fetches the live deploy.
-# Trade-off vs. 'max-age=0, must-revalidate': we lose the 304 short
-# circuit, so every visit re-downloads the full payload. data.json is
-# ~1.5 MB and data-blobs.json ~8 MB; the latter is lazy-loaded on
-# first place detail. If file size becomes a concern, switch to
-# 304-style caching once data.json content settles.
-
-/*.html
-  Cache-Control: no-store
-
-/*.json
-  Cache-Control: no-store
-
-/*.js
-  Cache-Control: no-store
-
-/*.css
-  Cache-Control: no-store
+# Strategy: 'no-store' on EVERY response, no exceptions. The browser
+# never writes the response to disk and the bfcache is bypassed, so a
+# plain reload (or even back/forward navigation) always fetches the
+# live deploy. data.json is ~2.5 MB and data-blobs.json ~3.1 MB; the
+# latter is lazy-loaded on first Lloc open. The trade-off vs.
+# 'max-age=0, must-revalidate' is the loss of the 304 short circuit
+# — every visit re-downloads the full payload — but ensures readers
+# always see the latest corpus.
 
 # Security headers — site is read-only static, no auth, no forms.
 #
@@ -39,6 +28,9 @@
 #   are navigational (<a href>), not embedded, so don't need CSP
 #   allowances.
 /*
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Pragma: no-cache
+  Expires: 0
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
