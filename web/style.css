@@ -1085,10 +1085,8 @@ button.child-card {
 .source-deep .source-meta strong { color: var(--ink); }
 
 .modern-intro {
-  max-width: 80ch;
   margin: 0 0 2rem;
 }
-.modern-intro > p { max-width: 75ch; }
 .modern-intro h2 { margin-top: 0; font-size: 1.5rem; }
 .modern-intro h3 { font-size: 1.1rem; margin-top: 1.5rem; }
 
