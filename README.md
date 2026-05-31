@@ -1,4 +1,4 @@
-# Meta · Balearic nomenclators
+# Nomenclàtors balears — aggregator
 
 Unified search and exploration site for the **Balearic Islands
 historical gazetteer family**: a single web that lets you find a place

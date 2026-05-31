@@ -1,4 +1,4 @@
-// Meta · Nomenclàtors balears — static web, vanilla JS.
+// Nomenclàtors balears — static web, vanilla JS.
 
 const state = {
   data: null,                 // full data.json
@@ -874,7 +874,7 @@ function renderPlaceDetail(place, blobs) {
   }).join("");
 
   const variants = place.variants.filter(v => norm(v) !== norm(place.name));
-  const dl = `meta-${place.ngib_id}.json`;
+  const dl = `nomenclators-${place.ngib_id}.json`;
   const isMunicipi = place.local_type === "Municipi";
 
   const breadcrumb = place.breadcrumb_parent
