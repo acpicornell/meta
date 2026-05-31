@@ -57,6 +57,7 @@ function gotoTab(t) {
     sec.classList.toggle("active", sec.dataset.toptab === t));
   if (t === "stats") renderStats();
   if (t === "map") ensureGlobalMap();
+  if (t === "abbr") renderAbbreviations();
   if (t !== "place") {
     // Hide the place tab when leaving it (it appears only after a click).
     const placeTab = document.querySelector('[data-toptab="place"].tab');
@@ -69,11 +70,26 @@ function initTabs() {
   document.querySelectorAll(".tabs .tab").forEach(btn => {
     btn.addEventListener("click", () => gotoTab(btn.dataset.toptab));
   });
-  document.querySelectorAll("[data-goto]").forEach(el => {
-    el.addEventListener("click", ev => {
-      ev.preventDefault();
-      gotoTab(el.dataset.goto);
-    });
+  // Delegated handler so dynamically-rendered links (sources-grid,
+  // popups, etc.) also work.
+  document.addEventListener("click", ev => {
+    const el = ev.target.closest("[data-goto]");
+    if (!el) return;
+    ev.preventDefault();
+    gotoTab(el.dataset.goto);
+    const anchor = el.dataset.anchor;
+    if (anchor) {
+      // Defer until the target tab has rendered + (for abbr) the JSON
+      // has loaded. 250ms is enough in practice.
+      setTimeout(() => {
+        const target = document.querySelector(
+          `details[data-source="${anchor}"], #font-${anchor}`);
+        if (target) {
+          if (target.tagName.toLowerCase() === "details") target.open = true;
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 250);
+    }
   });
 }
 
@@ -114,6 +130,51 @@ function fillInitialCounters() {
   const inAll = state.data.places.filter(p =>
     new Set(p.entries.map(e => e.source)).size === 5).length;
   $("home-stat-in-all").textContent = fmt(inAll);
+  renderHomeSourcesGrid();
+  renderFontsCounters();
+}
+
+// ---------------------- home sources-grid -----------------------------------
+const SOURCE_AUTHOR = {
+  floridablanca:    "Conde de Floridablanca",
+  minano:           "Sebastián Miñano",
+  madoz:            "Pascual Madoz",
+  nomenclator_1860: "Junta General d'Estadística",
+  riera:            "Pablo Riera y Sans",
+};
+const SOURCE_KIND_BLURB = {
+  floridablanca:    "Cens demogràfic tabular",
+  minano:           "Diccionari geogràfic-estadístic (11 vol.)",
+  madoz:            "Diccionari geogràfic-estadístic-històric (16 vol.)",
+  nomenclator_1860: "Cens d'edificis i albergues",
+  riera:            "Diccionari geogràfic-estadístic-postal (12 vol.)",
+};
+
+function renderHomeSourcesGrid() {
+  const el = $("home-sources-grid");
+  if (!el) return;
+  const by = state.data.totals.by_source || {};
+  el.innerHTML = SOURCE_ORDER.map(src => {
+    const count = by[src]?.total || 0;
+    const year  = SOURCE_YEAR[src];
+    return `
+      <a class="source-card" href="#" data-goto="fonts" data-anchor="${esc(src)}">
+        <div class="source-card-year">${year}</div>
+        <div class="source-card-name">${esc(SOURCE_LABEL[src])}</div>
+        <div class="source-card-author">${esc(SOURCE_AUTHOR[src])}</div>
+        <div class="source-card-kind">${esc(SOURCE_KIND_BLURB[src])}</div>
+        <div class="source-card-count">${fmt(count)} entrades</div>
+      </a>
+    `;
+  }).join("");
+}
+
+function renderFontsCounters() {
+  const by = state.data.totals.by_source || {};
+  for (const src of SOURCE_ORDER) {
+    const el = $(`src-cnt-${src}`);
+    if (el) el.textContent = fmt(by[src]?.total || 0);
+  }
 }
 
 // ---------------------- filters ---------------------------------------------
@@ -994,6 +1055,94 @@ function renderStats() {
     </div>
   `;
   el.dataset.rendered = "1";
+}
+
+// ---------------------- abbreviations ---------------------------------------
+let abbrState = { loaded: false, data: null };
+
+async function renderAbbreviations() {
+  const container = $("abbreviations-container");
+  if (!container) return;
+  if (!abbrState.loaded) {
+    try {
+      const res = await fetch("abbreviations.json" + CACHE_BUST, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      abbrState.data = await res.json();
+      abbrState.loaded = true;
+    } catch (err) {
+      container.innerHTML =
+        `<p class="empty" style="color:#b00">Error carregant abreviatures: ${esc(err.message)}</p>`;
+      return;
+    }
+    bindAbbrSearch();
+  }
+  paintAbbreviations(abbrState.data, $("abbr-search").value.trim());
+}
+
+function paintAbbreviations(data, queryRaw) {
+  const container = $("abbreviations-container");
+  const q = norm(queryRaw);
+  const matchItem = ([a, m]) => !q || norm(a).includes(q) || norm(m).includes(q);
+  const renderList = items => {
+    const rows = items.map(([a, m]) =>
+      `<div class="abbr-item"><span class="abbr-cell">${esc(a)}</span><span class="abbr-def">${esc(m)}</span></div>`
+    ).join("");
+    return `<div class="abbr-list">${rows}</div>`;
+  };
+  const html = SOURCE_ORDER
+    .filter(src => data.by_source[src])
+    .map(src => {
+      const s = data.by_source[src];
+      const cats = s.categories.map(c => {
+        const matched = c.items.filter(matchItem);
+        if (!matched.length) return "";
+        return `
+          <h4 class="abbr-cat">${esc(c.name)}</h4>
+          ${renderList(matched)}
+        `;
+      }).join("");
+      const totalMatched = s.categories
+        .reduce((n, c) => n + c.items.filter(matchItem).length, 0);
+      if (!totalMatched) return "";
+      const notes = (s.context_notes || []).map(n => {
+        const html = esc(n).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+          .replace(/\*(.+?)\*/g, "<em>$1</em>");
+        return `<li>${html}</li>`;
+      }).join("");
+      return `
+        <details class="abbr-source" data-source="${esc(src)}" ${q ? "open" : ""}>
+          <summary>
+            <span class="abbr-source-year">${SOURCE_YEAR[src]}</span>
+            <span class="abbr-source-name">${esc(s.label)}</span>
+            <span class="abbr-source-count">${totalMatched} entrades</span>
+          </summary>
+          ${s.intro ? `<p class="abbr-intro">${esc(s.intro)}</p>` : ""}
+          ${cats}
+          ${notes ? `
+            <div class="abbr-notes">
+              <h4 class="abbr-cat">Notes contextuals</h4>
+              <ul>${notes}</ul>
+              ${s.source_note ? `<p class="abbr-source-note">Font: ${esc(s.source_note)}</p>` : ""}
+            </div>
+          ` : ""}
+        </details>
+      `;
+    }).join("");
+  container.innerHTML = html || `<p class="empty">Cap abreviatura no coincideix amb «${esc(queryRaw)}».</p>`;
+}
+
+let abbrSearchBound = false;
+function bindAbbrSearch() {
+  if (abbrSearchBound) return;
+  const inp = $("abbr-search");
+  if (!inp) return;
+  abbrSearchBound = true;
+  let timer = null;
+  inp.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => paintAbbreviations(abbrState.data, inp.value.trim()), 80);
+  });
 }
 
 // ---------------------- map (global) ----------------------------------------

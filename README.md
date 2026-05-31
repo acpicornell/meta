@@ -85,6 +85,23 @@ Lloc page also includes a small focused map with the place and its
 NGIB sub-features. Leaflet and `leaflet.markercluster` are vendored
 under `web/vendor/`.
 
+## Editorial content
+
+Beyond the data, the web ships two reference tabs:
+
+- **Fonts** — a per-source deep dive (author, dates, editorial
+  structure, biases, link to the sibling) for each of the five
+  nomenclators. The content lives inline in `web/index.html`.
+- **Abreviatures** — a unified abbreviation legend per source,
+  driven by `web/abbreviations.json`. Madoz reuses the canonical
+  table printed in the 1845 vol. I; Riera and Nomenclàtor 1860
+  come from the sibling glossaries; Miñano and Floridablanca are
+  curated short lists.
+
+To add an abbreviation, edit `web/abbreviations.json`. The structure
+is `by_source.<src>.categories[].items[ [abbr, definition] ]`. No
+backend regeneration needed.
+
 ## License
 
 AGPL-3.0-or-later for the code; the original texts are in the public

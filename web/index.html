@@ -34,6 +34,8 @@
   <button class="tab" data-toptab="explore">Explorar</button>
   <button class="tab" data-toptab="map">Mapa</button>
   <button class="tab" data-toptab="place" hidden>Lloc</button>
+  <button class="tab" data-toptab="fonts">Fonts</button>
+  <button class="tab" data-toptab="abbr">Abreviatures</button>
   <button class="tab" data-toptab="stats">Estadístiques</button>
   <button class="tab" data-toptab="notes">Notes</button>
 </nav>
@@ -57,40 +59,67 @@
   </div>
 
   <div class="home-prose">
-    <h2>Per què aquests cinc?</h2>
+    <h2>Què és aquesta plataforma</h2>
     <p>
-      Cap nomenclàtor d'aquest segle ofereix una imatge completa de les
-      Balears per si sol. Els cinc seleccionats han estat triats perquè,
-      en conjunt, documenten la transició demogràfica i administrativa
-      d'una província perifèrica de l'imperi borbònic a una entitat
-      provincial de l'Estat liberal:
+      <strong>Meta</strong> és una eina de lectura paral·lela: agrega cinc
+      grans nomenclàtors històrics de les <strong>Illes Balears</strong>
+      —dels primers censos il·lustrats a la geografia administrativa de
+      la Restauració— en un mateix corpus. Cada lloc canònic apareix amb
+      els articles que se n'han escrit al llarg d'un segle, en ordre
+      cronològic. La unitat editorial no és la font sinó <em>el lloc</em>.
     </p>
-    <ul class="source-list">
-      <li><strong>1787 · Floridablanca.</strong> Cens del primer ministre Floridablanca, transcrit per l'INE. Recompte poble a poble amb desagregació per sexe, edat, estat civil i ofici.</li>
-      <li><strong>1826 · Miñano.</strong> Primer diccionari geogràfic-estadístic modern de la península, dues dècades anterior al Madoz.</li>
-      <li><strong>1845 · Madoz.</strong> El gran diccionari liberal: 1.200+ articles balears amb descripció de termes, jurisdiccions, agricultura i indústria.</li>
-      <li><strong>1860 · Nomenclàtor de la Junta General d'Estadística.</strong> El primer recompte modern d'edificis i albergs lloc a lloc, peça mestra per a la història del poblament.</li>
-      <li><strong>1881 · Riera.</strong> Diccionari de la Restauració, amb informació sobre infraestructura postal, instrucció pública i obres públiques.</li>
-    </ul>
+    <p>
+      Les dades de cada font les extreuen els cinc <a href="#" data-goto="fonts">projectes germans</a>
+      (un per nomenclàtor). Aquesta plataforma <strong>no torna a
+      transcriure res</strong>: només els enllaça, els compara i els
+      mostra junts.
+    </p>
+
+    <h2>Per què aquestes cinc fonts</h2>
+    <p>
+      El rang <strong>1787 → 1881</strong> cobreix la transició demogràfica i
+      administrativa d'una província perifèrica de l'imperi borbònic a
+      una entitat provincial de l'Estat liberal. Cap font sola dóna una
+      imatge completa: l'una és tabular, l'altra narrativa, l'altra
+      només compta edificis. Llegides juntes esdevenen una història del
+      poblament i del territori. Vegeu la pestanya
+      <a href="#" data-goto="fonts">Fonts</a> per a la fitxa detallada
+      de cada nomenclàtor.
+    </p>
 
     <h2>L'ancoratge: el NGIB</h2>
     <p>
-      Cada lloc canònic d'aquesta plataforma està identificat per un
-      <strong>geographic_name_id</strong> del
-      <a href="https://www.ngib.cat" target="_blank" rel="noopener">Nomenclàtor Geogràfic de les Illes Balears</a>.
-      Els topònims castellans del XVIII i XIX — Mahón, San Lorenzo,
-      Buñola, Pollensa, Iviza… — han estat enllaçats al seu equivalent
-      català modern mitjançant una combinació de regles deterministes,
-      coincidència aproximada i una taula curada de variants històriques.
-      El procediment complet es documenta a la pestanya <a href="#" data-goto="notes">Notes</a>.
+      Cada lloc canònic s'identifica amb un <strong>geographic_name_id</strong>
+      del <a href="https://www.ngib.cat" target="_blank" rel="noopener">Nomenclàtor
+      Geogràfic de les Illes Balears</a>. Els topònims castellans del
+      XVIII i XIX —Mahón, San Lorenzo, Buñola, Pollensa, Iviza, Lluchmayor…—
+      es resolen al seu equivalent català modern mitjançant una cascada
+      de regles deterministes, coincidència aproximada i una taula curada
+      d'unes 360 variants històriques.
     </p>
     <p>
-      <strong>Sobre el mapa.</strong> La pestanya <a href="#" data-goto="map">Mapa</a>
-      mostra cada lloc canònic com a marcador sobre la cartografia
-      d'OpenStreetMap, agrupat en clusters quan el zoom és baix. Les
-      coordenades són les del NGIB. Cada Lloc inclou també un mini-mapa
-      amb les sub-entitats al voltant.
+      El model és <em>dual-link</em>: cada article té un
+      <strong>describes_ngib_id</strong> (l'entitat que descriu) i un
+      <strong>parent_ngib_id</strong> (el municipi on és). Per això
+      <em>Port de Sóller</em> i <em>Sóller</em> apareixen com a pàgines
+      Lloc independents tot i estar al mateix terme. El procediment
+      complet es documenta a la pestanya <a href="#" data-goto="notes">Notes</a>.
     </p>
+
+    <h2>Què trobaràs a cada pestanya</h2>
+    <ul class="tab-guide">
+      <li><strong><a href="#" data-goto="explore">Explorar</a></strong> — cerca per topònim català o històric, amb filtres per illa, tipus NGIB i font on apareix.</li>
+      <li><strong><a href="#" data-goto="map">Mapa</a></strong> — els 1.520 llocs sobre OpenStreetMap, agrupats per cluster i filtrables per font.</li>
+      <li><strong><a href="#" data-goto="fonts">Fonts</a></strong> — fitxa històrica i editorial de cadascun dels cinc nomenclàtors.</li>
+      <li><strong><a href="#" data-goto="abbr">Abreviatures</a></strong> — llegendes d'abreviatures per font (Madoz, Riera, 1860 i altres).</li>
+      <li><strong><a href="#" data-goto="stats">Estadístiques</a></strong> — cobertura, distribució per illa, kind d'entrada, presència per font.</li>
+      <li><strong><a href="#" data-goto="notes">Notes</a></strong> — metodologia detallada del procediment d'enllaç i de la qualitat del corpus.</li>
+    </ul>
+
+    <h2>Les cinc fonts en una llambregada</h2>
+    <div class="sources-grid" id="home-sources-grid">
+      <div class="empty-note">Carregant…</div>
+    </div>
   </div>
 </section>
 
@@ -183,6 +212,240 @@
   <div id="place-detail"></div>
 </section>
 
+<!-- ===== FONTS (deep dive per font) ===== -->
+<section id="tab-fonts" class="tab-content" data-toptab="fonts">
+  <div class="modern-intro">
+    <h2>Les cinc fonts en detall</h2>
+    <p>
+      Cada una d'aquestes obres és el resultat d'un projecte editorial
+      propi —un cens il·lustrat, un diccionari liberal, un cens
+      d'edificis, una compilació de la Restauració— i té la seva
+      lògica interna, els seus biaixos i les seves convencions
+      ortotipogràfiques. La fitxa de cadascuna n'explica l'autor,
+      l'època, l'estructura editorial i la naturalesa de les dades
+      que aporta a aquesta plataforma.
+    </p>
+  </div>
+
+  <article class="source-deep" id="font-floridablanca">
+    <header>
+      <h2><span class="year">1787</span> Cens de Floridablanca</h2>
+      <p class="byline">José Moñino y Redondo (1728–1808), comte de Floridablanca · Madrid</p>
+      <p class="bib"><em>Censo español executado de orden del Rey comunicada por el Excelentísimo Señor Conde de Floridablanca, Primer Secretario de Estado y del Despacho, en el año de 1787.</em> Re-transcripció INE (Madrid, 1986).</p>
+    </header>
+    <p>
+      Floridablanca, primer secretari d'Estat de Carles III i màxima figura
+      del reformisme borbònic, encarrega el 1786 un <strong>recompte
+      sistemàtic dels regnes d'Espanya</strong> per donar al govern una
+      base estadística fiable per a la fiscalitat, la conscripció i la
+      reforma administrativa. És el cens espanyol modern fundacional:
+      primera presa nominal poble a poble, no agregada per parròquies.
+    </p>
+    <p>
+      A diferència dels diccionaris posteriors, el cens <strong>no és
+      narratiu</strong>: cada poble ocupa una pàgina de taula amb
+      desagregació per sexe, estat civil (solters, casats, vidus), grup
+      d'edat (set franges de 7 a 50+) i ofici (labradors, jornalers,
+      artesans, comerciants, eclesiàstics, etc.). El resultat: una
+      <em>radiografia administrativa i demogràfica</em> dels pobles
+      balears en vespres de la Revolució Francesa.
+    </p>
+    <p>
+      Les transcripcions modernes provenen del facsímil INE de 1986
+      (Tomo VI: Provincia de Baleares). Bibliografia clau:
+      <em>La Población española en 1787</em> (INE, 1991) i Juan Vidal
+      (1987) per a la crítica de fiabilitat — el cens conté
+      sub-recomptes coneguts a Ciutadella i sobre-recomptes a Palma.
+    </p>
+    <p class="source-meta">
+      Aporta a meta: <strong id="src-cnt-floridablanca">…</strong> entrades, 111 municipis.
+      Projecte germà: <a href="https://floridablanca-balears.pages.dev" target="_blank" rel="noopener">floridablanca-balears.pages.dev</a>.
+      Llegenda d'abreviatures: <a href="#" data-goto="abbr" data-anchor="floridablanca">veure a Abreviatures →</a>.
+    </p>
+  </article>
+
+  <article class="source-deep" id="font-minano">
+    <header>
+      <h2><span class="year">1826-1829</span> Diccionari de Miñano</h2>
+      <p class="byline">Sebastián Miñano y Bedoya (1779–1845) · Madrid</p>
+      <p class="bib"><em>Diccionario geográfico-estadístico de España y Portugal.</em> 11 volums, Imprenta de Pierart-Peralta, Madrid (1826-1829).</p>
+    </header>
+    <p>
+      Miñano fou prevere afrancesat, periodista satíric (<em>El Lazarillo
+      de Tormes en sus paseos por las calles de Madrid</em>, 1820) i
+      lexicògraf liberal. Bandejat de la cort el 1814 i el 1823 pels seus
+      escrits, escrigué la major part del Diccionari durant els exilis,
+      sobreposant la xarxa de corresponsals provincials d'una elit liberal
+      tot just sortint del Trienni.
+    </p>
+    <p>
+      És el <strong>primer diccionari geogràfic-estadístic modern</strong>
+      d'Espanya: combina text narratiu (situació, accidents,
+      jurisdicció) amb dades quantitatives sistemàtiques (vecinos,
+      ànimes, contribucions, llengües) en un mateix article. Madoz, dues
+      dècades més tard, n'hereta l'estructura i la multiplica per cinc.
+    </p>
+    <p>
+      Els articles balears són modestos en nombre (~210) però sovint
+      precisos en jurisdicció senyorial i en límits de partit. El
+      <strong>Tom XI (1829)</strong> és un suplement amb 88 entrades
+      addicionals — actualitzacions, errates i articles que no havien
+      arribat a temps. Apareixen marcats amb el badge SUPLEMENT.
+    </p>
+    <p class="source-meta">
+      Aporta a meta: <strong id="src-cnt-minano">…</strong> entrades.
+      Projecte germà: <a href="https://minano-balears.pages.dev" target="_blank" rel="noopener">minano-balears.pages.dev</a>.
+      Llegenda d'abreviatures: <a href="#" data-goto="abbr" data-anchor="minano">veure a Abreviatures →</a>.
+    </p>
+  </article>
+
+  <article class="source-deep" id="font-madoz">
+    <header>
+      <h2><span class="year">1845-1850</span> Diccionari de Madoz</h2>
+      <p class="byline">Pascual Madoz Ibáñez (1806–1870) · Madrid</p>
+      <p class="bib"><em>Diccionario geográfico-estadístico-histórico de España y sus posesiones de Ultramar.</em> 16 volums (Madrid, 1845-1850).</p>
+    </header>
+    <p>
+      Madoz, advocat i polític progressista navarrès, fou diputat per
+      Lleida, alcalde de Madrid, governador civil de Barcelona,
+      president de les Corts i, breument, ministre d'Hisenda. La seva
+      <strong>desamortització de béns municipals i eclesiàstics</strong>
+      del 1855 és posterior al diccionari, però es percep ja el clima
+      liberal a moltes entrades.
+    </p>
+    <p>
+      És l'obra de referència del segle XIX. Setze volums, prop de
+      <strong>70.000 entrades</strong> a tot l'Estat, redactades amb
+      l'ajuda de <strong>més de mil corresponsals locals</strong>. La
+      cobertura balear (1.217 entrades) és insòlitament detallada:
+      Madoz documenta cada predi de certa importància, cada talaia
+      costera, cada antic convent secularitzat per la desamortització
+      de Mendizábal (1836).
+    </p>
+    <p>
+      Estructuralment, cada article major combina seccions de geografia,
+      jurisdicció, agricultura, indústria, comerç, instrucció pública i
+      història local. El <strong>Tom XVI (Adiciones, 1850)</strong> és
+      l'últim volum, amb 20 entrades balears tardanes — majoritàriament
+      predis i possessions menors. La llegenda d'abreviatures (~80 entrades)
+      està impresa al tom I i és la més extensa dels cinc.
+    </p>
+    <p class="source-meta">
+      Aporta a meta: <strong id="src-cnt-madoz">…</strong> entrades.
+      Projecte germà: <a href="https://madoz.pages.dev" target="_blank" rel="noopener">madoz.pages.dev</a>.
+      Llegenda d'abreviatures: <a href="#" data-goto="abbr" data-anchor="madoz">veure a Abreviatures →</a>.
+    </p>
+  </article>
+
+  <article class="source-deep" id="font-nomenclator_1860">
+    <header>
+      <h2><span class="year">1860</span> Nomenclàtor</h2>
+      <p class="byline">Junta General d'Estadística del Regne · Madrid</p>
+      <p class="bib"><em>Nomenclátor que comprende las poblaciones, grupos, edificios, viviendas, albergues, etc., de las cuarenta y nueve provincias de España.</em> 5 volums (Imprenta de José María Ortiz, Madrid 1863-1871).</p>
+    </header>
+    <p>
+      El primer cens espanyol modern d'<strong>edificis i poblament</strong>.
+      No comptem aquí persones sinó cases, cases de pagès, barraques,
+      coves i albergs, classificats per ús (habitats permanents,
+      estacionals, deshabitats) i per nombre de plantes. La unitat
+      d'observació no és el municipi sinó la <em>entidad de població</em> —
+      la xarxa fina del poblament rural.
+    </p>
+    <p>
+      L'INE com a tal no existia: es creà el 1945. Els censos els
+      elaborava la Junta General d'Estadística (1856-1873) i, a partir
+      de 1870, l'Institut Geogràfic i Estadístic que la va succeir. La
+      digitalització balear cobreix les <strong>51 pàgines</strong> del
+      volum corresponent: 60 municipis, ~3.000 entitats de població,
+      classificades en 5 partits judicials (Eivissa, Inca, Maó,
+      Manacor, Palma).
+    </p>
+    <p>
+      És la font més massiva en volum d'entrades (~3.000 sobre les
+      4.627 totals de meta) però la menys narrativa. Cada fila és un
+      <em>número estadístic</em>; per llegir-la cal saber descodificar
+      les columnes <code>HC/HT/Inh</code> i <code>P1-P3/PM/Alb</code>.
+    </p>
+    <p class="source-meta">
+      Aporta a meta: <strong id="src-cnt-nomenclator_1860">…</strong> entrades.
+      Projecte germà: <a href="https://nomenclator-1860-balears.pages.dev" target="_blank" rel="noopener">nomenclator-1860-balears.pages.dev</a>.
+      Llegenda i codis: <a href="#" data-goto="abbr" data-anchor="nomenclator_1860">veure a Abreviatures →</a>.
+    </p>
+  </article>
+
+  <article class="source-deep" id="font-riera">
+    <header>
+      <h2><span class="year">1881-1887</span> Diccionari de Riera</h2>
+      <p class="byline">Pablo Riera y Sans (1820–1897) · Barcelona</p>
+      <p class="bib"><em>Diccionario geográfico, estadístico, histórico, biográfico, postal, municipal, militar, marítimo y eclesiástico de España y sus posesiones de ultramar.</em> 12 volums (Barcelona, 1881-1887).</p>
+    </header>
+    <p>
+      Riera, editor i compilador a Barcelona, dirigeix durant la
+      Restauració el darrer gran diccionari geogràfic-estadístic
+      d'Espanya. Posterior a Madoz però estructurat al voltant del
+      <strong>cens nacional de 1877</strong> i del nou esquema
+      administratiu —audiència territorial, partit judicial, governs
+      civil i militar, diòcesi— que havia desplaçat les jurisdiccions
+      senyorials de l'Antic Règim.
+    </p>
+    <p>
+      Cada article major es desglossa en <strong>nou seccions
+      administratives template</strong>: Organització judicial · civil ·
+      militar · econòmica · eclesiàstica · Servei públic · Obres
+      públiques · Instrucció pública · Població. Les articles llargs
+      sumen tres camps narratius opcionals (Indústria, Situació
+      geogràfica, Història i biografia).
+    </p>
+    <p>
+      Adopta ja el <strong>sistema mètric decimal</strong>
+      (kilòmetres, pessetes) i incorpora dades estructurals que Madoz
+      no podia conèixer: trams de ferrocarril, conduccions postals
+      marítimes, contribució industrial. Els articles balears són
+      sovint més compactes que els de Madoz però amb informació
+      administrativa més precisa per a la dècada de 1880.
+    </p>
+    <p class="source-meta">
+      Aporta a meta: <strong id="src-cnt-riera">…</strong> entrades.
+      Projecte germà: <a href="https://riera-balears.pages.dev" target="_blank" rel="noopener">riera-balears.pages.dev</a>.
+      Llegenda d'abreviatures: <a href="#" data-goto="abbr" data-anchor="riera">veure a Abreviatures →</a>.
+    </p>
+  </article>
+
+  <div class="modern-intro">
+    <h3>Per què aquests cinc i no més</h3>
+    <p>
+      Existeixen altres recomptes balears del segle XIX (Despuig 1785,
+      Tofiño 1786, Salvà 1812, Pascual Madoz Tabla resumen 1842…) però
+      cap té el doble caràcter de <strong>cobertura insular completa</strong>
+      i <strong>article-per-lloc</strong> dels cinc seleccionats. La
+      tabla resumen 1842, per exemple, és agregada per partit; Tofiño
+      és nàutic. Els cinc inclosos cobreixen un segle gairebé continu i
+      cada un aporta una mirada distinta: cens fundacional, diccionari
+      precursor, diccionari liberal de referència, cens d'edificis, i
+      diccionari postal-administratiu de la Restauració.
+    </p>
+  </div>
+</section>
+
+<!-- ===== ABREVIATURES ===== -->
+<section id="tab-abbr" class="tab-content" data-toptab="abbr">
+  <div class="modern-intro">
+    <h2>Abreviatures per font</h2>
+    <p>
+      Cada nomenclàtor empra el seu propi sistema d'abreviatures, més o
+      menys explícitament documentat al volum I. Madoz publica una taula
+      canònica de ~80 entrades; Riera n'usa una de més extensa però sense
+      taula impresa; el Nomenclàtor de 1860 utilitza codis de columna en
+      lloc d'abreviatures pròpiament dites. Aquí els recollim tots junts,
+      organitzats per font i categoria. Cliqueu el títol per desplegar.
+    </p>
+    <input type="search" id="abbr-search" placeholder="Cerca per abreviatura o significat…" autocomplete="off">
+  </div>
+  <div id="abbreviations-container">
+    <p class="empty">Carregant…</p>
+  </div>
+</section>
+
 <!-- ===== STATS ===== -->
 <section id="tab-stats" class="tab-content" data-toptab="stats">
   <h2>Estadístiques del corpus</h2>
@@ -245,6 +508,17 @@
     <li><a href="https://riera-balears.pages.dev" target="_blank" rel="noopener">riera-balears</a> · Diccionari de Riera, 1881–1887</li>
   </ul>
 
+  <h3>Cobertura informativa</h3>
+  <p>
+    El contingut editorial de cada nomenclàtor —qui era l'autor, com es
+    va elaborar, quina estructura té cada article, quins biaixos hi ha—
+    es presenta a la pestanya <a href="#" data-goto="fonts">Fonts</a>.
+    Per llegir entrades del segle XIX cal sovint descodificar
+    abreviatures (<code>dióc.</code>, <code>aud. terr.</code>,
+    <code>cot. red.</code>, <code>cap.</code>…); la taula completa per
+    font és a <a href="#" data-goto="abbr">Abreviatures</a>.
+  </p>
+
   <h3>Mapa</h3>
   <p>
     La pestanya <em>Mapa</em> renderitza tots els 1.520 llocs canònics
@@ -268,6 +542,33 @@
     Els textos originals dels cinc nomenclàtors són de domini públic.
   </p>
 </section>
+
+<footer>
+  <p>
+    Edició digital agregadora dels cinc nomenclàtors històrics balears
+    (1787-1881), enllaçats al <em>Nomenclàtor Geogràfic de les Illes
+    Balears</em> (NGIB) com a autoritat de topònims canònics. Les
+    extraccions originals provenen dels cinc projectes germans
+    enllaçats a la pestanya <a href="#" data-goto="fonts">Fonts</a>.
+  </p>
+  <p>
+    Llicència del codi:
+    <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0</a>.
+    Textos originals (1787-1881): domini públic.
+    Coordenades derivades del
+    <a href="https://ideib.caib.es/ngib/" target="_blank" rel="noopener">NGIB</a>
+    (Govern de les Illes Balears, IDEIB),
+    <a href="https://intranet.caib.es/opendatacataleg/es/dataset/lloc_anomenat" target="_blank" rel="noopener">CC BY</a>.
+  </p>
+  <p class="footer-repo">
+    <a class="repo-link" href="https://github.com/acpicornell/meta" target="_blank" rel="noopener" aria-label="Repositori a GitHub">
+      <svg class="repo-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      Codi al repositori
+    </a>
+  </p>
+</footer>
 
 <script src="vendor/leaflet.js"></script>
 <script src="vendor/markercluster.js"></script>

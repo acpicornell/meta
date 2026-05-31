@@ -1,0 +1,454 @@
+{
+  "by_source": {
+    "floridablanca": {
+      "label": "Floridablanca (1787)",
+      "year": 1787,
+      "intro": "El cens de Floridablanca és estructuralment tabular — cada poble es presenta amb columnes per sexe, estat civil, grup d'edat i ofici. Les abreviatures explícites són poques i corresponen a categories demogràfiques. La llista següent recull les més habituals dels títols de columna i les notes d'estructura.",
+      "source_note": "No hi ha taula d'abreviatures oficial al cens; aquesta llista és curada a partir de les categories del facsímil INE 1986.",
+      "categories": [
+        {
+          "name": "Estat civil i sexe",
+          "items": [
+            ["Vec.", "Vecino — cap de família (~1 família = ~4-5 persones)"],
+            ["Alm.", "Almas — total d'habitants comptats individualment"],
+            ["S.", "Solters / Solteres"],
+            ["C.", "Casats / Casades"],
+            ["V.", "Vidus / Vídues"],
+            ["Masc.", "Masculí (en el sentit demogràfic)"],
+            ["Fem.", "Femení"]
+          ]
+        },
+        {
+          "name": "Grups d'edat (Taula 3 del facsímil)",
+          "items": [
+            ["7 a.", "Fins als 7 anys (infantesa primerenca)"],
+            ["7-16", "De 7 a 16 anys"],
+            ["16-25", "De 16 a 25 anys (servei militar)"],
+            ["25-40", "Edat fèrtil i productiva"],
+            ["40-50", "Madura"],
+            ["50 +", "Vellesa"]
+          ]
+        },
+        {
+          "name": "Eclesiàstics i ocupacions (Taula 4)",
+          "items": [
+            ["Eccls.", "Eclesiàstics (clergat secular)"],
+            ["Reg.", "Regulars (religiosos amb vot)"],
+            ["Sec.", "Seculars (sense vot regular)"],
+            ["Lab.", "Labradores (pagesos amb propietat)"],
+            ["Jor.", "Jornaleros (assalariats agrícoles)"],
+            ["Art.", "Artesanos (mestres i oficials d'ofici)"],
+            ["Com.", "Comerciantes"],
+            ["Crd.", "Criados / serventes"],
+            ["Hid.", "Hidalgos (gentilesa)"],
+            ["Mil.", "Militares"],
+            ["Estud.", "Estudiantes"]
+          ]
+        },
+        {
+          "name": "Estructura administrativa",
+          "items": [
+            ["Cor.", "Corregimiento"],
+            ["Juris.", "Jurisdicción (senyorial / reial / d'ordres militars)"],
+            ["Part.", "Partido (subdivisió administrativa)"],
+            ["Pob.", "Población"]
+          ]
+        }
+      ],
+      "context_notes": [
+        "El cens es publicà el 1787 sota direcció de **José Moñino, comte de Floridablanca**, primer secretari d'Estat de Carles III. L'objectiu era donar al govern una imatge precisa de la població per després planificar la fiscalitat i la conscripció.",
+        "La distinció **vecino / alma** és clau: vecino és la unitat fiscal (cap de família); alma és cada persona individual. Multiplicar vec. × 4,5 dóna una estimació orientativa quan les ànimes no estan separades.",
+        "A diferència de Madoz i Riera, **Floridablanca no és narratiu**: no hi ha descripció de pobles, només taules. Per això la pàgina Lloc mostra blocs estadístics i no text continu.",
+        "Per a la versió INE 1986 i la metodologia d'edició, vegeu el projecte germà a [floridablanca-balears.pages.dev](https://floridablanca-balears.pages.dev)."
+      ]
+    },
+
+    "minano": {
+      "label": "Miñano (1826-1829)",
+      "year": 1826,
+      "intro": "Miñano fou el primer a establir el sistema d'abreviatures que Madoz adoptaria i ampliaria dues dècades més tard. La majoria dels termes són idèntics; les diferències són menors (l'ortografia castellana del 1826 és més arcaica). El Tom XI (1829) és el suplement amb addicions i errates.",
+      "source_note": "El Diccionari de Miñano no inclou taula d'abreviatures oficial; la llista següent és el subconjunt funcional que apareix sistemàticament als articles balears, sobreposable a Madoz.",
+      "categories": [
+        {
+          "name": "Tipus de població",
+          "items": [
+            ["V.", "Villa"],
+            ["L.", "Lugar"],
+            ["C.", "Ciudad"],
+            ["Ald.", "Aldea"],
+            ["Cas.", "Caserío"],
+            ["Cot. red.", "Coto redondo (possessió tancada)"],
+            ["Desp.", "Despoblado"],
+            ["Felig.", "Feligresía"],
+            ["Cuart.", "Cuartón (subdivisió eivissenca)"]
+          ]
+        },
+        {
+          "name": "Administració",
+          "items": [
+            ["prov.", "Provincia"],
+            ["part.", "Partido"],
+            ["ob.", "Obispado"],
+            ["dióc.", "Diócesis"],
+            ["ayunt.", "Ayuntamiento"],
+            ["jurisd.", "Jurisdicción"],
+            ["s. e.", "Señorío eclesiástico"],
+            ["s. s.", "Señorío secular"]
+          ]
+        },
+        {
+          "name": "Geografia i economia",
+          "items": [
+            ["sit.", "Situado, situación"],
+            ["dist.", "Distante, distancia"],
+            ["leg.", "Legua (~5,5 km)"],
+            ["térm.", "Término"],
+            ["alt.", "Altitud"],
+            ["lat.", "Latitud"],
+            ["long.", "Longitud"],
+            ["vec.", "Vecino"],
+            ["hab.", "Habitantes"],
+            ["fan.", "Fanega (unitat de superfície agrícola)"],
+            ["arr.", "Arrobas (unitat de pes ~11,5 kg)"],
+            ["rs.", "Reales (moneda)"]
+          ]
+        },
+        {
+          "name": "Referències creuades",
+          "items": [
+            ["V.", "Véase — remissió a un altre article"],
+            ["(adición)", "Article del Tom XI (suplement, 1829) — addicions i errates"]
+          ]
+        }
+      ],
+      "context_notes": [
+        "**Sebastián Miñano y Bedoya** (Becerril de Campos, 1779 – Bayonne, 1845) fou prevere afrancesat, periodista satíric i lexicògraf liberal. Va escriure el Diccionari durant l'exili polític, publicant-ne els primers volums el 1826.",
+        "L'obra té **11 volums** ordenats alfabèticament; el Tom XI és un suplement amb **88 entrades balears** addicionals (entre adicions i errates). A la pestanya Explorar es marquen amb el badge SUPLEMENT.",
+        "Miñano és **precursor metodològic** de Madoz: per primer cop un diccionari geogràfic-estadístic combinava text narratiu amb dades quantitatives sistemàtiques (vecinos, llengües, contribuciones). Madoz hereta l'estructura i la multiplica per cinc.",
+        "Per al detall i el text complet, vegeu [minano-balears.pages.dev](https://minano-balears.pages.dev)."
+      ]
+    },
+
+    "madoz": {
+      "label": "Madoz (1845-1850)",
+      "year": 1845,
+      "intro": "Llista canònica del Madoz, transcrita literalment del facsímil del tom I (1845), pàgines preliminars sota el títol «Esplicacion de las abreviaturas». L'ortografia conserva les variants del segle XIX (esplicacion amb «s», setentrion amb una sola «p», etc.).",
+      "source_note": "Font: Madoz, tom I, pàgines preliminars (1845). «Esplicacion de las abreviaturas». Transcrita literalment del facsímil.",
+      "categories": [
+        {
+          "name": "Administratives",
+          "items": [
+            ["ab.", "abadengo"],
+            ["adm.", "administracion"],
+            ["alc. c.", "alcalde constitucional"],
+            ["alc. m.", "alcalde mayor"],
+            ["alc. p.", "alcalde pedáneo"],
+            ["art.", "articulo"],
+            ["arz.", "arzobispo, arzobispado"],
+            ["aud.", "audiencia"],
+            ["ayunt.", "ayuntamiento"],
+            ["c. g.", "capitania general"],
+            ["cab.", "cabeza"],
+            ["cap.", "capital"],
+            ["cated.", "catedral, cátedra"],
+            ["cend.", "cendea"],
+            ["col.", "colegiata"],
+            ["com. g.", "comandancia general"],
+            ["conc.", "concejo, concejil"],
+            ["cond.", "conde, condado"],
+            ["correg.", "corregidor, corregimiento"],
+            ["conv.", "convento"],
+            ["dióc.", "diócesis"],
+            ["dip.", "diputado"],
+            ["distr.", "distrito"],
+            ["ecl.", "eclesiásticos"],
+            ["ep.", "episcopal"],
+            ["herm.", "hermandad"],
+            ["igl.", "iglesia"],
+            ["jurisd.", "jurisdiccion"],
+            ["juzg.", "juzgado"],
+            ["merind.", "merindad"],
+            ["monast.", "monasterio"],
+            ["ob.", "obispado, obispo"],
+            ["parr.", "parroquia, parroquial"],
+            ["part. jud.", "partido judicial"],
+            ["prov.", "provincia"],
+            ["señ.", "señorío"],
+            ["univ.", "universidad"]
+          ]
+        },
+        {
+          "name": "Tipus de població",
+          "items": [
+            ["ald.", "aldea"],
+            ["alq.", "alqueria"],
+            ["anteigl.", "anteiglesia"],
+            ["c.", "ciudad"],
+            ["cas.", "caserio"],
+            ["cast.", "castillo"],
+            ["cot. red.", "coto redondo"],
+            ["desp.", "despoblado"],
+            ["felig.", "feligresía"],
+            ["fort.", "fortaleza"],
+            ["l.", "lugar"],
+            ["pobl.", "poblacion"],
+            ["v.", "villa"],
+            ["(V.)", "Véase"]
+          ]
+        },
+        {
+          "name": "Geografia física",
+          "items": [
+            ["alt.", "altitud"],
+            ["cord.", "cordillera"],
+            ["cuad.", "cuadra"],
+            ["deh.", "dehesa"],
+            ["der.", "derecha"],
+            ["dist.", "dista, distante, distancia"],
+            ["fab.", "fábrica"],
+            ["ferr.", "ferrería"],
+            ["izq.", "izquierda"],
+            ["lat.", "latitud"],
+            ["leg.", "legua"],
+            ["lim.", "limite, limita"],
+            ["long.", "longitud"],
+            ["márg.", "márgen"],
+            ["marit.", "marítima, o"],
+            ["r.", "rio"],
+            ["riach.", "riachuelo"],
+            ["sit.", "situacion, situado, a"],
+            ["térm.", "término"],
+            ["terr.", "territorio, territorial"]
+          ]
+        },
+        {
+          "name": "Punts cardinals",
+          "items": [
+            ["N.", "Norte"],
+            ["S.", "Sur"],
+            ["E.", "Este"],
+            ["O.", "Oeste"],
+            ["NE.", "Nordeste"],
+            ["NO.", "Noroeste"],
+            ["SE.", "Sudeste"],
+            ["SO.", "Sudoeste"],
+            ["Set.", "Setentrion, al"]
+          ]
+        },
+        {
+          "name": "Demografia i economia",
+          "items": [
+            ["a", "arroba"],
+            ["alm.", "almas"],
+            ["contr.", "contribucion"],
+            ["fan.", "fanega"],
+            ["hab.", "habitantes"],
+            ["imp.", "imponible"],
+            ["ind.", "industria, industrial"],
+            ["prod.", "productos"],
+            ["qq.", "quintales"],
+            ["quint.", "quintal"],
+            ["rent.", "rentas"],
+            ["vec.", "vecino"]
+          ]
+        },
+        {
+          "name": "Altres i signes",
+          "items": [
+            ["ant.", "antiguo, a"],
+            ["descrip.", "descripcion"],
+            ["=", "igual"],
+            ["—", "menos"],
+            ["+", "mas"],
+            ["×", "por"]
+          ]
+        },
+        {
+          "name": "Abreviatures de les entrades no llistades al tom I",
+          "items": [
+            ["rs.", "reales (moneda)"],
+            ["rs. vn.", "reales de vellón (moneda corrent al segle XIX)"],
+            ["vn.", "vellón (sufix monetari)"],
+            ["mrs.", "maravedís (1 real = 34 maravedís)"],
+            ["marít.", "marítima, marítimo (variant accentuada de marit.)"],
+            ["fáb.", "fábrica (variant accentuada de fab.)"],
+            ["exconv.", "ex-convento (immoble desafectat per la desamortització de Mendizábal, 1836)"],
+            ["depart.", "departamento (marítim, militar)"]
+          ]
+        }
+      ],
+      "context_notes": [
+        "Aquesta llista és **canònica del Madoz**: està impresa a les pàgines preliminars del tom I (1845) sota el títol «ESPLICACION DE LAS ABREVIATURAS» (ortografia original).",
+        "El terme **predio**, freqüent als articles balears, no apareix com a abreviatura — es deixa sempre sencer. A les Balears designa una finca rústica gran amb casa pairal (català: **possessió** o **casal**).",
+        "**Vecino** és la unitat fiscal/administrativa (~1 família amb cap de casa). Per estimar habitants es multiplica per ~4-5.",
+        "**Almas** és el recompte total de persones, a diferència de *vecinos*.",
+        "**Felig.** (feligresía) a Galícia designa una parròquia rural; a les Balears el Madoz l'aplica per analogia a alguns predis amb església.",
+        "Una **legua** castellana ≈ 5,5 km. Les distàncies «en horas» són hores de marxa a peu (~4 km/h).",
+        "El Madoz escriu **Setentrion** amb una sola 'p' (variant del segle XIX); ortografia moderna: *septentrión*."
+      ]
+    },
+
+    "nomenclator_1860": {
+      "label": "Nomenclàtor 1860",
+      "year": 1860,
+      "intro": "El Nomenclàtor de 1860 no és narratiu sinó tabular. Les «abreviatures» són en realitat **codis de columna** que cal saber interpretar per llegir les dades. La llista següent prové del glossari del germà nomenclator_1860 i recull les columnes del cens d'edificis i albergues, més les classes de població definides a les notes de la pàgina 50 de l'original.",
+      "source_note": "Adaptat del glossari estadístic del projecte germà nomenclator_1860-balears.pages.dev.",
+      "categories": [
+        {
+          "name": "Columnes per ús",
+          "items": [
+            ["HC", "Inhabited permanent — edificis habitats tot l'any"],
+            ["HT", "Inhabited seasonal — edificis ocupats només una part de l'any"],
+            ["Inh", "Uninhabited — edificis sense ocupants en el moment del cens"]
+          ]
+        },
+        {
+          "name": "Columnes per nombre de plantes",
+          "items": [
+            ["P1", "Edificis d'1 planta"],
+            ["P2", "Edificis de 2 plantes"],
+            ["P3", "Edificis de 3 plantes"],
+            ["PM", "Edificis de més de 3 plantes"],
+            ["Alb", "Albergues — estructures habitables que no són edificis (barraques, coves, cases de palla, casetes…)"],
+            ["Total", "HC + HT + Inh = P1 + P2 + P3 + PM + Alb"]
+          ]
+        },
+        {
+          "name": "Classes de població (def. literals del facsímil)",
+          "items": [
+            ["Ciudad / Villa / Lugar / Aldéa", "Poblacions consolidades, classificades per l'apel·latiu oficial"],
+            ["Caserío", "«Dos ó mas casas, siempre en corto número, habitadas constante ó temporalmente»"],
+            ["Grupo", "«Cada conjunto de construcciones mas ó menos perceptibles constantemente inhabitadas»"],
+            ["Casa / Prédio / Casa de labor", "Edificis habitats individuals (no part d'una població)"],
+            ["Albergues", "«Entidades que están también habitadas, pero que no son edificios: barraca, caseta, cueva, choza…»"],
+            ["Sítios", "«Entidades, sean ó no edificios, que se hallan inhabitadas: almacenes, bodegas, ermitas, palomares…»"]
+          ]
+        },
+        {
+          "name": "Classes freqüents a les Balears",
+          "items": [
+            ["Casa de huerto", "Casa annexa a un hort o explotació hortícola"],
+            ["Casa de recréo", "Segona residència d'ús estacional"],
+            ["Molino de viento / Aceña / Molí", "Molins (aceña = molí hidràulic tradicional)"],
+            ["Torre de vigía / Atalaya / Torre de faro", "Estructures defensives o de senyalització costanera"],
+            ["Parróquia y casa / Oratório / Capilla del cementério", "Edificis eclesiàstics"]
+          ]
+        },
+        {
+          "name": "Convencions del text original",
+          "items": [
+            ["»", "Símbol equivalent a zero al PDF de 1860 (a la BD: 0)"],
+            ["9'3", "Distància 9,3 km (apòstrof = separador decimal)"],
+            ["1.062", "1062 (el punt és separador europeu de milers, no decimal)"]
+          ]
+        }
+      ],
+      "context_notes": [
+        "Font: *Nomenclátor que comprende las poblaciones, grupos, edificios, viviendas, albergues, etc.*, **Junta General de Estadística del Reino**, Madrid 1863-1871. 5 volums (un per regió). Aquesta edició cobreix les 51 pàgines del volum corresponent a Balears: **60 municipis** i **~3.000 entitats** de població.",
+        "L'INE no existia: es creà el 1945. Abans, els censos els elaborava la Junta General d'Estadística (1856-1873), i a partir de 1870 l'**Institut Geogràfic i Estadístic** que la va succeir.",
+        "**5 partits judicials**: Eivissa (Pitiüses + Formentera), Inca (nord de Mallorca), Maó (Menorca), Manacor (est de Mallorca), Palma (oest i capital).",
+        "El detall complet (taules originals, fe d'errates, quadres-resum del facsímil) està al projecte germà [nomenclator-1860-balears.pages.dev](https://nomenclator-1860-balears.pages.dev)."
+      ]
+    },
+
+    "riera": {
+      "label": "Riera (1881-1887)",
+      "year": 1881,
+      "intro": "Riera adopta un sistema d'abreviatures regular, més extens que el de Madoz a causa de la voluntat editorial de concentrar el text. La llista següent recull les més habituals; algunes són variants compactes dels capçals de secció.",
+      "source_note": "Transcrita literalment del projecte germà riera-balears.pages.dev.",
+      "categories": [
+        {
+          "name": "Tipus d'entitat (després del títol)",
+          "items": [
+            ["V.", "Villa (nucli amb ajuntament propi)"],
+            ["L.", "Lugar (nucli dependent d'un ajuntament matriu)"],
+            ["C.", "Ciudad"],
+            ["B.", "Barrio"],
+            ["Ald.", "Aldea (sovint OCR'd «Aid.»)"],
+            ["Cas.", "Caserío"],
+            ["Cot.", "Coto"],
+            ["Cor.", "Corregimiento"],
+            ["Felig.", "Feligresía"],
+            ["Desp.", "Despoblado"],
+            ["Cabo / Cala / Isla / Islote / Punta", "Accidents costaners autònoms"]
+          ]
+        },
+        {
+          "name": "Seccions administratives (versió compacta)",
+          "items": [
+            ["Org. jud.", "Organización judicial"],
+            ["Org. civ.", "Organización civil"],
+            ["Org. mil.", "Organización militar"],
+            ["Org. econ.", "Organización económica"],
+            ["Org. ecle.", "Organización eclesiástica"],
+            ["S. púb.", "Servicio público"],
+            ["Ob. púb. y med. de com.", "Obras públicas y medios de comunicación"],
+            ["Ins. púb.", "Instrucción pública"],
+            ["Pob.", "Población"],
+            ["Art., of. ind.", "Artes, oficios, industria"],
+            ["Sit. geog. y top.", "Situación geográfica y topográfica"],
+            ["Hist. y Biog.", "Historia y Biografía (closing section a articles llargs)"],
+            ["Fer. y merc.", "Ferias y mercados"]
+          ]
+        },
+        {
+          "name": "Administració civil i territorial",
+          "items": [
+            ["prov.", "Provincia"],
+            ["part. jud.", "Partido judicial"],
+            ["aud. territ.", "Audiencia territorial"],
+            ["C. G.", "Capitanía General"],
+            ["G. M.", "Gobierno militar"],
+            ["ayunt.", "Ayuntamiento"],
+            ["agreg.", "Agregado a (entrada dependent)"],
+            ["admon. econ.", "Administración económica de la provincia"],
+            ["dióc.", "Diócesis"],
+            ["arz.", "Arzobispado"]
+          ]
+        },
+        {
+          "name": "Demografia (cens del 1877)",
+          "items": [
+            ["hab.", "Habitantes"],
+            ["edif.", "Edificios (habitats + temporals + inhabitats)"],
+            ["cas. y grupos", "Caseríos y grupos (hamlets agregats)"],
+            ["viv. y alb. ais.", "Viviendas y albergues aislados"],
+            ["contr. terr.", "Contribución territorial (pessetes)"],
+            ["contr. subsidio", "Contribución de subsidio industrial"]
+          ]
+        },
+        {
+          "name": "Geografia i comunicacions",
+          "items": [
+            ["Sit.", "Situado / Situada"],
+            ["conf.", "Confina"],
+            ["tér.", "Término municipal"],
+            ["terr.", "Terreno"],
+            ["k.", "Kilòmetres (Riera ja usa el sistema mètric)"],
+            ["f. c.", "Ferrocarril"],
+            ["est.", "Estación (de ferrocarril o telègraf)"],
+            ["cn.", "Conducción (de correu)"],
+            ["cn. m.", "Conducción marítima"],
+            ["pt.", "Peatón (cartero a peu)"],
+            ["car.", "Cartería"]
+          ]
+        },
+        {
+          "name": "Referències creuades",
+          "items": [
+            ["V.", "Véase — remissió a un altre article"],
+            ["(V. su artículo)", "Remissió a l'article propi"],
+            ["(addicional)", "Article afegit en un volum posterior (suplement)"]
+          ]
+        }
+      ],
+      "context_notes": [
+        "**Pablo Riera y Sans** (Mataró, 1820 – Barcelona, 1897) fou editor, periodista catòlic i compilador a Barcelona durant la Restauració. El Diccionari es publicà entre **1881 i 1887 en 12 volums** sota la seva direcció amb un equip de col·laboradors regionals.",
+        "L'obra usa el **cens nacional de 1877** com a base estadística i adopta el **sistema mètric decimal** (kilòmetres, pessetes) que ja s'havia oficialitzat el 1849 però que encara coexistia amb llegues i reals a Madoz.",
+        "Cada article major té **9 seccions administratives** template: Organització judicial · civil · militar · econòmica · eclesiàstica · Servei públic · Obres públiques · Instrucció pública · Població.",
+        "Riera és el **darrer gran diccionari geogràfic-estadístic** del segle XIX espanyol. Posterior al Madoz però abans dels grans atles del segle XX.",
+        "Per al detall i el text complet, vegeu [riera-balears.pages.dev](https://riera-balears.pages.dev)."
+      ]
+    }
+  }
+}

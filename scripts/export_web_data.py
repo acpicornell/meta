@@ -236,8 +236,22 @@ def main():
             'jurisdictional_entries': jurisdictional_ents,
         })
 
+    # Per-source totals already accumulated; sum them for the global
+    # "linked" KPI displayed on the Home tab. An entry is "linked" when
+    # at least one of its NGIB ids (describes or parent) is set —
+    # describes_linked alone undercounts because most sub-features only
+    # carry a parent link.
+    total_entries     = sum(by_source_total.values())
+    parent_linked     = sum(by_source_parent_linked.values())
+    describes_linked  = sum(by_source_describes_linked.values())
+    linked_entries    = total_entries - sum(len(v) for v in orphans.values())
+
     totals = {
         'places':                  len(places),
+        'entries':                 total_entries,
+        'linked_entries':          linked_entries,
+        'parent_linked':           parent_linked,
+        'describes_linked':        describes_linked,
         'entries_by_kind':         dict(by_kind),
         'orphan_count':            sum(len(v) for v in orphans.values()),
         'by_source': {
