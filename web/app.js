@@ -10,6 +10,7 @@ const state = {
   type: "",
   conf: "",
   combine: "any",
+  mincov: "",
   sources: new Set(),
   page: 0,
   perPage: 100,
@@ -205,6 +206,7 @@ function initFilters() {
   $("f-type").addEventListener("change",   ev => { state.type   = ev.target.value; state.page = 0; applyFilters(); });
   $("f-conf").addEventListener("change",   ev => { state.conf   = ev.target.value; state.page = 0; applyFilters(); });
   $("f-combine").addEventListener("change",ev => { state.combine= ev.target.value; state.page = 0; applyFilters(); });
+  $("f-mincov").addEventListener("change", ev => { state.mincov = ev.target.value; state.page = 0; applyFilters(); });
   document.querySelectorAll(".sources-row input[data-source]").forEach(cb => {
     cb.addEventListener("change", () => {
       state.sources = new Set(
@@ -220,7 +222,7 @@ function initFilters() {
 function anyFilterActive() {
   return Boolean(
     state.search || state.island || state.type || state.conf
-    || state.combine !== "any" || state.sources.size
+    || state.combine !== "any" || state.mincov || state.sources.size
   );
 }
 
@@ -236,6 +238,7 @@ function clearFilters() {
   state.type   = "";
   state.conf   = "";
   state.combine = "any";
+  state.mincov = "";
   state.sources = new Set();
   state.page = 0;
   $("search").value = "";
@@ -243,6 +246,7 @@ function clearFilters() {
   $("f-type").value = "";
   $("f-conf").value = "";
   $("f-combine").value = "any";
+  $("f-mincov").value = "";
   document.querySelectorAll(".sources-row input[data-source]")
     .forEach(cb => { cb.checked = false; });
   applyFilters();
@@ -339,6 +343,13 @@ function applyFilters() {
     }
     if (!placeMatchesSearch(p, state.search)) return false;
     if (!placeMatchesSources(p)) return false;
+    if (state.mincov) {
+      // Count distinct sources attested for this place across all four
+      // entry buckets — captures the toponym's editorial visibility
+      // across the century, not the article count.
+      const n = new Set(allEntriesOf(p).map(e => e.source)).size;
+      if (n < Number(state.mincov)) return false;
+    }
     return true;
   });
   renderResults();
