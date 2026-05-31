@@ -67,14 +67,23 @@ uv run scripts/load_db.py
 uv run scripts/export_web_data.py
 uv run scripts/report.py
 
-cd web && python3 -m http.server 8000
+cd web && python3 dev_server.py     # no-cache wrapper; defaults to port 8766
 ```
+
+`dev_server.py` is a tiny `http.server` subclass that adds
+`Cache-Control: no-store` on every response. Plain `python -m
+http.server` lets the browser cache `app.js` / `style.css` in memory,
+so reloads can serve stale JS until you hard-reload (cmd-shift-R) or
+open a private tab.
 
 ## Map
 
-Intentionally **not** rendered in v1. The pipeline still exports
-`lat`/`lng` for every canonical place; the map waits until linkage
-quality across the five sources has been audited.
+The **Mapa** tab plots every NGIB place referenced by at least one
+sibling article on Leaflet + OpenStreetMap, clustered when zoomed
+out, filterable by island / NGIB type / source / has-article. Each
+Lloc page also includes a small focused map with the place and its
+NGIB sub-features. Leaflet and `leaflet.markercluster` are vendored
+under `web/vendor/`.
 
 ## License
 
