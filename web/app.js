@@ -1065,8 +1065,189 @@ function renderStats() {
         <strong>Localitzats al terme</strong> — l'article està ubicat dins el terme municipal d'un municipi conegut, encara que la seva entitat pròpia no tingui equivalent NGIB. Un article pot estar a totes dues columnes alhora (per exemple, un article sobre Port de Sóller s'identifica com a Port de Sóller i es localitza al terme de Sóller). La cua d'articles orfes —ni una cosa ni l'altra— és visible amb el filtre <em>Sense vincle NGIB</em> de la pestanya Explorar.
       </p>
     </div>
+
+    ${renderKindBreakdown()}
+    ${renderTopTypes()}
+    ${renderTopPlaces()}
+    ${renderIslandSourceMatrix()}
   `;
+
+  // The top-places block links to specific Lloc pages; the delegated
+  // [data-goto] handler already covers them (data-goto absent, plain
+  // <a href="?ngib=…"> bubbles through the URL deep-link).
   el.dataset.rendered = "1";
+}
+
+// === Stats helpers — additional blocks ======================================
+
+const KIND_LABEL = {
+  municipality:      "Municipi (article descriu un municipi)",
+  feature_with_ngib: "Sub-entitat amb identitat NGIB (llogarets, ports, caps…)",
+  feature_no_ngib:   "Predi / accident geogràfic sense entitat NGIB pròpia",
+  jurisdictional:   "Article administratiu o jurisdiccional",
+};
+const KIND_ORDER = ["municipality", "feature_with_ngib", "feature_no_ngib", "jurisdictional"];
+
+function renderKindBreakdown() {
+  const t = state.data.totals.entries_by_kind || {};
+  const total = state.data.totals.entries || 1;
+  const orphans = state.data.totals.orphan_count || 0;
+  const rows = KIND_ORDER.map(k => ({ k, n: t[k] || 0 }))
+    .concat([{ k: "orphan", n: orphans }]);
+  const max = Math.max(...rows.map(r => r.n));
+  const labelFor = k => k === "orphan"
+    ? "Article orfe (cap enllaç al NGIB)"
+    : (KIND_LABEL[k] || k);
+  const html = rows.map(r => {
+    const w = r.n ? Math.max(2, Math.round(r.n / max * 100)) : 0;
+    const pct = (r.n * 100 / total).toFixed(1);
+    return `
+      <span class="bar-label">${esc(labelFor(r.k))}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div>
+      <span class="bar-count">${fmt(r.n)} <span class="bar-pct">(${pct}%)</span></span>
+    `;
+  }).join("");
+  return `
+    <div class="stat-block">
+      <h3>Composició del corpus</h3>
+      <div class="bar-chart">${html}</div>
+      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+        Cada article queda classificat per la naturalesa de l'entitat que descriu. Només el 8% són articles de municipi pròpiament dit; la majoria del corpus són sub-entitats —llogarets, predis, caps, talaies— que els nomenclàtors documenten amb molt detall, sobretot el cens d'edificis de 1860.
+      </p>
+    </div>
+  `;
+}
+
+function renderTopTypes() {
+  const counts = {};
+  for (const p of state.data.places) {
+    if (!p.local_type) continue;
+    counts[p.local_type] = (counts[p.local_type] || 0) + 1;
+  }
+  const top = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12);
+  const max = top.length ? top[0][1] : 1;
+  const html = top.map(([k, v]) => {
+    const w = Math.max(2, Math.round(v / max * 100));
+    return `
+      <span class="bar-label">${esc(k)}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div>
+      <span class="bar-count">${fmt(v)}</span>
+    `;
+  }).join("");
+  return `
+    <div class="stat-block">
+      <h3>Tipus NGIB més freqüents (top 12)</h3>
+      <div class="bar-chart">${html}</div>
+    </div>
+  `;
+}
+
+function renderTopPlaces() {
+  // Score = distinct sources (more is rarer) then total entries.
+  const ranked = state.data.places.map(p => {
+    const ents = allEntriesOf(p);
+    const srcs = new Set(ents.map(e => e.source));
+    return { p, srcs: srcs.size, ents: ents.length };
+  })
+    .filter(x => x.srcs >= 4 && x.ents > 0)
+    .sort((a, b) => b.srcs - a.srcs || b.ents - a.ents || a.p.name.localeCompare(b.p.name, "ca"))
+    .slice(0, 20);
+  const rows = ranked.map(({ p, srcs, ents }) => {
+    const dots = SOURCE_ORDER.map(s => {
+      const has = allEntriesOf(p).some(e => e.source === s);
+      return `<span class="source-dot ${has ? "has-" + SOURCE_YEAR[s] : "empty"}" title="${esc(SOURCE_LABEL[s])} (${SOURCE_YEAR[s]})${has ? "" : " — no atestat"}">${has ? SOURCE_YEAR[s] : "·"}</span>`;
+    }).join("");
+    return `
+      <tr>
+        <td><a href="?ngib=${esc(p.ngib_id)}"><strong>${esc(p.name)}</strong></a></td>
+        <td>${esc(p.island || "")}</td>
+        <td>${esc(p.local_type || "")}</td>
+        <td class="num">${srcs}</td>
+        <td class="num">${ents}</td>
+        <td>${dots}</td>
+      </tr>
+    `;
+  }).join("");
+  return `
+    <div class="stat-block">
+      <h3>Llocs més documentats al llarg del segle (top 20)</h3>
+      <table class="coverage-table top-places-table">
+        <thead><tr>
+          <th>Lloc</th>
+          <th>Illa</th>
+          <th>Tipus NGIB</th>
+          <th class="num">Fonts</th>
+          <th class="num">Articles</th>
+          <th>Presència</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+        Els llocs amb la documentació més contínua del corpus. Clica el nom per veure-ho a Lloc.
+      </p>
+    </div>
+  `;
+}
+
+function renderIslandSourceMatrix() {
+  // entries[island][source] = count of entries attested.
+  const islands = new Map();
+  for (const p of state.data.places) {
+    const isl = p.island || "—";
+    for (const e of allEntriesOf(p)) {
+      if (!islands.has(isl)) islands.set(isl, {});
+      const row = islands.get(isl);
+      row[e.source] = (row[e.source] || 0) + 1;
+    }
+  }
+  // Sort islands by row total.
+  const sorted = [...islands.entries()]
+    .map(([isl, row]) => ({ isl, row, total: SOURCE_ORDER.reduce((s, src) => s + (row[src] || 0), 0) }))
+    .sort((a, b) => b.total - a.total);
+  // Per-column total (for cell tint).
+  const colTotals = {};
+  for (const src of SOURCE_ORDER) {
+    colTotals[src] = sorted.reduce((s, r) => s + (r.row[src] || 0), 0);
+  }
+  // Per-row max (so dark = relatively important within this island).
+  const cellHtml = (row, src) => {
+    const v = row[src] || 0;
+    const rowMax = Math.max(1, ...SOURCE_ORDER.map(s => row[s] || 0));
+    const opacity = v ? Math.max(0.12, v / rowMax) : 0;
+    const bg = `rgba(107, 68, 35, ${opacity.toFixed(2)})`;
+    return `<td class="num matrix-cell" style="background:${bg}">${v ? fmt(v) : ""}</td>`;
+  };
+  const headRow = SOURCE_ORDER.map(s =>
+    `<th class="num"><span class="src-mat-name">${esc(SOURCE_LABEL[s])}</span><span class="src-mat-year">${SOURCE_YEAR[s]}</span></th>`
+  ).join("");
+  const bodyRows = sorted.map(({ isl, row, total }) => `
+    <tr>
+      <td><strong>${esc(isl)}</strong></td>
+      ${SOURCE_ORDER.map(s => cellHtml(row, s)).join("")}
+      <td class="num row-total">${fmt(total)}</td>
+    </tr>
+  `).join("");
+  const totalRow = `
+    <tr class="matrix-total">
+      <td><strong>Total</strong></td>
+      ${SOURCE_ORDER.map(s => `<td class="num">${fmt(colTotals[s])}</td>`).join("")}
+      <td class="num">${fmt(SOURCE_ORDER.reduce((s, src) => s + colTotals[src], 0))}</td>
+    </tr>
+  `;
+  return `
+    <div class="stat-block">
+      <h3>Cobertura per illa × font</h3>
+      <table class="coverage-table source-matrix">
+        <thead><tr><th>Illa</th>${headRow}<th class="num">Total</th></tr></thead>
+        <tbody>${bodyRows}${totalRow}</tbody>
+      </table>
+      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+        Cada cel·la compta el nombre d'articles atestats. La intensitat del color és relativa dins la mateixa illa: indica quina font documenta més extensament aquell territori. Les diferències entre fonts són notables — el cens de 1860 és molt més detallat al poblament rural, Madoz cobreix més uniformement.
+      </p>
+    </div>
+  `;
 }
 
 // ---------------------- abbreviations ---------------------------------------

@@ -725,6 +725,41 @@ button.child-card {
 .coverage-table th.num { text-align: right; }
 .coverage-table td.num { text-align: right; font-family: ui-monospace, Menlo, monospace; }
 .coverage-table tr:last-child td { border-bottom: none; }
+.bar-pct { color: var(--ink-faint); font-size: .8em; }
+
+/* Top places — same coverage-table shell with right-aligned numerics
+   and a tighter source-dots presentation. */
+.top-places-table .source-dot {
+  display: inline-block;
+  min-width: 2.3em;
+  margin-right: .15em;
+  padding: .12em .35em;
+  border-radius: 3px;
+  font-size: .72rem;
+  text-align: center;
+}
+
+/* Coverage matrix — heat-tinted cells. The td.matrix-cell uses inline
+   background; we just need the typography. */
+.source-matrix th .src-mat-name { display: block; font-size: .8rem; }
+.source-matrix th .src-mat-year { display: block; font-size: .72rem; color: var(--ink-faint); font-weight: 500; }
+.source-matrix td.matrix-cell {
+  color: var(--ink);
+  font-weight: 500;
+}
+.source-matrix td.row-total {
+  border-left: 1px solid var(--rule);
+  color: var(--ink-dim);
+  font-weight: 600;
+}
+.source-matrix tr.matrix-total {
+  border-top: 2px solid var(--rule);
+  background: var(--paper);
+}
+.source-matrix tr.matrix-total td {
+  font-weight: 600;
+  color: var(--ink-dim);
+}
 
 /* === NOTES === */
 #tab-notes h2 { margin-top: 0; }
