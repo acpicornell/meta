@@ -25,19 +25,21 @@
 # Security headers — site is read-only static, no auth, no forms.
 #
 # CSP notes:
-# - No remote scripts in v1 (no Leaflet, no analytics).
-# - style-src 'self' 'unsafe-inline' — index.html / app.js use a
-#   handful of inline style="…" attributes for one-off layout touches.
-#   Accepted: CSS-only XSS has very limited impact on a read-only
+# - Leaflet + leaflet.markercluster are self-hosted under /vendor/.
+# - style-src 'self' 'unsafe-inline' — index.html / app.js use inline
+#   style="…" attributes and Leaflet sets inline styles on tile-layer
+#   panes. Accepted: CSS-only XSS has limited impact on a read-only
 #   site without auth.
-# - img-src 'self' data: — favicon is an inline SVG data: URI.
-# - connect-src 'self' — only fetches are data.json + data-blobs.json
-#   from the same origin.
+# - img-src 'self' data: https://*.tile.openstreetmap.org — favicon is
+#   an inline SVG data: URI; OSM tile servers serve the map raster
+#   tiles consumed by the Mapa tab and Lloc mini-map.
+# - connect-src 'self' — fetches are data.json + data-blobs.json.
+#   Tile images are <img> resources, not fetch/XHR.
 # - External Internet Archive, NGIB, Wikipedia and sibling-site links
-#   are navigational (<a href>), not embedded resources, so they don't
-#   need CSP allowances.
+#   are navigational (<a href>), not embedded, so don't need CSP
+#   allowances.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
