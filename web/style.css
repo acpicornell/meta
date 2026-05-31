@@ -722,6 +722,7 @@ button.child-card {
 .coverage-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
 .coverage-table th, .coverage-table td { padding: .4rem .6rem; text-align: left; border-bottom: 1px solid var(--rule); }
 .coverage-table th { background: var(--paper); color: var(--ink-dim); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; }
+.coverage-table th.num { text-align: right; }
 .coverage-table td.num { text-align: right; font-family: ui-monospace, Menlo, monospace; }
 .coverage-table tr:last-child td { border-bottom: none; }
 

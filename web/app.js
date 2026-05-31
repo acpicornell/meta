@@ -1013,9 +1013,9 @@ function renderStats() {
       <thead><tr>
         <th>Font</th><th>Any</th>
         <th class="num">Articles</th>
-        <th class="num">Amb describes</th>
-        <th class="num">Amb parent</th>
-        <th class="num">% describes</th>
+        <th class="num">Identifiquen un lloc</th>
+        <th class="num">Localitzats al terme</th>
+        <th class="num">% identificats</th>
       </tr></thead>
       <tbody>
         ${SOURCE_ORDER.map(s => {
@@ -1050,7 +1050,8 @@ function renderStats() {
       <h3>Cobertura per font</h3>
       ${srcHtml}
       <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
-        <em>Describes</em> = l'article descriu una entitat NGIB concreta. <em>Parent</em> = l'article està ubicat dins el terme d'un municipi NGIB. La cua d'articles orfes (cap dels dos enllaços) és visible amb el filtre <em>Sense vincle NGIB</em> de la pestanya Explorar.
+        <strong>Identifiquen un lloc</strong> — l'article descriu una entitat NGIB concreta (un poble, un llogaret, un cap, un predi…).
+        <strong>Localitzats al terme</strong> — l'article està ubicat dins el terme municipal d'un municipi conegut, encara que la seva entitat pròpia no tingui equivalent NGIB. Un article pot estar a totes dues columnes alhora (per exemple, un article sobre Port de Sóller s'identifica com a Port de Sóller i es localitza al terme de Sóller). La cua d'articles orfes —ni una cosa ni l'altra— és visible amb el filtre <em>Sense vincle NGIB</em> de la pestanya Explorar.
       </p>
     </div>
   `;
