@@ -1226,6 +1226,21 @@ footer p:last-child { margin-bottom: 0; }
 .repo-link:hover { color: var(--accent); }
 .repo-icon { width: 1em; height: 1em; }
 
+/* Caveat strip atop the Stats tab — sets reader expectations before
+   they start interpreting absolute numbers. */
+.stats-caveat {
+  max-width: 80ch;
+  margin: 0 0 1.4rem;
+  padding: .7rem 1rem;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-soft);
+  border-radius: 0 4px 4px 0;
+  color: var(--ink-dim);
+  font-size: .9rem;
+  line-height: 1.5;
+}
+
 /* === MAP TAB === */
 .map-controls {
   display: flex;

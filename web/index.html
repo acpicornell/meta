@@ -117,6 +117,13 @@
         provenen dels cinc <a href="#" data-goto="fonts">projectes germans</a>
         (un per nomenclàtor); aquí els unifica, els compara i els mostra junts.
       </p>
+      <p>
+        Les transcripcions són fruit d'<strong>OCR + LLM + regex + fuzzy
+        matching</strong>: ho hem fet el millor que hem sabut, però els
+        números són raonablement propers a la realitat, no garantits al
+        100%. Una <a href="#" data-goto="notes">nota d'humilitat</a>
+        ho explica.
+      </p>
     </article>
     <article>
       <h2 class="home-section-h">Per què aquestes cinc</h2>
@@ -481,6 +488,14 @@
 <!-- ===== STATS ===== -->
 <section id="tab-stats" class="tab-content" data-toptab="stats">
   <h2>Estadístiques del corpus</h2>
+  <p class="stats-caveat">
+    Les xifres d'aquesta pestanya provenen d'extraccions OCR + LLM dels
+    facsímils originals i d'enllaços resolts per cascada determinista +
+    fuzzy matching contra el NGIB. Són <strong>raonablement properes a la
+    realitat</strong> però no podem garantir-les al 100%. Vegeu la
+    <a href="#" data-goto="notes">nota sobre la fiabilitat del corpus</a>
+    per als detalls metodològics.
+  </p>
   <div id="stats-content"></div>
 </section>
 
@@ -562,6 +577,40 @@
   <h3>Mapa</h3>
   <p>
     La pestanya <a href="#" data-goto="map">Mapa</a> renderitza els 1.520 llocs canònics amb Leaflet + OpenStreetMap. Els 192 orfes no apareixen perquè no tenen geometria associada. Cada Lloc amb coordenades incorpora a més un <strong>mini-mapa</strong> centrat amb les seves sub-entitats NGIB (port, llogarets, barriades…) com a marcadors secundaris. Les coordenades són les del NGIB, distribuïdes via <a href="https://intranet.caib.es/opendatacataleg/es/dataset/lloc_anomenat" target="_blank" rel="noopener">IDEIB open data (CC BY)</a>.
+  </p>
+
+  <h3>Sobre la fiabilitat del corpus</h3>
+  <p>
+    Convé recordar el que aquesta web <em>no</em> és: un cens canònic.
+    Les transcripcions provenen d'<strong>OCR</strong> sobre facsímils
+    (l'INE 1986 per a Floridablanca; Internet Archive i la Biblioteca
+    Digital de Castella i Lleó per a la resta), refinades per
+    <strong>models de llenguatge</strong> (Claude Opus 4.7 com a
+    extractor d'estructura), enllaçades al NGIB per
+    <strong>regles deterministes + fuzzy matching</strong>, i resoltes
+    en ambigüitats per un <strong>LLM com a tiebreaker</strong> amb
+    cache local.
+  </p>
+  <p>
+    Cada un d'aquests passos pot equivocar-se. L'OCR del XIX confón
+    «ó» amb «ò» i «v» amb «b» quan la tipografia és gastada. El
+    Madoz té entrades dividides entre dues columnes que el partidor
+    de pàgines pot trencar. La cascada determinista preferix no
+    resoldre abans que resoldre malament: els 192 articles orfes són
+    en bona part casos on hem preferit deixar la pregunta oberta
+    que arriscar una correspondència errònia.
+  </p>
+  <p>
+    Les xifres del corpus —1.520 llocs canònics, 4.435 enllaços, 95,9%
+    de cobertura— són <strong>raonablement properes a la realitat</strong>
+    però <strong>no podem garantir-les al 100%</strong>. Hem fet el millor
+    que hem sabut amb les eines que tenim i hem documentat les
+    auditories sistemàtiques que hi ha passat per damunt (els 80
+    anys de Madoz, les 88 entrades del Tom XI de Miñano, els
+    Municipis sense els 5 anys atestats). Si trobes un article que
+    creus que falta o un enllaç que sembla incorrecte, els repositoris
+    són públics (vegeu el <a href="#" data-goto="fonts">Fonts</a>) i
+    qualsevol esmena es benvinguda.
   </p>
 
   <h3>Llicència</h3>
