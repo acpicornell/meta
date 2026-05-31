@@ -25,7 +25,7 @@
 <header>
   <div class="header-content">
     <h1>Nomenclàtors balears</h1>
-    <p class="subtitle">Les mateixes Balears a través de cinc mirades: <strong>Floridablanca · Miñano · Madoz · Nomenclàtor 1860 · Riera</strong></p>
+    <p class="subtitle">Les mateixes Balears a través de cinc mirades<span class="subtitle-srcs">: <strong>Floridablanca · Miñano · Madoz · Nomenclàtor 1860 · Riera</strong></span></p>
   </div>
 </header>
 
@@ -91,6 +91,10 @@
       <a class="home-action" href="#" data-goto="notes">
         <span class="home-action-title">Notes</span>
         <span class="home-action-blurb">Metodologia del procediment d'enllaç i qualitat del corpus.</span>
+      </a>
+      <a class="home-action home-action--random" href="#" id="home-random-place">
+        <span class="home-action-title">Un lloc a l'atzar ↗</span>
+        <span class="home-action-blurb">Obre una fitxa qualsevol amb articles a 2 fonts o més.</span>
       </a>
     </div>
   </div>
@@ -247,7 +251,15 @@
     </p>
   </div>
 
-  <article class="source-deep" id="font-floridablanca">
+  <nav class="fonts-toc" aria-label="Salt ràpid a una font">
+    <a href="#font-floridablanca"    class="has-source-floridablanca"><span class="fonts-toc-year">1787</span> Floridablanca</a>
+    <a href="#font-minano"           class="has-source-minano"><span class="fonts-toc-year">1826</span> Miñano</a>
+    <a href="#font-madoz"            class="has-source-madoz"><span class="fonts-toc-year">1845</span> Madoz</a>
+    <a href="#font-nomenclator_1860" class="has-source-nomenclator_1860"><span class="fonts-toc-year">1860</span> Nomenclàtor</a>
+    <a href="#font-riera"            class="has-source-riera"><span class="fonts-toc-year">1881</span> Riera</a>
+  </nav>
+
+  <article class="source-deep has-source-floridablanca" id="font-floridablanca">
     <header>
       <h2><span class="year">1787</span> Cens de Floridablanca</h2>
       <p class="byline">José Moñino y Redondo (1728–1808), comte de Floridablanca · Madrid</p>
@@ -284,7 +296,7 @@
     </p>
   </article>
 
-  <article class="source-deep" id="font-minano">
+  <article class="source-deep has-source-minano" id="font-minano">
     <header>
       <h2><span class="year">1826-1829</span> Diccionari de Miñano</h2>
       <p class="byline">Sebastián Miñano y Bedoya (1779–1845) · Madrid</p>
@@ -319,7 +331,7 @@
     </p>
   </article>
 
-  <article class="source-deep" id="font-madoz">
+  <article class="source-deep has-source-madoz" id="font-madoz">
     <header>
       <h2><span class="year">1845-1850</span> Diccionari de Madoz</h2>
       <p class="byline">Pascual Madoz Ibáñez (1806–1870) · Madrid</p>
@@ -357,7 +369,7 @@
     </p>
   </article>
 
-  <article class="source-deep" id="font-nomenclator_1860">
+  <article class="source-deep has-source-nomenclator_1860" id="font-nomenclator_1860">
     <header>
       <h2><span class="year">1860</span> Nomenclàtor</h2>
       <p class="byline">Junta General d'Estadística del Regne · Madrid</p>
@@ -393,7 +405,7 @@
     </p>
   </article>
 
-  <article class="source-deep" id="font-riera">
+  <article class="source-deep has-source-riera" id="font-riera">
     <header>
       <h2><span class="year">1881-1887</span> Diccionari de Riera</h2>
       <p class="byline">Pablo Riera y Sans (1820–1897) · Barcelona</p>

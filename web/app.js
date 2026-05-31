@@ -133,6 +133,7 @@ function fillInitialCounters() {
   $("home-stat-in-all").textContent = fmt(inAll);
   renderHomeSourcesGrid();
   renderFontsCounters();
+  bindRandomPlaceButton();
 }
 
 // ---------------------- home sources-grid -----------------------------------
@@ -159,7 +160,7 @@ function renderHomeSourcesGrid() {
     const count = by[src]?.total || 0;
     const year  = SOURCE_YEAR[src];
     return `
-      <a class="source-card" href="#" data-goto="fonts" data-anchor="${esc(src)}">
+      <a class="source-card has-source-${esc(src)}" href="#" data-goto="fonts" data-anchor="${esc(src)}">
         <div class="source-card-year">${year}</div>
         <div class="source-card-name">${esc(SOURCE_LABEL[src])}</div>
         <div class="source-card-author">${esc(SOURCE_AUTHOR[src])}</div>
@@ -168,6 +169,24 @@ function renderHomeSourcesGrid() {
       </a>
     `;
   }).join("");
+}
+
+function bindRandomPlaceButton() {
+  const btn = $("home-random-place");
+  if (!btn) return;
+  btn.addEventListener("click", ev => {
+    ev.preventDefault();
+    // Prefer places with at least 2 distinct sources so the resulting
+    // Lloc has something to compare. Fall back to ≥1 if the candidate
+    // pool would otherwise be empty (shouldn't happen with current data).
+    const pool = state.data.places.filter(p =>
+      new Set(allEntriesOf(p).map(e => e.source)).size >= 2);
+    const candidates = pool.length ? pool : state.data.places.filter(p =>
+      allEntriesOf(p).length > 0);
+    if (!candidates.length) return;
+    const pick = candidates[Math.floor(Math.random() * candidates.length)];
+    openPlace(pick.ngib_id);
+  });
 }
 
 function renderFontsCounters() {
@@ -380,7 +399,7 @@ function renderResults() {
     const dots = SOURCE_ORDER.map(s => {
       const yr = SOURCE_YEAR[s];
       const has = present.has(s);
-      return `<span class="source-dot ${has ? "has-" + yr : "empty"}" title="${esc(SOURCE_LABEL[s])} (${yr})${has ? "" : " — no atestat"}">${has ? yr : "·"}</span>`;
+      return `<span class="source-dot source-dot--compact ${has ? "has-" + yr : "empty"}" title="${esc(SOURCE_LABEL[s])} (${yr})${has ? "" : " — no atestat"}"></span>`;
     }).join("");
     const variants = p.variants.filter(v => norm(v) !== norm(p.name));
     const nMain = (p.entries || []).length;
@@ -845,7 +864,9 @@ function timelineCard(e, blobs) {
         ${citationFor(e, blob)}
         ${e.source_url ? ` · <a href="${esc(e.source_url)}" target="_blank" rel="noopener">↗ Article original</a>` : ""}
       </div>
-      ${renderBlob(e.source, blob)}
+      <div class="timeline-body" data-foldable="1">
+        ${renderBlob(e.source, blob)}
+      </div>
     </div>
   </div>`;
 }
@@ -903,7 +924,6 @@ function renderPlaceDetail(place, blobs) {
     ${place.lat != null ? `<div id="lloc-mini-map" class="lloc-mini-map"></div>` : ""}
 
     ${ents.length ? `
-      <h2 class="section-h">Articles sobre aquest lloc</h2>
       <div class="timeline">
         ${ents.map(e => timelineCard(e, blobs)).join("")}
       </div>
@@ -976,6 +996,29 @@ function renderPlaceDetail(place, blobs) {
 
   document.querySelectorAll(".back-link[data-goto]").forEach(el => {
     el.addEventListener("click", ev => { ev.preventDefault(); gotoTab("explore"); });
+  });
+
+  // Fold long timeline entries: compare the body's natural height
+  // (computed BEFORE we clamp it) against a px threshold. The CSS
+  // class .is-collapsed then applies max-height + gradient fade.
+  // 14em ≈ 224px at the default 16px root size, matches the CSS rule.
+  const FOLD_THRESHOLD_PX = 260;
+  document.querySelectorAll('.timeline-body[data-foldable="1"]').forEach(body => {
+    requestAnimationFrame(() => {
+      if (body.scrollHeight <= FOLD_THRESHOLD_PX) return;
+      body.classList.add("is-collapsed");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "timeline-fold-btn";
+      btn.textContent = "Veure article complet ↓";
+      btn.addEventListener("click", () => {
+        const collapsed = body.classList.toggle("is-collapsed");
+        btn.textContent = collapsed
+          ? "Veure article complet ↓"
+          : "Reduir article ↑";
+      });
+      body.after(btn);
+    });
   });
 }
 
@@ -1157,7 +1200,7 @@ function renderTopPlaces() {
   const rows = ranked.map(({ p, srcs, ents }) => {
     const dots = SOURCE_ORDER.map(s => {
       const has = allEntriesOf(p).some(e => e.source === s);
-      return `<span class="source-dot ${has ? "has-" + SOURCE_YEAR[s] : "empty"}" title="${esc(SOURCE_LABEL[s])} (${SOURCE_YEAR[s]})${has ? "" : " — no atestat"}">${has ? SOURCE_YEAR[s] : "·"}</span>`;
+      return `<span class="source-dot source-dot--compact ${has ? "has-" + SOURCE_YEAR[s] : "empty"}" title="${esc(SOURCE_LABEL[s])} (${SOURCE_YEAR[s]})${has ? "" : " — no atestat"}"></span>`;
     }).join("");
     return `
       <tr>

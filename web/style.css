@@ -331,6 +331,26 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
 .source-dot.has-1860 { background: var(--year-1860); color: white; border-color: transparent; }
 .source-dot.has-1881 { background: var(--year-1881); color: white; border-color: transparent; }
 
+/* Compact variant used on high-density lists (Explore rows, Stats
+   top-20). Year-coloured square if attested, neutral square if not.
+   Year + source name remain accessible via the title tooltip. */
+.source-dot--compact {
+  min-width: 14px;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin: 0 1px;
+}
+.source-dot--compact.empty {
+  min-width: 14px;
+  width: 14px;
+  height: 14px;
+  background: var(--rule);
+  border-color: transparent;
+}
+
 /* === PAGINATION === */
 .pagination {
   display: flex; justify-content: center; gap: .5rem;
@@ -613,6 +633,42 @@ button.child-card {
 .timeline-year.y-1881 { background: var(--year-1881); }
 
 .timeline-card .source { font-weight: 600; color: var(--ink); }
+
+/* Long-article collapse — applied client-side after measuring the
+   body's natural height. Cards that don't overflow never get the
+   is-collapsed class, so visually nothing changes for them. */
+.timeline-body.is-collapsed {
+  max-height: 14em;
+  overflow: hidden;
+  position: relative;
+}
+.timeline-body.is-collapsed::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3.5em;
+  background: linear-gradient(180deg,
+              rgba(255,255,255,0) 0%,
+              var(--paper-card) 90%);
+  pointer-events: none;
+}
+.timeline-fold-btn {
+  margin-top: .6rem;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: .35rem .8rem;
+  font-family: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .12s, border-color .12s;
+}
+.timeline-fold-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
 .card-heading {
   display: flex;
   flex-direction: column;
@@ -795,17 +851,8 @@ button.child-card {
 .coverage-table tr:last-child td { border-bottom: none; }
 .bar-pct { color: var(--ink-faint); font-size: .8em; }
 
-/* Top places — same coverage-table shell with right-aligned numerics
-   and a tighter source-dots presentation. */
-.top-places-table .source-dot {
-  display: inline-block;
-  min-width: 2.3em;
-  margin-right: .15em;
-  padding: .12em .35em;
-  border-radius: 3px;
-  font-size: .72rem;
-  text-align: center;
-}
+/* Top places: rely on .source-dot--compact (set by app.js) instead
+   of the previous year-number-in-a-box look. */
 
 /* Coverage matrix — heat-tinted cells. The td.matrix-cell uses inline
    background; we just need the typography. */
@@ -877,7 +924,24 @@ button.child-card {
   color: var(--ink);
   border-bottom-width: 1px;
   transition: background .12s, border-color .12s;
+  position: relative;
+  overflow: hidden;
 }
+.source-card::before {
+  /* Coloured stripe per source — using the existing per-year tokens
+     so the eye trains the year↔colour correspondence reused elsewhere
+     (source-dots, Fonts left border, etc.). */
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--src-color, var(--rule));
+}
+.source-card.has-source-floridablanca    { --src-color: var(--year-1787); }
+.source-card.has-source-minano           { --src-color: var(--year-1826); }
+.source-card.has-source-madoz            { --src-color: var(--year-1845); }
+.source-card.has-source-nomenclator_1860 { --src-color: var(--year-1860); }
+.source-card.has-source-riera            { --src-color: var(--year-1881); }
 .source-card:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
@@ -885,7 +949,7 @@ button.child-card {
 .source-card-year {
   font-size: .8rem;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--src-color, var(--accent));
   letter-spacing: .02em;
 }
 .source-card-name { font-weight: 700; font-size: 1.05rem; color: var(--ink); }
@@ -898,12 +962,61 @@ button.child-card {
 }
 
 /* === FONTS TAB === */
+.fonts-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 0 0 2rem;
+  padding: .55rem .6rem;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.fonts-toc a {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .35rem .7rem;
+  border-radius: 4px;
+  border-bottom: none;
+  background: transparent;
+  color: var(--ink);
+  font-size: .9rem;
+  font-weight: 600;
+  transition: background .12s;
+}
+.fonts-toc a:hover {
+  background: var(--accent-soft);
+}
+.fonts-toc-year {
+  display: inline-block;
+  padding: .1em .45em;
+  border-radius: 3px;
+  background: var(--src-color, var(--accent-soft));
+  color: white;
+  font-size: .72rem;
+  letter-spacing: .04em;
+  font-weight: 700;
+}
+.fonts-toc a.has-source-floridablanca    { --src-color: var(--year-1787); }
+.fonts-toc a.has-source-minano           { --src-color: var(--year-1826); }
+.fonts-toc a.has-source-madoz            { --src-color: var(--year-1845); }
+.fonts-toc a.has-source-nomenclator_1860 { --src-color: var(--year-1860); }
+.fonts-toc a.has-source-riera            { --src-color: var(--year-1881); }
+
 .source-deep {
   max-width: 100%;
   margin: 0 0 2.5rem;
   padding-bottom: 1.5rem;
+  padding-left: 1.2rem;
   border-bottom: 1px solid var(--rule);
+  border-left: 4px solid var(--src-color, var(--accent-soft));
 }
+.source-deep.has-source-floridablanca    { --src-color: var(--year-1787); }
+.source-deep.has-source-minano           { --src-color: var(--year-1826); }
+.source-deep.has-source-madoz            { --src-color: var(--year-1845); }
+.source-deep.has-source-nomenclator_1860 { --src-color: var(--year-1860); }
+.source-deep.has-source-riera            { --src-color: var(--year-1881); }
 .source-deep:last-of-type { border-bottom: none; }
 .source-deep header { margin-bottom: 1rem; }
 .source-deep p { max-width: 75ch; }
@@ -937,8 +1050,8 @@ button.child-card {
 }
 .source-deep h2 .year {
   display: inline-block;
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--src-color, var(--accent));
+  color: white;
   font-size: .7em;
   font-weight: 700;
   padding: .15em .55em;
@@ -1190,4 +1303,22 @@ footer p:last-child { margin-bottom: 0; }
   .home-hero h1 { font-size: 1.6rem; }
   #map { height: 60vh; min-height: 360px; }
   .lloc-mini-map { height: 200px; }
+  /* The source-list tail is redundant on small screens — the tabs
+     already enumerate the projects. Keep just the slogan. */
+  .subtitle-srcs { display: none; }
+}
+
+/* «Un lloc a l'atzar» — distinguish it from the navigation pills so
+   the user reads it as a discovery affordance, not a tab link. */
+.home-action--random {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+}
+.home-action--random:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.home-action--random:hover .home-action-title,
+.home-action--random:hover .home-action-blurb {
+  color: white;
 }
