@@ -101,7 +101,6 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
   margin: 0 0 .65rem;
   letter-spacing: -.02em;
   line-height: 1.15;
-  max-width: 22ch;
 }
 .home-hero h1 em {
   color: var(--accent);
@@ -110,7 +109,6 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
 .home-hero .lead {
   font-size: 1.12rem;
   color: var(--ink-dim);
-  max-width: 70ch;
   line-height: 1.55;
   margin: 0 0 1rem;
 }
