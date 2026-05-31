@@ -43,12 +43,12 @@
 <!-- ===== HOME ===== -->
 <section id="tab-home" class="tab-content active" data-toptab="home">
   <div class="home-hero">
-    <h1>Una mateixa Balears, cinc mirades</h1>
+    <h1>Una mateixa Balears, <em>cinc mirades</em></h1>
     <p class="lead">
-      Aquesta plataforma reuneix els cinc grans nomenclàtors històrics de
-      les Illes Balears entre el final de l'Antic Règim i la Restauració.
-      Cada poble, predi, cala o castell apareix amb el text complet de
-      cadascuna de les obres que el descriuen, en ordre cronològic.
+      Cinc nomenclàtors històrics de les <strong>Illes Balears</strong> entre
+      el final de l'Antic Règim i la Restauració, agregats lloc a lloc.
+      Cada poble, cala, predi o castell apareix amb els articles complets
+      de cadascuna de les obres que el descriuen, en ordre cronològic.
     </p>
     <div class="home-stats">
       <div class="home-stat"><span class="num" id="home-stat-places">…</span><span class="label">llocs amb identitat NGIB</span></div>
@@ -58,68 +58,79 @@
     </div>
   </div>
 
-  <div class="home-prose">
-    <h2>Què és aquesta plataforma</h2>
-    <p>
-      <strong>Meta</strong> és una eina de lectura paral·lela: agrega cinc
-      grans nomenclàtors històrics de les <strong>Illes Balears</strong>
-      —dels primers censos il·lustrats a la geografia administrativa de
-      la Restauració— en un mateix corpus. Cada lloc canònic apareix amb
-      els articles que se n'han escrit al llarg d'un segle, en ordre
-      cronològic. La unitat editorial no és la font sinó <em>el lloc</em>.
-    </p>
-    <p>
-      Les dades de cada font les extreuen els cinc <a href="#" data-goto="fonts">projectes germans</a>
-      (un per nomenclàtor). Aquesta plataforma <strong>no torna a
-      transcriure res</strong>: només els enllaça, els compara i els
-      mostra junts.
-    </p>
-
-    <h2>Per què aquestes cinc fonts</h2>
-    <p>
-      El rang <strong>1787 → 1881</strong> cobreix la transició demogràfica i
-      administrativa d'una província perifèrica de l'imperi borbònic a
-      una entitat provincial de l'Estat liberal. Cap font sola dóna una
-      imatge completa: l'una és tabular, l'altra narrativa, l'altra
-      només compta edificis. Llegides juntes esdevenen una història del
-      poblament i del territori. Vegeu la pestanya
-      <a href="#" data-goto="fonts">Fonts</a> per a la fitxa detallada
-      de cada nomenclàtor.
-    </p>
-
-    <h2>L'ancoratge: el NGIB</h2>
-    <p>
-      Cada lloc canònic s'identifica amb un <strong>geographic_name_id</strong>
-      del <a href="https://www.ngib.cat" target="_blank" rel="noopener">Nomenclàtor
-      Geogràfic de les Illes Balears</a>. Els topònims castellans del
-      XVIII i XIX —Mahón, San Lorenzo, Buñola, Pollensa, Iviza, Lluchmayor…—
-      es resolen al seu equivalent català modern mitjançant una cascada
-      de regles deterministes, coincidència aproximada i una taula curada
-      d'unes 360 variants històriques.
-    </p>
-    <p>
-      El model és <em>dual-link</em>: cada article té un
-      <strong>describes_ngib_id</strong> (l'entitat que descriu) i un
-      <strong>parent_ngib_id</strong> (el municipi on és). Per això
-      <em>Port de Sóller</em> i <em>Sóller</em> apareixen com a pàgines
-      Lloc independents tot i estar al mateix terme. El procediment
-      complet es documenta a la pestanya <a href="#" data-goto="notes">Notes</a>.
-    </p>
-
-    <h2>Què trobaràs a cada pestanya</h2>
-    <ul class="tab-guide">
-      <li><strong><a href="#" data-goto="explore">Explorar</a></strong> — cerca per topònim català o històric, amb filtres per illa, tipus NGIB i font on apareix.</li>
-      <li><strong><a href="#" data-goto="map">Mapa</a></strong> — els 1.520 llocs sobre OpenStreetMap, agrupats per cluster i filtrables per font.</li>
-      <li><strong><a href="#" data-goto="fonts">Fonts</a></strong> — fitxa històrica i editorial de cadascun dels cinc nomenclàtors.</li>
-      <li><strong><a href="#" data-goto="abbr">Abreviatures</a></strong> — llegendes d'abreviatures per font (Madoz, Riera, 1860 i altres).</li>
-      <li><strong><a href="#" data-goto="stats">Estadístiques</a></strong> — cobertura, distribució per illa, kind d'entrada, presència per font.</li>
-      <li><strong><a href="#" data-goto="notes">Notes</a></strong> — metodologia detallada del procediment d'enllaç i de la qualitat del corpus.</li>
-    </ul>
-
-    <h2>Les cinc fonts en una llambregada</h2>
+  <div class="home-section">
+    <h2 class="home-section-h">Les cinc fonts</h2>
     <div class="sources-grid" id="home-sources-grid">
       <div class="empty-note">Carregant…</div>
     </div>
+  </div>
+
+  <div class="home-section">
+    <h2 class="home-section-h">Què vols fer?</h2>
+    <div class="home-actions">
+      <a class="home-action" href="#" data-goto="explore">
+        <span class="home-action-title">Explorar</span>
+        <span class="home-action-blurb">Cerca per topònim català o històric, amb filtres per illa, tipus i font.</span>
+      </a>
+      <a class="home-action" href="#" data-goto="map">
+        <span class="home-action-title">Mapa</span>
+        <span class="home-action-blurb">1.520 marcadors sobre OpenStreetMap, agrupats per cluster.</span>
+      </a>
+      <a class="home-action" href="#" data-goto="fonts">
+        <span class="home-action-title">Fonts</span>
+        <span class="home-action-blurb">Fitxa històrica i editorial de cadascun dels cinc nomenclàtors.</span>
+      </a>
+      <a class="home-action" href="#" data-goto="abbr">
+        <span class="home-action-title">Abreviatures</span>
+        <span class="home-action-blurb">Llegendes d'abreviatures per font (Madoz, Riera, 1860…).</span>
+      </a>
+      <a class="home-action" href="#" data-goto="stats">
+        <span class="home-action-title">Estadístiques</span>
+        <span class="home-action-blurb">Cobertura, composició, top 20 llocs més documentats.</span>
+      </a>
+      <a class="home-action" href="#" data-goto="notes">
+        <span class="home-action-title">Notes</span>
+        <span class="home-action-blurb">Metodologia del procediment d'enllaç i qualitat del corpus.</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="home-section home-narrative">
+    <article>
+      <h2 class="home-section-h">Què és aquesta plataforma</h2>
+      <p>
+        <strong>Meta</strong> és una eina de lectura paral·lela. Agrega cinc
+        grans nomenclàtors històrics balears —del cens fundacional de
+        Floridablanca (1787) al diccionari de Riera (1881-1887)— i els enllaça
+        contra el <a href="https://www.ngib.cat" target="_blank" rel="noopener">Nomenclàtor
+        Geogràfic de les Illes Balears</a> (NGIB) com a autoritat de
+        topònims canònics. La unitat editorial no és la font sinó
+        <em>el lloc</em>: cada Lloc canònic acumula totes les vegades que
+        les cinc obres en parlen, en ordre cronològic.
+      </p>
+      <p>
+        Aquesta web <strong>no transcriu res de nou</strong>. Les dades
+        provenen dels cinc <a href="#" data-goto="fonts">projectes germans</a>
+        (un per nomenclàtor); aquí els unifica, els compara i els mostra junts.
+      </p>
+    </article>
+    <article>
+      <h2 class="home-section-h">Per què aquestes cinc</h2>
+      <p>
+        El rang <strong>1787 → 1881</strong> cobreix la transició d'una
+        província perifèrica de l'imperi borbònic a una entitat provincial
+        de l'Estat liberal. Cap font sola dóna una imatge completa: l'una és
+        tabular, l'altra narrativa, l'altra només compta edificis. Llegides
+        juntes esdevenen una <strong>història del poblament balear</strong>.
+      </p>
+      <p>
+        Els topònims castellans del XVIII i XIX —Mahón, San Lorenzo, Buñola,
+        Pollensa, Iviza, Lluchmayor…— es resolen al seu equivalent català
+        modern via una cascada de regles, fuzzy-match i una taula curada
+        d'unes 360 variants històriques. Detalls a la
+        <a href="#" data-goto="notes">pestanya Notes</a>.
+      </p>
+    </article>
   </div>
 </section>
 
