@@ -30,9 +30,10 @@ data/reports/
 db/*.duckdb
 db/*.duckdb.wal
 
-# Generated web data (rebuildable via export_web_data.py).
-web/data.json
-web/data-blobs.json
+# Generated web data — committed so the static site has data when
+# deployed; rebuildable locally via export_web_data.py.
+# web/data.json
+# web/data-blobs.json
 
 # Secrets.
 .env
