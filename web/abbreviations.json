@@ -59,7 +59,7 @@
         "El cens es publicà el 1787 sota direcció de **José Moñino, comte de Floridablanca**, primer secretari d'Estat de Carles III. L'objectiu era donar al govern una imatge precisa de la població per després planificar la fiscalitat i la conscripció.",
         "La distinció **vecino / alma** és clau: vecino és la unitat fiscal (cap de família); alma és cada persona individual. Multiplicar vec. × 4,5 dóna una estimació orientativa quan les ànimes no estan separades.",
         "A diferència de Madoz i Riera, **Floridablanca no és narratiu**: no hi ha descripció de pobles, només taules. Per això la pàgina Lloc mostra blocs estadístics i no text continu.",
-        "Per a la versió INE 1986 i la metodologia d'edició, vegeu el projecte germà a [floridablanca-balears.pages.dev](https://floridablanca-balears.pages.dev)."
+        "Per a la versió INE 1986 i la metodologia d'edició, vegeu el projecte germà a [floridablanca-balears.cloudflare-d82.workers.dev](https://floridablanca-balears.cloudflare-d82.workers.dev)."
       ]
     },
 
@@ -125,7 +125,7 @@
         "**Sebastián Miñano y Bedoya** (Becerril de Campos, 1779 – Bayonne, 1845) fou prevere afrancesat, periodista satíric i lexicògraf liberal. Va escriure el Diccionari durant l'exili polític, publicant-ne els primers volums el 1826.",
         "L'obra té **11 volums** ordenats alfabèticament; el Tom XI és un suplement amb **88 entrades balears** addicionals (entre adicions i errates). A la pestanya Explorar es marquen amb el badge SUPLEMENT.",
         "Miñano és **precursor metodològic** de Madoz: per primer cop un diccionari geogràfic-estadístic combinava text narratiu amb dades quantitatives sistemàtiques (vecinos, llengües, contribuciones). Madoz hereta l'estructura i la multiplica per cinc.",
-        "Per al detall i el text complet, vegeu [minano-balears.pages.dev](https://minano-balears.pages.dev)."
+        "Per al detall i el text complet, vegeu [minano-balears.cloudflare-d82.workers.dev](https://minano-balears.cloudflare-d82.workers.dev)."
       ]
     },
 
@@ -292,7 +292,7 @@
       "label": "Nomenclàtor 1860",
       "year": 1860,
       "intro": "El Nomenclàtor de 1860 no és narratiu sinó tabular. Les «abreviatures» són en realitat **codis de columna** que cal saber interpretar per llegir les dades. La llista següent prové del glossari del germà nomenclator_1860 i recull les columnes del cens d'edificis i albergues, més les classes de població definides a les notes de la pàgina 50 de l'original.",
-      "source_note": "Adaptat del glossari estadístic del projecte germà nomenclator_1860-balears.pages.dev.",
+      "source_note": "Adaptat del glossari estadístic del projecte germà nomenclator-1860-balears.cloudflare-d82.workers.dev.",
       "categories": [
         {
           "name": "Columnes per ús",
@@ -347,7 +347,7 @@
         "Font: *Nomenclátor que comprende las poblaciones, grupos, edificios, viviendas, albergues, etc.*, **Junta General de Estadística del Reino**, Madrid 1863-1871. 5 volums (un per regió). Aquesta edició cobreix les 51 pàgines del volum corresponent a Balears: **60 municipis** i **~3.000 entitats** de població.",
         "L'INE no existia: es creà el 1945. Abans, els censos els elaborava la Junta General d'Estadística (1856-1873), i a partir de 1870 l'**Institut Geogràfic i Estadístic** que la va succeir.",
         "**5 partits judicials**: Eivissa (Pitiüses + Formentera), Inca (nord de Mallorca), Maó (Menorca), Manacor (est de Mallorca), Palma (oest i capital).",
-        "El detall complet (taules originals, fe d'errates, quadres-resum del facsímil) està al projecte germà [nomenclator-1860-balears.pages.dev](https://nomenclator-1860-balears.pages.dev)."
+        "El detall complet (taules originals, fe d'errates, quadres-resum del facsímil) està al projecte germà [nomenclator-1860-balears.cloudflare-d82.workers.dev](https://nomenclator-1860-balears.cloudflare-d82.workers.dev)."
       ]
     },
 
@@ -355,7 +355,7 @@
       "label": "Riera (1881-1887)",
       "year": 1881,
       "intro": "Riera adopta un sistema d'abreviatures regular, més extens que el de Madoz a causa de la voluntat editorial de concentrar el text. La llista següent recull les més habituals; algunes són variants compactes dels capçals de secció.",
-      "source_note": "Transcrita literalment del projecte germà riera-balears.pages.dev.",
+      "source_note": "Transcrita literalment del projecte germà riera-balears.cloudflare-d82.workers.dev.",
       "categories": [
         {
           "name": "Tipus d'entitat (després del títol)",
@@ -447,7 +447,7 @@
         "L'obra usa el **cens nacional de 1877** com a base estadística i adopta el **sistema mètric decimal** (kilòmetres, pessetes) que ja s'havia oficialitzat el 1849 però que encara coexistia amb llegues i reals a Madoz.",
         "Cada article major té **9 seccions administratives** template: Organització judicial · civil · militar · econòmica · eclesiàstica · Servei públic · Obres públiques · Instrucció pública · Població.",
         "Riera és el **darrer gran diccionari geogràfic-estadístic** del segle XIX espanyol. Posterior al Madoz però abans dels grans atles del segle XX.",
-        "Per al detall i el text complet, vegeu [riera-balears.pages.dev](https://riera-balears.pages.dev)."
+        "Per al detall i el text complet, vegeu [riera-balears.cloudflare-d82.workers.dev](https://riera-balears.cloudflare-d82.workers.dev)."
       ]
     }
   }
