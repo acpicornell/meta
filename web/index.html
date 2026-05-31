@@ -15,6 +15,11 @@
 <meta property="og:description" content="Cerca unificada sobre cinc nomenclàtors històrics balears: Floridablanca (1787), Miñano (1826), Madoz (1845), Nomenclàtor 1860 i Riera (1881).">
 <meta property="og:locale" content="ca_ES">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🗺️%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -29,6 +34,7 @@
 <nav class="tabs tabs-main">
   <button class="tab active" data-toptab="home">Inici</button>
   <button class="tab" data-toptab="explore">Explorar</button>
+  <button class="tab" data-toptab="map">Mapa</button>
   <button class="tab" data-toptab="place" hidden>Lloc</button>
   <button class="tab" data-toptab="stats">Estadístiques</button>
   <button class="tab" data-toptab="notes">Notes</button>
@@ -81,11 +87,11 @@
       El procediment complet es documenta a la pestanya <a href="#" data-goto="notes">Notes</a>.
     </p>
     <p>
-      <strong>Sobre el mapa.</strong> Aquesta versió no en porta. Les
-      coordenades NGIB depenen del topònim canònic, i errors d'enllaç
-      —ara mateix encara presents en la cua de matchs aproximats— es
-      tradueixen en marcadors visualment enganyosos. El mapa s'afegirà
-      quan la qualitat de l'enllaç hagi estat auditada per a cada font.
+      <strong>Sobre el mapa.</strong> La pestanya <a href="#" data-goto="map">Mapa</a>
+      mostra cada lloc canònic com a marcador sobre la cartografia
+      d'OpenStreetMap, agrupat en clusters quan el zoom és baix. Les
+      coordenades són les del NGIB. Cada Lloc inclou també un mini-mapa
+      amb les sub-entitats al voltant.
     </p>
   </div>
 </section>
@@ -136,6 +142,42 @@
   <div id="results"></div>
 
   <div class="pagination" id="pagination"></div>
+</section>
+
+<!-- ===== MAP ===== -->
+<section id="tab-map" class="tab-content" data-toptab="map">
+  <div class="map-controls">
+    <div class="filter-grid">
+      <label>Illa
+        <select id="m-island"><option value="">— Totes —</option></select>
+      </label>
+      <label>Tipus NGIB
+        <select id="m-type"><option value="">— Tots —</option></select>
+      </label>
+      <label>Apareix a
+        <select id="m-source">
+          <option value="">— Qualsevol font —</option>
+          <option value="floridablanca">Floridablanca (1787)</option>
+          <option value="minano">Miñano (1826)</option>
+          <option value="madoz">Madoz (1845)</option>
+          <option value="nomenclator_1860">Nomenclàtor 1860</option>
+          <option value="riera">Riera (1881)</option>
+        </select>
+      </label>
+      <label>Amb article
+        <select id="m-haveentries">
+          <option value="">— Tots els llocs —</option>
+          <option value="yes">Només amb article</option>
+          <option value="no">Només sense article</option>
+        </select>
+      </label>
+    </div>
+    <div class="map-meta">
+      <span class="result-count" id="map-count">…</span>
+      <button id="m-clear" type="button" class="clear-filters" hidden>✕ Netejar filtres</button>
+    </div>
+  </div>
+  <div id="map"></div>
 </section>
 
 <!-- ===== PLACE DETAIL ===== -->
@@ -207,11 +249,19 @@
 
   <h3>Mapa</h3>
   <p>
-    No s'inclou en aquesta versió. Cada lloc canònic exporta les
-    coordenades NGIB, però l'enllaç encara conté soroll en la cua
-    aproximada. Aquesta cua produiria marcadors mal col·locats al mapa.
-    El mapa s'afegirà quan l'auditoria d'enllaç per font hagi pujat per
-    sobre del 95 %.
+    La pestanya <em>Mapa</em> renderitza tots els 1.520 llocs canònics
+    amb Leaflet + OpenStreetMap. El zoom alt revela cada marcador
+    individualment; el zoom baix els agrupa en clusters numerats. Els
+    filtres del capdamunt restringeixen el conjunt visible per illa,
+    tipus NGIB, font i presència d'article. Cada Lloc inclou a més un
+    mini-mapa centrat amb les sub-entitats NGIB (port, llogarets,
+    barriades…) com a marcadors secundaris.
+  </p>
+  <p>
+    Les coordenades són les del NGIB. Els articles que no s'han pogut
+    enllaçar a cap entitat NGIB no apareixen al mapa: són visibles a
+    l'<a href="#" data-goto="explore">Explorar</a> amb el filtre
+    <em>«Sense vincle NGIB»</em>.
   </p>
 
   <h3>Llicència</h3>
@@ -221,6 +271,10 @@
   </p>
 </section>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

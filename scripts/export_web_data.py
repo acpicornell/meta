@@ -205,6 +205,8 @@ def main():
                     'name':       cm['name'],
                     'local_type': cm['local_type'],
                     'entry_count':entry_count,
+                    'lat':        cm.get('lat'),
+                    'lng':        cm.get('lng'),
                 })
             child_places.sort(key=lambda c: (-c['entry_count'], c['name']))
 

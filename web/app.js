@@ -56,6 +56,7 @@ function gotoTab(t) {
   document.querySelectorAll(".tab-content").forEach(sec =>
     sec.classList.toggle("active", sec.dataset.toptab === t));
   if (t === "stats") renderStats();
+  if (t === "map") ensureGlobalMap();
   if (t !== "place") {
     // Hide the place tab when leaving it (it appears only after a click).
     const placeTab = document.querySelector('[data-toptab="place"].tab');
@@ -827,6 +828,8 @@ function renderPlaceDetail(place, blobs) {
       <button class="download-btn" id="download-place">↓ Descarregar JSON</button>
     </div>
 
+    ${place.lat != null ? `<div id="lloc-mini-map" class="lloc-mini-map"></div>` : ""}
+
     ${ents.length ? `
       <h2 class="section-h">Articles sobre aquest lloc</h2>
       <div class="timeline">
@@ -862,6 +865,8 @@ function renderPlaceDetail(place, blobs) {
       </div>
     ` : ""}
   `;
+
+  if (place.lat != null) renderMiniMap(place);
 
   $("download-place").addEventListener("click", () => {
     const payload = {
@@ -989,6 +994,192 @@ function renderStats() {
     </div>
   `;
   el.dataset.rendered = "1";
+}
+
+// ---------------------- map (global) ----------------------------------------
+const mapState = {
+  map: null,
+  cluster: null,
+  ready: false,
+  island: "",
+  type: "",
+  source: "",
+  haveEntries: "",
+};
+
+const BALEARS_CENTRE = [39.6, 2.9];
+const BALEARS_ZOOM   = 9;
+const PLACE_ICON = L.divIcon({
+  className: "pin pin-place",
+  iconSize:  [18, 18],
+  iconAnchor:[9, 9],
+});
+const CHILD_ICON = L.divIcon({
+  className: "pin pin-child",
+  iconSize:  [12, 12],
+  iconAnchor:[6, 6],
+});
+
+function ensureGlobalMap() {
+  if (mapState.ready) return;
+  const islands = new Set(), types = new Set();
+  for (const p of state.data.places) {
+    if (p.island) islands.add(p.island);
+    if (p.local_type) types.add(p.local_type);
+  }
+  const fill = (id, items) => {
+    const sel = $(id);
+    [...items].sort((a, b) => a.localeCompare(b, "ca")).forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v; opt.textContent = v;
+      sel.appendChild(opt);
+    });
+  };
+  fill("m-island", islands);
+  fill("m-type",   types);
+
+  mapState.map = L.map("map", { scrollWheelZoom: true })
+    .setView(BALEARS_CENTRE, BALEARS_ZOOM);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(mapState.map);
+  mapState.cluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius: 50,
+  });
+  mapState.map.addLayer(mapState.cluster);
+
+  ["m-island", "m-type", "m-source", "m-haveentries"].forEach(id => {
+    $(id).addEventListener("change", ev => {
+      mapState[id.slice(2).replace("haveentries", "haveEntries")] = ev.target.value;
+      refreshMapClearButton();
+      mapState.refit = true;
+      renderMap();
+    });
+  });
+  $("m-clear").addEventListener("click", clearMapFilters);
+  mapState.refit = true;   // initial render fits the archipelago bounds
+
+  mapState.ready = true;
+  renderMap();
+}
+
+function mapAnyFilterActive() {
+  return Boolean(mapState.island || mapState.type
+                 || mapState.source || mapState.haveEntries);
+}
+function refreshMapClearButton() {
+  const btn = $("m-clear");
+  if (btn) btn.hidden = !mapAnyFilterActive();
+}
+function clearMapFilters() {
+  mapState.island = ""; mapState.type = "";
+  mapState.source = ""; mapState.haveEntries = "";
+  $("m-island").value = ""; $("m-type").value = "";
+  $("m-source").value = ""; $("m-haveentries").value = "";
+  refreshMapClearButton();
+  mapState.refit = true;
+  renderMap();
+}
+
+function placeMatchesMapFilters(p) {
+  if (mapState.island && p.island !== mapState.island) return false;
+  if (mapState.type   && p.local_type !== mapState.type) return false;
+  if (mapState.source) {
+    const entries = allEntriesOf(p);
+    if (!entries.some(e => e.source === mapState.source)) return false;
+  }
+  if (mapState.haveEntries === "yes" && allEntriesOf(p).length === 0) return false;
+  if (mapState.haveEntries === "no"  && allEntriesOf(p).length >  0) return false;
+  return true;
+}
+
+function renderMap() {
+  if (!mapState.cluster) return;
+  mapState.cluster.clearLayers();
+  const markers = [];
+  const bounds = [];
+  for (const p of state.data.places) {
+    if (p.lat == null || p.lng == null) continue;
+    if (!placeMatchesMapFilters(p)) continue;
+    bounds.push([p.lat, p.lng]);
+    const count = allEntriesOf(p).length;
+    const m = L.marker([p.lat, p.lng], { icon: PLACE_ICON });
+    const title = esc(p.name);
+    const sub   = `${esc(p.local_type || "")}${p.municipality && p.municipality !== p.name ? ` · ${esc(p.municipality)}` : ""}`;
+    m.bindPopup(
+      `<div class="map-popup">
+         <strong>${title}</strong>
+         <span class="muted">${sub}</span>
+         <span class="muted">${count} article${count===1?"":"s"}</span>
+         <a href="#" data-ngib="${esc(p.ngib_id)}" class="map-popup-link">Obrir lloc →</a>
+       </div>`
+    );
+    m.placeNgib = p.ngib_id;
+    markers.push(m);
+  }
+  mapState.cluster.addLayers(markers);
+  $("map-count").textContent = `${fmt(markers.length)} lloc${markers.length===1?"":"s"}`;
+
+  // Force Leaflet to recompute size now that the tab is visible.
+  setTimeout(() => {
+    mapState.map.invalidateSize();
+    // Only re-fit when explicitly asked (initial render or filter
+    // change). Otherwise leave the user's pan/zoom alone.
+    if (mapState.refit && bounds.length) {
+      mapState.map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
+      mapState.refit = false;
+    }
+  }, 0);
+}
+
+// Popup-link delegation — clicking "Obrir lloc" opens the Place tab.
+document.addEventListener("click", ev => {
+  const link = ev.target.closest("a.map-popup-link");
+  if (!link) return;
+  ev.preventDefault();
+  openPlace(link.dataset.ngib);
+});
+
+// ---------------------- mini-map (Lloc tab) ---------------------------------
+let miniMap = null;
+
+function renderMiniMap(place) {
+  const el = $("lloc-mini-map");
+  if (!el || place.lat == null || place.lng == null) return;
+  if (miniMap) { miniMap.remove(); miniMap = null; }
+  miniMap = L.map(el, {
+    zoomControl: true,
+    scrollWheelZoom: false,
+    attributionControl: false,
+  });
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+  }).addTo(miniMap);
+
+  const bounds = [];
+  const main = L.marker([place.lat, place.lng], { icon: PLACE_ICON })
+    .bindPopup(`<strong>${esc(place.name)}</strong>`)
+    .addTo(miniMap);
+  bounds.push([place.lat, place.lng]);
+
+  for (const c of (place.child_places || [])) {
+    if (c.lat == null || c.lng == null) continue;
+    const cm = L.marker([c.lat, c.lng], { icon: CHILD_ICON })
+      .bindPopup(
+        `<a href="#" data-ngib="${esc(c.ngib_id)}" class="map-popup-link">${esc(c.name)} →</a>`
+      )
+      .addTo(miniMap);
+    bounds.push([c.lat, c.lng]);
+  }
+
+  if (bounds.length > 1) {
+    miniMap.fitBounds(bounds, { padding: [20, 20], maxZoom: 14 });
+  } else {
+    miniMap.setView([place.lat, place.lng], 14);
+  }
+  setTimeout(() => miniMap.invalidateSize(), 0);
 }
 
 // ---------------------- boot ------------------------------------------------
