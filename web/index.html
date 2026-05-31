@@ -488,90 +488,87 @@
 <section id="tab-notes" class="tab-content" data-toptab="notes">
   <h2>Metodologia</h2>
 
-  <h3>Procés d'enllaçat</h3>
+  <h3>El model dual-link</h3>
   <p>
-    Cada article dels cinc nomenclàtors és tractat com una <em>menció de
-    lloc</em>. La resolució a un identificador canònic NGIB segueix una
-    cascada, on la primera regla que troba un candidat fiable s'imposa:
+    Cada article dels cinc nomenclàtors té dos enllaços al NGIB:
   </p>
+  <ul>
+    <li><strong>describes_ngib_id</strong> — l'entitat NGIB que l'article descriu. Un article del Madoz sobre <em>Port de Sóller</em> apunta a l'entitat NGIB <em>Port de Sóller</em> (llogaret independent), no a Sóller-municipi.</li>
+    <li><strong>parent_ngib_id</strong> — el municipi NGIB on l'entitat es troba. El mateix article apunta a Sóller-municipi com a pare.</li>
+  </ul>
+  <p>
+    Cada article es classifica també amb un <strong>entry_kind</strong>:
+    <em>municipality</em> (article que descriu un municipi),
+    <em>feature_with_ngib</em> (llogaret, port, cap, llogarret amb identitat NGIB pròpia),
+    <em>feature_no_ngib</em> (predi, talaia, accident geogràfic sense entitat NGIB) o
+    <em>jurisdictional</em> (partit judicial, diòcesi, corregimient, sense equivalent NGIB).
+    Només el 8% dels articles són de tipus <em>municipality</em>; la resta són sub-entitats o categories administratives.
+  </p>
+
+  <h3>El resolver de 3 fases</h3>
   <ol>
-    <li><strong>latlon_passthrough</strong> (confiança 1,00) — Miñano i Riera ja exporten les coordenades NGIB. La meta retroresol el <code>geographic_name_id</code> via les coordenades exactes.</li>
-    <li><strong>historical_curated</strong> (0,99) — coincidència exacta amb una taula d'unes 130 variants històriques: <em>Mahón → Maó</em>, <em>San Lorenzo → Sant Llorenç des Cardassar</em>, <em>Iviza → Eivissa</em>, <em>Sinen → Sineu</em>, etc.</li>
-    <li><strong>exact_norm</strong> (0,97) — coincidència exacta després de normalitzar accents, articles, hifens i puntuació.</li>
-    <li><strong>municipality_join</strong> (0,95) — si el títol no enllaça però l'article declara un <em>municipi</em> conegut, s'enllaça al municipi pare.</li>
-    <li><strong>fuzzy_wratio</strong> (≥0,88) — coincidència aproximada amb <em>rapidfuzz</em>, escapat per illa i amb una guàrdia de longitud.</li>
-    <li><strong>fuzzy_token_set</strong> (≥0,85) — segona passada per a títols multi-paraula no resolts al pas anterior.</li>
-    <li><strong>unlinked</strong> — articles que no s'han pogut enllaçar a cap entrada NGIB; visibles aquí amb el filtre «Sense vincle NGIB».</li>
+    <li><strong>Decidir l'<em>entry_kind</em></strong> a partir del <code>place_type</code> del germà (villa, lugar, predio, partido, cuartón…) amb una taxonomia de regex whole-word per evitar trampes («illa» dins «villa», per exemple) i una drecera per a sub-features quan el títol coincideix exactament amb una entitat NGIB no-Municipi de la mateixa illa.</li>
+    <li><strong>Resoldre <em>parent_ngib_id</em></strong> a partir del camp <code>municipality</code> o <code>cross_references</code> del germà. Per a Floridablanca el municipi és sempre explícit; per al Madoz el 80% surt del seu propi camp; per a Miñano i Riera s'infereix de cross-references o del títol mateix quan tot es relaciona a un mateix terme.</li>
+    <li><strong>Resoldre <em>describes_ngib_id</em></strong> mitjançant una cascada estricta dins el terme del parent (no es busca mai a tota l'illa, per evitar conflations cross-municipi com <em>Port (es)</em> a Sóller landant a <em>es Port</em> de Banyalbufar): primer <em>historical_curated</em> (coincidència amb una de les ~360 variants curades), llavors <em>exact_norm</em> (normalitzant accents/articles/puntuació), llavors <em>fuzzy_wratio</em> (rapidfuzz ≥0.88) i finalment <em>fuzzy_token_set</em> per a títols multi-paraula no resolts.</li>
   </ol>
   <p>
-    No hi ha cap intervenció manual entrada-per-entrada. La taula curada
-    de l'pas 2 conté unes 130 variants històriques heretades del projecte
-    Miñano i ampliades per al projecte Madoz. La cua de no enllaçats no
-    es descarta: queda visible amb un filtre dedicat perquè es pugui
-    auditar.
+    Quan cap candidat passa la cascada però el parent està resolt, l'article queda enllaçat <strong>només pel parent</strong>. És el cas de la majoria de predis del Madoz («Son X», «Can Y») que no tenen entitat NGIB pròpia però que pertanyen clarament al terme d'algun municipi. Aquests articles apareixen al Lloc del municipi sota la secció <em>Articles dins el terme sense entrada NGIB pròpia</em>.
+  </p>
+
+  <h3>La taula de variants curades</h3>
+  <p>
+    El pas <em>historical_curated</em> consulta una taula d'unes <strong>360 variants</strong> (<code>scripts/build_gazetteer.py</code>) que cobreix els tres tipus de soroll que la cascada determinista no resoldria sola:
+  </p>
+  <ul>
+    <li><strong>Castellanitzacions</strong>: <em>Mahón → Maó</em>, <em>San Lorenzo → Sant Llorenç des Cardassar</em>, <em>Iviza → Eivissa</em>, <em>Lluchmayor → Llucmajor</em>, <em>Bunyola → Bunyola</em>, etc.</li>
+    <li><strong>Variants OCR</strong>: <em>Escorga → Escorca</em>, <em>Biniarroig → Biniarroi</em>, <em>Caimary → Caimari</em>, etc.</li>
+    <li><strong>Convencions editorials d'època</strong>: el Madoz fila els sants pel nom propi i els tuca entre parèntesis («MARIA (Santa) del Camí»); un helper <code>_reverse_saint_inversion</code> els reordena abans del match.</li>
+  </ul>
+  <p>
+    No hi ha cap intervenció manual entrada-per-entrada. Les variants es deriven d'auditories sistemàtiques: per cada Municipi sense els 5 anys atestats, es revisa quin germà falla i s'analitza per què.
+  </p>
+
+  <h3>Enriquiment Wikidata</h3>
+  <p>
+    A banda del NGIB, ancorem el corpus al ítem <a href="https://www.wikidata.org/wiki/Q107356467" target="_blank" rel="noopener">Q107356467</a> del Wikidata (<em>elements anomenats dins de les Illes Balears</em>) i en derivem ~6.900 ítems amb àlies multilingües, dels quals ~1.500 s'enllacen via coincidència de label al NGIB. Reforça la taula de variants amb àlies oficials catalans/castellans que ningú no havia hagut de curar a mà.
   </p>
 
   <h3>Toms suplementaris</h3>
+  <p>Dues de les obres tenen un volum final amb addicions:</p>
+  <ul>
+    <li><strong>Miñano, Tom XI (Suplemento, 1829).</strong> ~88 entrades balears: 55 titulades <em>«(adición)»</em> que actualitzen articles dels deu primers volums (alteracions demogràfiques, errates, dades estadístiques) i la resta articles nous que no havien arribat a temps. Marcades amb el badge <em>SUPLEMENT</em>.</li>
+    <li><strong>Madoz, Tom XVI (Adiciones, 1850).</strong> 20 entrades balears noves —majoritàriament predis i possessions menors— que el redactor no havia documentat durant la sèrie alfabètica principal (1845-1849). També amb <em>SUPLEMENT</em>.</li>
+  </ul>
+  <p>Floridablanca (1787), el Nomenclàtor de 1860 i Riera (1881) són obres mono-volumàriques sense suplements.</p>
+
+  <h3>Cobertura i orfes</h3>
   <p>
-    Dues de les obres tenen un volum final amb addicions:
+    Dels <strong>4.627</strong> articles totals, <strong>4.435</strong> tenen almenys un dels dos enllaços (parent o describes) — un 95,9% de cobertura útil. Els <strong>192 orfes</strong> restants (4,1%) són majoritàriament:
   </p>
   <ul>
-    <li><strong>Miñano, Tom XI (Suplemento, 1829).</strong> Conté unes 88 entrades baleariques: 55 expressament titulades <em>«(adición)»</em> que actualitzen articles dels deu primers volums (alteracions demogràfiques, errates, dades estadístiques) i la resta articles nous que no havien arribat a temps a l'edició original. A la pestanya Lloc apareixen amb el badge <em>«suplement»</em> just després de l'entrada principal de 1826.</li>
-    <li><strong>Madoz, Tom XVI (Adiciones, 1850).</strong> Conté 20 entrades baleariques noves —majoritàriament predis i possessions menors— que el redactor no havia pogut documentar durant la sèrie alfabètica principal (1845–1849). També marcades amb <em>«suplement»</em>.</li>
+    <li>Articles arxipèlag-wide (<em>«Baleares»</em>, <em>«Mallorca-isla»</em>, <em>«Menorca-diócesi»</em>) que cobreixen tot un territori sense localització puntual.</li>
+    <li>Predis perduts: entrades del Madoz o de Miñano sobre cases pairals que no tenen equivalent NGIB modern (la propietat ja no existeix amb aquell nom).</li>
+    <li>Fuzzy noise: topònims que el matcher rebutja per evitar falsos positius (un «Sa Punta» genèric a una illa amb 30 candidats no es vincula sense més context).</li>
   </ul>
   <p>
-    Floridablanca (1787), el Nomenclàtor de 1860 i Riera (1881) són obres mono-volumàriques sense tom suplementari.
+    Els orfes són visibles a la pestanya <a href="#" data-goto="explore">Explorar</a> amb el filtre <em>Confiança del vincle = «Sense vincle NGIB»</em>. Cada un obre la mateixa fitxa modal que la resta d'articles, perquè el corpus quedi inspeccionable sense haver de baixar a la base de dades.
   </p>
 
   <h3>Cites bibliogràfiques</h3>
   <p>
-    Cada fitxa de l'apartat <em>Lloc</em> inclou una capçalera amb la
-    referència completa de l'obra original i un enllaç al text font (a
-    Internet Archive, Biblioteca Digital de Castella-Lleó o al projecte
-    germà corresponent).
-  </p>
-
-  <h3>Fonts i projectes germans</h3>
-  <ul>
-    <li><a href="https://floridablanca-balears.cloudflare-d82.workers.dev" target="_blank" rel="noopener">floridablanca-balears</a> · Cens de Floridablanca, 1787</li>
-    <li><a href="https://minano-balears.cloudflare-d82.workers.dev" target="_blank" rel="noopener">minano-balears</a> · Diccionari de Miñano, 1826–1829</li>
-    <li><a href="https://madoz-balears.cloudflare-d82.workers.dev" target="_blank" rel="noopener">madoz-balears</a> · Diccionari de Madoz, 1845–1850</li>
-    <li><a href="https://nomenclator-1860-balears.cloudflare-d82.workers.dev" target="_blank" rel="noopener">nomenclator-1860-balears</a> · Nomenclàtor de 1860</li>
-    <li><a href="https://riera-balears.cloudflare-d82.workers.dev" target="_blank" rel="noopener">riera-balears</a> · Diccionari de Riera, 1881–1887</li>
-  </ul>
-
-  <h3>Cobertura informativa</h3>
-  <p>
-    El contingut editorial de cada nomenclàtor —qui era l'autor, com es
-    va elaborar, quina estructura té cada article, quins biaixos hi ha—
-    es presenta a la pestanya <a href="#" data-goto="fonts">Fonts</a>.
-    Per llegir entrades del segle XIX cal sovint descodificar
-    abreviatures (<code>dióc.</code>, <code>aud. terr.</code>,
-    <code>cot. red.</code>, <code>cap.</code>…); la taula completa per
-    font és a <a href="#" data-goto="abbr">Abreviatures</a>.
+    Cada fitxa d'article del Lloc inclou la cita bibliogràfica completa a la capçalera (volum, pàgina impresa, edició) seguida del cos transcrit. <strong>No hi ha enllaços externs</strong> a fonts: la fitxa és autocontinguda. La pestanya <a href="#" data-goto="fonts">Fonts</a> inclou els enllaços als cinc projectes germans corresponents, on hi ha les transcripcions originals i les referències al facsímil.
   </p>
 
   <h3>Mapa</h3>
   <p>
-    La pestanya <em>Mapa</em> renderitza tots els 1.520 llocs canònics
-    amb Leaflet + OpenStreetMap. El zoom alt revela cada marcador
-    individualment; el zoom baix els agrupa en clusters numerats. Els
-    filtres del capdamunt restringeixen el conjunt visible per illa,
-    tipus NGIB, font i presència d'article. Cada Lloc inclou a més un
-    mini-mapa centrat amb les sub-entitats NGIB (port, llogarets,
-    barriades…) com a marcadors secundaris.
-  </p>
-  <p>
-    Les coordenades són les del NGIB. Els articles que no s'han pogut
-    enllaçar a cap entitat NGIB no apareixen al mapa: són visibles a
-    l'<a href="#" data-goto="explore">Explorar</a> amb el filtre
-    <em>«Sense vincle NGIB»</em>.
+    La pestanya <a href="#" data-goto="map">Mapa</a> renderitza els 1.520 llocs canònics amb Leaflet + OpenStreetMap. Els 192 orfes no apareixen perquè no tenen geometria associada. Cada Lloc amb coordenades incorpora a més un <strong>mini-mapa</strong> centrat amb les seves sub-entitats NGIB (port, llogarets, barriades…) com a marcadors secundaris. Les coordenades són les del NGIB, distribuïdes via <a href="https://intranet.caib.es/opendatacataleg/es/dataset/lloc_anomenat" target="_blank" rel="noopener">IDEIB open data (CC BY)</a>.
   </p>
 
   <h3>Llicència</h3>
   <p>
     Codi: <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0-or-later</a>.
-    Els textos originals dels cinc nomenclàtors són de domini públic.
+    Textos originals (1787-1881): domini públic.
+    Coordenades NGIB: CC BY (Govern de les Illes Balears, IDEIB).
   </p>
 </section>
 
