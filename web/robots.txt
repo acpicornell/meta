@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nomenclators.corpusbalear.org/sitemap.xml

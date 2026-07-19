@@ -14,11 +14,45 @@
 <meta property="og:title" content="Nomenclàtors balears">
 <meta property="og:description" content="Cerca unificada sobre cinc nomenclàtors històrics balears: Floridablanca (1787), Miñano (1826), Madoz (1845), Nomenclàtor 1860 i Riera (1881).">
 <meta property="og:locale" content="ca_ES">
+<link rel="canonical" href="https://nomenclators.corpusbalear.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧭%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="stylesheet" href="vendor/MarkerCluster.css">
 <link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
 <link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://nomenclators.corpusbalear.org/#website",
+      "url": "https://nomenclators.corpusbalear.org/",
+      "name": "Nomenclàtors balears",
+      "inLanguage": "ca",
+      "isPartOf": { "@type": "CollectionPage", "name": "Corpus Balear", "url": "https://corpusbalear.org/" },
+      "about": { "@id": "https://nomenclators.corpusbalear.org/#dataset" }
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://nomenclators.corpusbalear.org/#dataset",
+      "name": "Nomenclàtors balears — lectura diacrònica (1787–1881)",
+      "description": "Edició digital que unifica cinc nomenclàtors històrics de les Illes Balears (Floridablanca 1787, Miñano 1826, Madoz 1845, Nomenclàtor 1860 i Riera 1881) al voltant d'una identitat canònica de lloc, de manera que cada topònim presenta els articles successius de cada obra en ordre cronològic al llarg d'un segle.",
+      "inLanguage": "ca",
+      "isPartOf": { "@type": "CollectionPage", "name": "Corpus Balear", "url": "https://corpusbalear.org/" },
+      "spatialCoverage": { "@type": "Place", "name": "Illes Balears" },
+      "temporalCoverage": "1787/1881",
+      "isBasedOn": [
+        { "@type": "Book", "name": "Cens de Floridablanca 1787", "datePublished": "1787" },
+        { "@type": "Book", "name": "Diccionario de Miñano 1826", "datePublished": "1826/1829" },
+        { "@type": "Book", "name": "Diccionario de Madoz 1845", "datePublished": "1845/1850" },
+        { "@type": "Book", "name": "Nomenclátor 1860", "datePublished": "1860" },
+        { "@type": "Book", "name": "Diccionario de Riera 1881", "datePublished": "1881/1887" }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -639,6 +673,10 @@
     <a href="https://ideib.caib.es/ngib/" target="_blank" rel="noopener">NGIB</a>
     (Govern de les Illes Balears, IDEIB),
     <a href="https://intranet.caib.es/opendatacataleg/es/dataset/lloc_anomenat" target="_blank" rel="noopener">CC BY</a>.
+  </p>
+  <p class="footer-portal">
+    Part del <a href="https://corpusbalear.org/">Corpus Balear</a> · edicions digitals de fonts
+    històriques de les Illes Balears.
   </p>
   <p class="footer-repo">
     <a class="repo-link" href="https://github.com/acpicornell/meta" target="_blank" rel="noopener" aria-label="Repositori a GitHub">
