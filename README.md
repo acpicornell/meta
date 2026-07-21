@@ -1,5 +1,7 @@
 # Nomenclàtors balears — aggregator
 
+[![Deploy](https://github.com/acpicornell/meta/actions/workflows/deploy.yml/badge.svg)](https://github.com/acpicornell/meta/actions/workflows/deploy.yml)
+
 > **Live site:** [meta-balears.cloudflare-d82.workers.dev](https://meta-balears.cloudflare-d82.workers.dev)
 >
 > A unified diachronic reader over the **five great historical gazetteers of the Balearic Islands** (1787 – 1881). One canonical place at a time, one century at a time.
