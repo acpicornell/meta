@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "meta-balears",
+  "workers_dev": false,
   "compatibility_date": "2026-05-28",
   "observability": {
     "enabled": true
