@@ -18,7 +18,85 @@
   --conf-mitjana: #b07d0b;
   --conf-baixa: #a93838;
   --conf-sense: #6b6b6b;
+  --on-accent: #fff;
+  --accent-deep: #4a2d15;
+  --badge-bg: #f1ead8; --badge-ink: #6b5022; --badge-line: #d8c389;
+  --tint: rgba(0,0,0,.02);
+  --heat: 107 68 35;
 }
+
+/* Dark theme, as on the sibling sites: defined once for "the system is dark
+   and the reader has not chosen light" and once for "the reader chose dark"
+   (theme.js sets data-theme on <html> before the first paint). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #e7eaed;
+    --ink-dim: #adb6bf;
+    --ink-faint: #828d98;
+    --paper: #15181b;
+    --paper-card: #1d2125;
+    --rule: #2e353b;
+    --accent: #d6a77a;
+    --accent-soft: #4d3a27;
+    --year-1787: #8fb79e;
+    --year-1826: #9db0d8;
+    --year-1845: #c79bb1;
+    --year-1860: #d9b874;
+    --year-1881: #c49c78;
+    --conf-alta: #6cc192;
+    --conf-mitjana: #e0b04a;
+    --conf-baixa: #e57d7d;
+    --conf-sense: #9a9a9a;
+    --on-accent: #1a120a;
+    --accent-deep: #e8c39f;
+    --badge-bg: #3a3020; --badge-ink: #e6cf98; --badge-line: #5c4c2a;
+    --tint: rgba(255,255,255,.03);
+    --heat: 214 167 122;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #e7eaed;
+  --ink-dim: #adb6bf;
+  --ink-faint: #828d98;
+  --paper: #15181b;
+  --paper-card: #1d2125;
+  --rule: #2e353b;
+  --accent: #d6a77a;
+  --accent-soft: #4d3a27;
+  --year-1787: #8fb79e;
+  --year-1826: #9db0d8;
+  --year-1845: #c79bb1;
+  --year-1860: #d9b874;
+  --year-1881: #c49c78;
+  --conf-alta: #6cc192;
+  --conf-mitjana: #e0b04a;
+  --conf-baixa: #e57d7d;
+  --conf-sense: #9a9a9a;
+  --on-accent: #1a120a;
+  --accent-deep: #e8c39f;
+  --badge-bg: #3a3020; --badge-ink: #e6cf98; --badge-line: #5c4c2a;
+  --tint: rgba(255,255,255,.03);
+  --heat: 214 167 122;
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* Light/dark toggle (theme.js). */
+.theme {
+  float: right;
+  margin-left: 12px;
+  display: grid;
+  place-items: center;
+  background: none;
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px;
+  color: var(--ink-dim);
+}
+.theme:hover { color: var(--accent); border-color: var(--accent); }
+.theme:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -274,7 +352,7 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
 .clear-filters:hover {
   background: var(--accent);
   border-color: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 .clear-filters[hidden] { display: none; }
 
@@ -325,11 +403,11 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
   color: var(--ink-faint);
   font-weight: 400;
 }
-.source-dot.has-1787 { background: var(--year-1787); color: white; border-color: transparent; }
-.source-dot.has-1826 { background: var(--year-1826); color: white; border-color: transparent; }
-.source-dot.has-1845 { background: var(--year-1845); color: white; border-color: transparent; }
-.source-dot.has-1860 { background: var(--year-1860); color: white; border-color: transparent; }
-.source-dot.has-1881 { background: var(--year-1881); color: white; border-color: transparent; }
+.source-dot.has-1787 { background: var(--year-1787); color: var(--on-accent); border-color: transparent; }
+.source-dot.has-1826 { background: var(--year-1826); color: var(--on-accent); border-color: transparent; }
+.source-dot.has-1845 { background: var(--year-1845); color: var(--on-accent); border-color: transparent; }
+.source-dot.has-1860 { background: var(--year-1860); color: var(--on-accent); border-color: transparent; }
+.source-dot.has-1881 { background: var(--year-1881); color: var(--on-accent); border-color: transparent; }
 
 /* Compact variant used on high-density lists (Explore rows, Stats
    top-20). Year-coloured square if attested, neutral square if not.
@@ -389,11 +467,11 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
 .place-header .place-meta-grid dd { margin: 0; }
 .place-header .download-btn {
   align-self: start; padding: .5rem 1rem;
-  background: var(--accent); color: white;
+  background: var(--accent); color: var(--on-accent);
   border: none; border-radius: 4px;
   font: inherit; cursor: pointer;
 }
-.place-header .download-btn:hover { background: #4a2d15; }
+.place-header .download-btn:hover { background: var(--accent-deep); }
 .place-breadcrumb {
   font-size: .9rem;
   color: var(--ink-dim);
@@ -548,7 +626,7 @@ button.child-card {
 .entry-modal-close:hover {
   background: var(--accent);
   border-color: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 .entry-modal-head {
   display: grid;
@@ -598,7 +676,7 @@ button.child-card {
 .entry-modal-body .blob h4:first-child { margin-top: 0; }
 .entry-modal-body .blob p { margin: 0 0 .5rem; line-height: 1.6; }
 .entry-modal-body .blob .raw {
-  background: white;
+  background: var(--paper-card);
   border: 1px dashed var(--rule);
   border-radius: 3px;
   padding: .4rem .6rem;
@@ -620,7 +698,7 @@ button.child-card {
   padding: 1.1rem 1.3rem;
 }
 .timeline-year {
-  font-size: 1.4rem; font-weight: 700; color: white;
+  font-size: 1.4rem; font-weight: 700; color: var(--on-accent);
   padding: .5rem .5rem .4rem; border-radius: 4px;
   text-align: center; height: fit-content;
   font-family: ui-monospace, Menlo, monospace;
@@ -733,9 +811,9 @@ button.child-card {
   font-weight: 500;
   padding: .1rem .5rem;
   border-radius: 999px;
-  background: #f1ead8;
-  color: #6b5022;
-  border: 1px solid #d8c389;
+  background: var(--badge-bg);
+  color: var(--badge-ink);
+  border: 1px solid var(--badge-line);
   margin-left: .25rem;
   letter-spacing: .02em;
   text-transform: uppercase;
@@ -760,7 +838,7 @@ button.child-card {
 .timeline-card .blob h4:first-child { margin-top: 0; }
 .timeline-card .blob p { margin: 0 0 .4rem; line-height: 1.6; }
 .timeline-card .blob .raw {
-  background: white;
+  background: var(--paper-card);
   border: 1px dashed var(--rule);
   border-radius: 3px;
   padding: .4rem .6rem;
@@ -780,7 +858,7 @@ button.child-card {
   display: inline-flex;
   align-items: baseline;
   gap: .35rem;
-  background: white;
+  background: var(--paper-card);
   border: 1px solid var(--rule);
   border-radius: 999px;
   padding: .2rem .65rem .25rem;
@@ -993,7 +1071,7 @@ button.child-card {
   padding: .1em .45em;
   border-radius: 3px;
   background: var(--src-color, var(--accent-soft));
-  color: white;
+  color: var(--on-accent);
   font-size: .72rem;
   letter-spacing: .04em;
   font-weight: 700;
@@ -1051,7 +1129,7 @@ button.child-card {
 .source-deep h2 .year {
   display: inline-block;
   background: var(--src-color, var(--accent));
-  color: white;
+  color: var(--on-accent);
   font-size: .7em;
   font-weight: 700;
   padding: .15em .55em;
@@ -1177,7 +1255,7 @@ button.child-card {
 .abbr-notes {
   margin-top: 1.2rem;
   padding: .8rem 1rem;
-  background: rgba(0,0,0,.02);
+  background: var(--tint);
   border-left: 3px solid var(--accent-soft);
   border-radius: 0 4px 4px 0;
 }
@@ -1262,7 +1340,7 @@ footer p:last-child { margin-bottom: 0; }
   border-radius: 4px;
   font-family: inherit;
   font-size: .95rem;
-  background: white;
+  background: var(--paper-card);
 }
 .map-meta {
   display: flex; gap: 1rem; align-items: center;
@@ -1332,5 +1410,34 @@ footer p:last-child { margin-bottom: 0; }
 }
 .home-action--random:hover .home-action-title,
 .home-action--random:hover .home-action-blurb {
-  color: white;
+  color: var(--on-accent);
 }
+
+/* The map in the dark theme. OpenStreetMap publishes no dark tiles, so the
+   light ones are inverted and dimmed -- the usual treatment; the markers and
+   clusters keep their colours. Leaflet's own controls and popups are white by
+   default and follow the theme here. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(.92) contrast(.9) saturate(.7);
+  }
+  :root:not([data-theme="light"]) .leaflet-container { background: #1b2026; }
+  :root:not([data-theme="light"]) .leaflet-bar a,
+  :root:not([data-theme="light"]) .leaflet-popup-content-wrapper,
+  :root:not([data-theme="light"]) .leaflet-popup-tip,
+  :root:not([data-theme="light"]) .leaflet-control-attribution {
+    background: var(--paper-card); color: var(--ink); border-color: var(--rule);
+  }
+  :root:not([data-theme="light"]) .leaflet-control-attribution a { color: var(--accent); }
+}
+:root[data-theme="dark"] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(.92) contrast(.9) saturate(.7);
+}
+:root[data-theme="dark"] .leaflet-container { background: #1b2026; }
+:root[data-theme="dark"] .leaflet-bar a,
+:root[data-theme="dark"] .leaflet-popup-content-wrapper,
+:root[data-theme="dark"] .leaflet-popup-tip,
+:root[data-theme="dark"] .leaflet-control-attribution {
+  background: var(--paper-card); color: var(--ink); border-color: var(--rule);
+}
+:root[data-theme="dark"] .leaflet-control-attribution a { color: var(--accent); }

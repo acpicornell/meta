@@ -672,7 +672,7 @@ function renderMinano(b) {
     ${b.description ? `<h4>Article</h4><p>${esc(b.description)}</p>` : ""}
     ${renderStatGrid(b.stats)}
     ${b.cross_references?.length ? `<p><em>Vegeu també:</em> ${b.cross_references.map(esc).join(" · ")}</p>` : ""}
-    ${b.confidence ? `<p style="color:#7b8794;font-size:.8rem">Confiança d'extracció: ${esc(b.confidence)}</p>` : ""}
+    ${b.confidence ? `<p style="color:var(--ink-faint);font-size:.8rem">Confiança d'extracció: ${esc(b.confidence)}</p>` : ""}
   </div>`;
 }
 
@@ -684,7 +684,7 @@ function renderMadoz(b) {
     ${row("Municipi", b.municipality)}
     ${b.description ? `<h4>Article</h4><p>${esc(b.description)}</p>` : ""}
     ${b.cross_references?.length ? `<p><em>Vegeu també:</em> ${b.cross_references.map(esc).join(" · ")}</p>` : ""}
-    ${b.confidence ? `<p style="color:#7b8794;font-size:.8rem">Confiança d'extracció: ${esc(b.confidence)}</p>` : ""}
+    ${b.confidence ? `<p style="color:var(--ink-faint);font-size:.8rem">Confiança d'extracció: ${esc(b.confidence)}</p>` : ""}
   </div>`;
 }
 
@@ -709,7 +709,7 @@ function render1860(b) {
     ${row("Distància al municipi (km)", b.distance_km)}
     ${renderStatGrid(habitable, { heading: "Habitatges i població" })}
     ${renderStatGrid(buildings, { heading: "Edificis per nombre de pisos" })}
-    ${b.page ? `<p style="color:#7b8794;font-size:.8rem">Pàgina ${esc(b.page)}</p>` : ""}
+    ${b.page ? `<p style="color:var(--ink-faint);font-size:.8rem">Pàgina ${esc(b.page)}</p>` : ""}
   </div>`;
 }
 
@@ -1092,7 +1092,7 @@ function renderStats() {
     <div class="stat-block">
       <h3>Llocs atestats en N fonts</h3>
       <div class="bar-chart">${distHtml}</div>
-      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+      <p style="margin-top:1rem;color:var(--ink-dim);font-size:.9rem">
         Una mateixa entitat pot tenir entrades als cinc nomenclàtors o només a un. La gran cua dreta del corpus són topònims molt locals (caserius, predis) que només apareixen al recompte de 1860.
       </p>
     </div>
@@ -1103,7 +1103,7 @@ function renderStats() {
     <div class="stat-block">
       <h3>Cobertura per font</h3>
       ${srcHtml}
-      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+      <p style="margin-top:1rem;color:var(--ink-dim);font-size:.9rem">
         <strong>Identifiquen un lloc</strong> — l'article descriu una entitat NGIB concreta (un poble, un llogaret, un cap, un predi…).
         <strong>Localitzats al terme</strong> — l'article està ubicat dins el terme municipal d'un municipi conegut, encara que la seva entitat pròpia no tingui equivalent NGIB. Un article pot estar a totes dues columnes alhora (per exemple, un article sobre Port de Sóller s'identifica com a Port de Sóller i es localitza al terme de Sóller). La cua d'articles orfes —ni una cosa ni l'altra— és visible amb el filtre <em>Sense vincle NGIB</em> de la pestanya Explorar.
       </p>
@@ -1154,7 +1154,7 @@ function renderKindBreakdown() {
     <div class="stat-block">
       <h3>Composició del corpus</h3>
       <div class="bar-chart">${html}</div>
-      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+      <p style="margin-top:1rem;color:var(--ink-dim);font-size:.9rem">
         Cada article queda classificat per la naturalesa de l'entitat que descriu. Només el 8% són articles de municipi pròpiament dit; la majoria del corpus són sub-entitats —llogarets, predis, caps, talaies— que els nomenclàtors documenten amb molt detall, sobretot el cens d'edificis de 1860.
       </p>
     </div>
@@ -1227,7 +1227,7 @@ function renderTopPlaces() {
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>
-      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+      <p style="margin-top:1rem;color:var(--ink-dim);font-size:.9rem">
         Els llocs amb la documentació més contínua del corpus. Clica el nom per veure-ho a Lloc.
       </p>
     </div>
@@ -1259,7 +1259,9 @@ function renderIslandSourceMatrix() {
     const v = row[src] || 0;
     const rowMax = Math.max(1, ...SOURCE_ORDER.map(s => row[s] || 0));
     const opacity = v ? Math.max(0.12, v / rowMax) : 0;
-    const bg = `rgba(107, 68, 35, ${opacity.toFixed(2)})`;
+    // The heat colour is a theme token (an "R G B" triplet), so the matrix
+    // follows the light/dark theme; the opacity carries the value.
+    const bg = `rgb(var(--heat) / ${opacity.toFixed(2)})`;
     return `<td class="num matrix-cell" style="background:${bg}">${v ? fmt(v) : ""}</td>`;
   };
   const headRow = SOURCE_ORDER.map(s =>
@@ -1286,7 +1288,7 @@ function renderIslandSourceMatrix() {
         <thead><tr><th>Illa</th>${headRow}<th class="num">Total</th></tr></thead>
         <tbody>${bodyRows}${totalRow}</tbody>
       </table>
-      <p style="margin-top:1rem;color:#52606d;font-size:.9rem">
+      <p style="margin-top:1rem;color:var(--ink-dim);font-size:.9rem">
         Cada cel·la compta el nombre d'articles atestats. La intensitat del color és relativa dins la mateixa illa: indica quina font documenta més extensament aquell territori. Les diferències entre fonts són notables — el cens de 1860 és molt més detallat al poblament rural, Madoz cobreix més uniformement.
       </p>
     </div>
@@ -1571,5 +1573,5 @@ function renderMiniMap(place) {
 initTabs();
 loadData().catch(err => {
   console.error(err);
-  $("results").innerHTML = `<div class="loading" style="color:#a93838">Error carregant les dades. Veure la consola del navegador.</div>`;
+  $("results").innerHTML = `<div class="loading" style="color:var(--conf-baixa)">Error carregant les dades. Veure la consola del navegador.</div>`;
 });
