@@ -538,32 +538,6 @@ header h1 { margin: 0 0 .1rem; font-size: 1.7rem; font-weight: 600; letter-spaci
   color: var(--ink-faint);
   margin-top: .3rem;
 }
-.jurisdictional-places {
-  margin-top: 1.2rem;
-  background: var(--paper-card);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 0;
-}
-.jurisdictional-places > summary {
-  cursor: pointer;
-  padding: .9rem 1.3rem;
-  font-weight: 600;
-  font-size: 1rem;
-  list-style: none;
-  color: var(--ink-dim);
-}
-.jurisdictional-places > summary::-webkit-details-marker { display: none; }
-.jurisdictional-places > summary::before {
-  content: "▸";
-  display: inline-block;
-  margin-right: .5rem;
-  color: var(--accent);
-}
-.jurisdictional-places[open] > summary::before { content: "▾"; }
-.jurisdictional-places .timeline-minor {
-  padding: 0 1.3rem 1.3rem;
-}
 
 /* === SECTION HELP TEXT === */
 .section-help {
@@ -770,41 +744,6 @@ button.child-card {
   color: var(--ink-dim);
 }
 .card-source { font-weight: 600; color: var(--ink-dim); }
-.minor-places {
-  margin-top: 2rem;
-  background: var(--paper-card);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 0;
-}
-.minor-places > summary {
-  cursor: pointer;
-  padding: .9rem 1.3rem;
-  font-weight: 600;
-  font-size: 1rem;
-  list-style: none;
-}
-.minor-places > summary::-webkit-details-marker { display: none; }
-.minor-places > summary::before {
-  content: "▸";
-  display: inline-block;
-  margin-right: .5rem;
-  color: var(--accent);
-  transition: transform .15s;
-}
-.minor-places[open] > summary::before { content: "▾"; }
-.minor-places .minor-help {
-  display: block;
-  font-weight: 400;
-  font-size: .82rem;
-  color: var(--ink-dim);
-  margin-top: .2rem;
-}
-.timeline-minor {
-  padding: 0 1.3rem 1.3rem;
-  gap: .8rem;
-}
-.timeline-minor .timeline-card { background: var(--paper); }
 .suppl-badge {
   display: inline-block;
   font-size: .72rem;

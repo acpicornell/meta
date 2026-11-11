@@ -2,7 +2,7 @@
 
 [![Deploy](https://github.com/acpicornell/meta/actions/workflows/deploy.yml/badge.svg)](https://github.com/acpicornell/meta/actions/workflows/deploy.yml)
 
-> **Live site:** [meta-balears.cloudflare-d82.workers.dev](https://meta-balears.cloudflare-d82.workers.dev)
+> **Live site:** [nomenclators.corpusbalear.org](https://nomenclators.corpusbalear.org)
 >
 > A unified diachronic reader over the **five great historical gazetteers of the Balearic Islands** (1787 – 1881). One canonical place at a time, one century at a time.
 
@@ -39,7 +39,7 @@ But the historiographical value is in the **diachronic reading**: how does the e
 | 1860 | `nomenclator_1860` | Junta General de Estadística | 2 962 | [nomenclator-1860-balears.cloudflare-d82.workers.dev](https://nomenclator-1860-balears.cloudflare-d82.workers.dev) |
 | 1881-87 | `riera` | Pablo Riera y Sans (12 vol.) | 123 | [riera-balears.cloudflare-d82.workers.dev](https://riera-balears.cloudflare-d82.workers.dev) |
 
-Each sibling lives in a separate repo under `/Users/acpicornell/nomenclators/`. **`meta` does not re-transcribe anything**: it reads each sibling's published `web/data.json` (committed to that sibling's repo), normalises the columns, and links the result to NGIB.
+Each sibling lives in a separate repo next to this one, under the same parent directory (`../floridablanca`, `../madoz`, …; the scripts resolve them from `ROOT.parent`). **`meta` does not re-transcribe anything**: it reads each sibling's published `web/data.json` (committed to that sibling's repo), normalises the columns, and links the result to NGIB.
 
 The two long-form sources (Madoz, Riera) have **supplementary volumes** with late additions / errata. `meta` marks these as `is_supplement = true` and sorts them after the primary entry on the Lloc timeline:
 
@@ -189,7 +189,7 @@ This is documented to avoid the table growing into hand-maintained noise: every 
 
 The Nomenclàtor Geogràfic de les Illes Balears, published by the Govern de les Illes Balears (IDEIB), is the official Balearic toponym registry. It contains ~55 535 *preferent* canonical names + ~1 366 *variant* spellings, distributed under CC BY ([open data catalogue](https://intranet.caib.es/opendatacataleg/es/dataset/lloc_anomenat)).
 
-The local copy lives at `minano/data/ngib/` (the Miñano project ingests it first; meta reads from there). The parquet ingestion produces ~50 000 rows with these fields used by the resolver:
+`scripts/build_gazetteer.py` reads the local copy from `data/ngib/` in this repo (gitignored). The Miñano project ingests it first, so copy `../minano/data/ngib/` to `data/ngib/` before building the gazetteer. The parquet ingestion produces ~50 000 rows with these fields used by the resolver:
 
 - `geographic_name_id` — the canonical id we link to.
 - `spelling` — the preferred spelling.
@@ -219,7 +219,7 @@ The SPARQL query is cached to `data/wikidata.jsonl`; subsequent pipeline runs do
 
 The cache currently holds **1 850 decisions** from earlier rounds. With `--include-linked-to-parent`, additional cases can be queued.
 
-Authentication: a `.env` file in any sibling project (this project reads from `madoz/.env` per a one-time authorisation by the user) supplies `ANTHROPIC_API_KEY`.
+Authentication: `ANTHROPIC_API_KEY` is read from this repo's own `.env` (gitignored), loaded by `scripts/resolve_with_llm.py`, following the same convention as the sibling projects.
 
 ---
 
@@ -265,13 +265,13 @@ meta/
 │   ├── schema.sql               ← v2 dual-link schema
 │   └── meta.duckdb              ← rebuilt on every load_db.py
 │
-├── data/                        ← intermediate (gitignored except llm_cache)
+├── data/                        ← intermediate (gitignored except wikidata.jsonl)
 │   ├── sources/                 ← sibling snapshots
 │   ├── gazetteer.parquet
-│   ├── wikidata.jsonl
+│   ├── wikidata.jsonl           ← committed; avoids re-querying Wikidata
 │   ├── normalized/
 │   ├── place_links.jsonl
-│   ├── llm_cache.jsonl          ← committed; LLM decisions cached
+│   ├── llm_cache.jsonl          ← gitignored; LLM decisions cached locally
 │   └── reports/
 │
 └── web/                         ← static site, deployed to Cloudflare
@@ -350,10 +350,10 @@ Deploy:
 
 ```bash
 npx wrangler login         # one-off, opens the browser
-npx wrangler deploy        # ships ./web to https://meta-balears.cloudflare-d82.workers.dev
+npx wrangler deploy        # ships ./web to https://nomenclators.corpusbalear.org
 ```
 
-The `_headers` file inside `web/` is honoured by Workers Static Assets (the syntax matches the Pages convention). The deploy is **pull-from-disk**, not built from the GitHub repo — no CI hook, no GitHub Action.
+The `_headers` file inside `web/` is honoured by Workers Static Assets (the syntax matches the Pages convention). A manual `wrangler deploy` ships `web/` from disk. On every push to `main`, `.github/workflows/deploy.yml` also deploys the committed `web/` (after running `scripts/check_site.py web`), once the `CLOUDFLARE_API_TOKEN` secret is set; nothing is rebuilt in CI.
 
 ---
 

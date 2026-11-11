@@ -825,7 +825,7 @@ async function openEntryModal(source, sourceId) {
   document.addEventListener("keydown", onKey);
 }
 
-// Delegated click handler — attached once in initTabs.
+// Delegated click handler — attached once, at module load.
 document.addEventListener("click", ev => {
   const card = ev.target.closest("[data-entry-source]");
   if (card) {
@@ -992,10 +992,6 @@ function renderPlaceDetail(place, blobs) {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-  });
-
-  document.querySelectorAll(".back-link[data-goto]").forEach(el => {
-    el.addEventListener("click", ev => { ev.preventDefault(); gotoTab("explore"); });
   });
 
   // Fold long timeline entries: compare the body's natural height
@@ -1553,7 +1549,7 @@ function renderMiniMap(place) {
 
   for (const c of (place.child_places || [])) {
     if (c.lat == null || c.lng == null) continue;
-    const cm = L.marker([c.lat, c.lng], { icon: CHILD_ICON })
+    L.marker([c.lat, c.lng], { icon: CHILD_ICON })
       .bindPopup(
         `<a href="#" data-ngib="${esc(c.ngib_id)}" class="map-popup-link">${esc(c.name)} →</a>`
       )
