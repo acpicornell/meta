@@ -30,9 +30,13 @@ The matcher does **not** trust the lat/lon or `matched_toponym` published by sib
 ```
 meta/
 ├── README.md                    ← short overview
+├── LICENSE
 ├── docs/                        ← method, pipeline and site documentation
-├── pyproject.toml               ← Python deps: duckdb, rapidfuzz, pyarrow
+├── pyproject.toml               ← Python deps: duckdb, rapidfuzz, python-dotenv,
+│                                  pyarrow; optional extra `llm` = anthropic
+├── uv.lock
 ├── wrangler.jsonc               ← Cloudflare Workers Static Assets config
+├── .github/workflows/deploy.yml ← on push: check_site.py, then wrangler deploy
 │
 ├── scripts/                     ← pipeline (deterministic, re-runnable)
 │   ├── fetch_sources.py
@@ -44,7 +48,8 @@ meta/
 │   ├── resolve_with_llm.py      ← optional LLM tiebreaker (Claude)
 │   ├── load_db.py
 │   ├── export_web_data.py       ← writes web/data.json + web/data-blobs.json
-│   └── report.py                ← audit TSVs
+│   ├── report.py                ← audit TSVs
+│   └── check_site.py            ← lints web/ against its own _headers CSP (CI)
 │
 ├── db/
 │   ├── schema.sql               ← v2 dual-link schema
@@ -62,12 +67,15 @@ meta/
 └── web/                         ← static site, deployed to Cloudflare
     ├── index.html               ← all editorial content lives inline
     ├── app.js                   ← vanilla JS, no framework
-    ├── style.css                ← academic beige + per-source year palette
+    ├── theme.js                 ← light/dark choice, applied before first paint
+    ├── style.css                ← academic beige + per-source year palette,
+    │                              light and dark themes
     ├── abbreviations.json       ← 242 abbreviations across the 5 sources
     ├── data.json                ← exported by the pipeline; committed for deploy
     ├── data-blobs.json          ← lazy-loaded on first Lloc open
     ├── dev_server.py            ← local no-cache static server
     ├── _headers                 ← Cloudflare headers (no-store on everything)
+    ├── robots.txt, sitemap.xml
     └── vendor/                  ← Leaflet 1.9.4 + markercluster 1.5.3, self-hosted
 ```
 
